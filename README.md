@@ -20,10 +20,14 @@ English | [中文](README.zh-CN.md)
 This tool is an unofficial interface for retrieving publicly available Skeb artist information. Users must comply with Skeb's terms of service, including restrictions on misuse, fraudulent activities, or actions that may infringe on third-party rights. The tool's developer are not liable for any misuse, or violations of Skeb's guidelines resulting from its use.
 
 ## Deployment
-
-1. Creat a `Hello World` Cloudflare Worker.
-2. Replace the content of `worker.js` with [worker.js](worker.js).
+### git
+1. Clone or fork this repo.
+2. Create a Cloudflare Worker, choose "Import a repository" and select the cloned or forked repo.
 3. Save and deploy.
+### manual
+1. Create a Cloudflare Worker, choose "Start with Hello World!"
+2. Replace the content of `worker.js` with [worker.js](worker.js) in this repo.
+3. Deploy.
 
 ## Limitations
 
