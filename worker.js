@@ -181,6 +181,9 @@ const htmlContent = `
                 }
                 username = username.replace(/\\s+/g, '_');
                 username = username.split('?')[0];
+                if (!username) {
+                    throw new Error('Username required');
+                }
                 const isValidUsername = /^[a-zA-Z0-9_]+$/.test(username);
                 if (!isValidUsername) {
                     throw new Error('Username incorrect');
@@ -327,7 +330,7 @@ const htmlContent = `
                                 \${data.sent_requests_average_cancel_time ?
                                 \`<tr class="border-t border-gray-300 dark:border-gray-600">
                                     <th class="py-2 px-4 font-semibold text-sm sm:text-base">Sent Requests Average Cancel Time</th>
-                                    <td class="py-2 px-4 text-sm sm:text-base">\${(data.sent_requests_average_cancel_time / 86400).toFixed(2)}</td>
+                                    <td class="py-2 px-4 text-sm sm:text-base">\${(data.sent_requests_average_cancel_time / 86400).toFixed(2)} days</td>
                                 </tr>\`: ""}
                             </tbody>
                         </table>
