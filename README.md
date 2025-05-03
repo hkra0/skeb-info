@@ -21,8 +21,9 @@ This tool is an unofficial interface for retrieving publicly available Skeb arti
 
 ## Deployment
 
-- Deploy the script as a Cloudflare Worker.
-- No external dependencies required.
+1. Creat a `Hello World` Cloudflare Worker.
+2. Replace the content of `worker.js` with [worker.js](worker.js).
+3. Save and deploy.
 
 ## Limitations
 
