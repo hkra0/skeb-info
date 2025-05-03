@@ -19,11 +19,15 @@
 
 本工具为非官方接口，仅用于获取 Skeb 平台公开的创作者信息。使用者须遵守 Skeb 服务条款，禁止滥用服务、进行欺诈行为或侵犯第三方权益。开发者不对任何滥用行为或违反 Skeb 指南导致的后果承担责任。
 
-## 部署说明
-
-1. 创建一个 `Hello World` Cloudflare Worker
+## 部署方式
+### 连接 git
+1. Clone 或者 fork 本仓库
+2. 创建一个 Cloudflare Worker，选择"Import a repository"然后选择刚刚 Clone 或者 fork 好的仓库
+3. 保留默认配置，选择保存并部署
+### 手动部署
+1. 创建一个 Cloudflare Worker，选择“Start with Hello World!”
 2. 将 `worker.js` 的内容替换为本项目中的 [worker.js](worker.js)
-3. 选择保存并部署
+3. 点击部署
 
 ## 使用限制
 
