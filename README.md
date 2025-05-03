@@ -1,6 +1,8 @@
 # Skeb-info
 A simple Skeb user info lookup tool using Cloudflare worker. (๑• . •๑)
 
+English | [中文](README.zh-CN.md)
+
 ## Features
 
 - 🔍 Search Skeb artist profiles by username or link.
