@@ -4,14 +4,14 @@ A simple Skeb user info lookup tool using Cloudflare worker. (๑• . •๑)
 ## Features
 
 - 🔍 Search Skeb artist profiles by username or link.
-- 📑 Displays detailed infomation, get price when user stopped request.
-- 🔗 Rate-limited Skeb API proxy (`GET` only).
+- 📑 Displays detailed infomation, get price or expiration time even if user stopped request.
+- 🔗 Rate-limited Skeb user info API proxy.
 - ❤️ User-frendly UI.
 
 ## Usage
 
-Visit [skebinfo.hkra.xyz](https://skebinfo.hkra.xyz/).  
-API endpoint: `/api?username=<username>`.
+- Visit [skebinfo.hkra.xyz](https://skebinfo.hkra.xyz/).  
+- API endpoint: `/api?username=<username>`.
 
 ## Disclaimer
 
@@ -19,8 +19,8 @@ This tool is an unofficial interface for retrieving publicly available Skeb arti
 
 ## Deployment
 
-Deploy the script as a Cloudflare Worker.  
-No external dependencies required.
+- Deploy the script as a Cloudflare Worker.
+- No external dependencies required.
 
 ## Limitations
 
