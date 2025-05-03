@@ -11,7 +11,7 @@ A simple Skeb user info lookup tool using Cloudflare worker. (๑• . •๑)
 ## Usage
 
 Visit [skebinfo.hkra.xyz](https://skebinfo.hkra.xyz/).  
-API endpoint: /api?username=<username\>.
+API endpoint: `/api?username=<username>`.
 
 ## Disclaimer
 
