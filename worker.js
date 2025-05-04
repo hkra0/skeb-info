@@ -13,7 +13,7 @@ async function handleRequest(request) {
   const clientIP = request.headers.get('CF-Connecting-IP') || 'unknown';
 
   // Rate limiting logic
-  if (url.pathname === '/api') {
+  if (url.pathname.startsWith('/api')) {
     const now = Date.now();
     let clientData = requestCounts.get(clientIP) || { count: 0, startTime: now };
 
@@ -47,9 +47,17 @@ async function handleRequest(request) {
     });
   }
 
-  // Handle API requests for Skeb user info
-  if (url.pathname === '/api') {
-    const username = url.searchParams.get('username')?.replace(/^@/, '');
+  // Handle API requests
+  if (url.pathname.startsWith('/api/users/')) {
+    const headers = {
+      'authorization': 'Bearer null',
+      'sec-fetch-site': 'same-origin',
+      'sec-fetch-mode': 'cors',
+    };
+
+    // Extract username from path
+    const pathParts = url.pathname.split('/');
+    const username = pathParts[3]?.replace(/^@/, '');
     if (!username) {
       return new Response(JSON.stringify({ error: 'Username is required' }), {
         status: 400,
@@ -60,22 +68,47 @@ async function handleRequest(request) {
       });
     }
 
-    const headers = {
-      'authorization': 'Bearer null',
-      'sec-fetch-site': 'same-origin',
-      'sec-fetch-mode': 'cors',
-    };
-
     try {
-      const response = await fetch(`https://skeb.jp/api/users/${username}`, {
-        headers: headers,
-      });
+      let apiUrl;
+
+      // Handle user info request: /api/users/${username}
+      if (pathParts.length === 4) {
+        apiUrl = `https://skeb.jp/api/users/${username}`;
+      }
+      // Handle works requests: /api/users/${username}/works
+      else if (pathParts.length === 5 && pathParts[4] === 'works') {
+        const role = url.searchParams.get('role');
+        const sort = url.searchParams.get('sort') || 'date';
+        const offset = url.searchParams.get('offset') || '0';
+
+        if (!['creator', 'client'].includes(role)) {
+          return new Response(JSON.stringify({ error: 'Invalid role parameter' }), {
+            status: 400,
+            headers: {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': '*',
+            },
+          });
+        }
+
+        apiUrl = `https://skeb.jp/api/users/${username}/works?role=${role}&sort=${sort}&offset=${offset}`;
+      } else {
+        return new Response(JSON.stringify({ error: 'Invalid API path' }), {
+          status: 400,
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
+        });
+      }
+
+      const response = await fetch(apiUrl, { headers });
 
       if (!response.ok) {
         let errorMessage;
         switch (response.status) {
           case 404:
-            errorMessage = 'User not found';
+            errorMessage = 'Resource not found';
             break;
           case 429:
             errorMessage = 'Skeb API rate limit exceeded';
@@ -117,7 +150,6 @@ async function handleRequest(request) {
   // Return 404 for unknown paths
   return new Response('Not Found', { status: 404 });
 }
-
 // HTML content
 const htmlContent = `
 <!DOCTYPE html>
