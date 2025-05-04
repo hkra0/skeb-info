@@ -133,7 +133,7 @@ async function handleRequest(request) {
           }
 
           // Step 3: Return combined works
-          return new Response(JSON.stringify(allWorks), {
+          return new Response(JSON.stringify(totalPages), {
             status: 200,
             headers: responseHeaders,
           });
@@ -354,15 +354,11 @@ const htmlContent = `
                                 \`<tr class="border-t border-gray-300 dark:border-gray-600">
                                     <th class="py-2 px-4 font-semibold text-sm sm:text-base">Total</th>
                                     <td class="py-2 px-4 text-sm sm:text-base">
-                                        \${data.received_works_count} (\${
-                                        [
-                                        data.received_private_works_count && \`priv \${data.received_private_works_count}\`,
-                                        data.received_nsfw_works_count && \`nsfw \${data.received_nsfw_works_count}\`
-                                        ]
-                                        .filter(Boolean)
-                                        .join('; ')
-                                        .replace(/^/, ' ')
-                                        } )
+                                        \${data.received_works_count}\${
+                                            ((p = data.received_private_works_count, n = data.received_nsfw_works_count) => 
+                                                p || n ? \` (\${[p && \`priv \${p}\`, n && \`nsfw \${n}\`].filter(Boolean).join('; ')})\` : ''
+                                            )()
+                                        }
                                     </td>
                                 </tr>\` : ""}
                                 \${data.complete_rate ?
