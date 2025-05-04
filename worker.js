@@ -122,7 +122,7 @@ async function handleRequest(request) {
             allWorks = allWorks.concat(worksData);
           }
           // Step 3: Return combined works
-          return new Response(totalWorks, {
+          return new Response(JSON.stringify({"totalWorks": totalWorks}), {
             status: 200,
             headers: responseHeaders,
           });
@@ -386,7 +386,7 @@ const homePage = `
                         </table>
                     </div>
                 \`;
-            catch (error) {
+            } catch (error) {
                 if (error.response && error.response.status === 404) {
                     resultDiv.innerHTML = \`<p class="text-red-500 dark:text-red-400 py-2 px-4">Error: User not found</p>\`;
                 } else {
