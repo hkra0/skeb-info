@@ -13,7 +13,7 @@ English | [中文](README.zh-CN.md)
 ## Usage
 
 - Visit [skebinfo.hkra.xyz](https://skebinfo.hkra.xyz/).  
-- API endpoint: `/api?username=<username>`.
+- API endpoint: `/api/users/<username>`.
 
 ## Disclaimer
 

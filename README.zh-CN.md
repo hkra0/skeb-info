@@ -13,7 +13,7 @@
 ## 使用方法
 
 - 访问 [skebinfo.hkra.xyz](https://skebinfo.hkra.xyz/)
-- API 端点：`/api?username=<用户名>`
+- API 端点：`/api/users/<用户名>`
 
 ## 免责声明
 

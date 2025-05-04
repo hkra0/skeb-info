@@ -230,7 +230,7 @@ const htmlContent = `
                 }
                 resultDiv.innerHTML = '<p class="text-gray-500 dark:text-gray-400 py-2 px-4">Loading...</p>';
 
-                const response = await fetch(\`/api?username=\${username}\`);
+                const response = await fetch(\`/api/users/\${username}\`);
                 if (!response.ok) {
                     const errorData = await response.json();
                     throw new Error(errorData.error || 'Unknown error');
