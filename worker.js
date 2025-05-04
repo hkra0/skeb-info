@@ -106,7 +106,7 @@ async function handleRequest(request) {
             return handleApiError(userResponse, 'User in works api');
           }
           const userData = await userResponse.json();
-          const totalWorks = role === 'creator' ? userData.creator_works_count : userData.client_works_count;
+          const totalWorks = role === 'creator' ? userData.received_works_count : userData.sent_public_works_count;
           const perPage = 30;
           const totalPages = Math.ceil(totalWorks / perPage);
           let allWorks = [];
@@ -122,7 +122,6 @@ async function handleRequest(request) {
             allWorks = allWorks.concat(worksData);
           }
           // Step 3: Return combined works
-          console.log(allWorks);
           return new Response(JSON.stringify(allWorks), {
             status: 200,
             headers: responseHeaders,
