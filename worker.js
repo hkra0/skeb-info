@@ -24,6 +24,8 @@ async function handleRequest(request) {
   function handleApiError(response, resourceType = 'Resource') {
     let errorMessage;
     switch (response.status) {
+      case 403:
+        errorMessage = 'Access denied by Skeb';
       case 404:
         errorMessage = `${resourceType} not found`;
         break;
@@ -107,7 +109,7 @@ async function handleRequest(request) {
           // Step 1: Get user info to determine total works
           const userResponse = await fetch(`https://skeb.jp/api/users/${username}`, { headers: responseHeaders });
           if (!userResponse.ok) {
-            return handleApiError(userResponse, 'User');
+            return handleApiError(userResponse, 'User in works api');
           }
 
           const userData = await userResponse.json();
