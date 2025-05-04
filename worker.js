@@ -313,7 +313,7 @@ const htmlContent = `
                                         .filter(Boolean)
                                         .join('; ')
                                         .replace(/^/, ' ')
-                                        })
+                                        } )
                                     </td>
                                 </tr>\` : ""}
                                 \${data.complete_rate ?
