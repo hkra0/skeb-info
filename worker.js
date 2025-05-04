@@ -306,8 +306,8 @@ const htmlContent = `
                                     <th class="py-2 px-4 font-semibold text-sm sm:text-base">Total</th>
                                     <td class="py-2 px-4 text-sm sm:text-base">
                                         \${data.received_works_count}
-                                        \${data.received_private_works_count ? \` (private: \$data.received_private_works_count)\` : ""}
-                                        \${data.received_nsfw_works_count ? \` (nsfw: \$data.received_nsfw_works_count)\` : ""}
+                                        \${data.received_private_works_count ? \` (private: \${data.received_private_works_count})\` : ""}
+                                        \${data.received_nsfw_works_count ? \` (nsfw: \${data.received_nsfw_works_count})\` : ""}
                                     </td>
                                 </tr>\` : ""}
                                 \${data.complete_rate ?
