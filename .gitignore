@@ -1,0 +1,39 @@
+# Node.js dependencies
+node_modules/
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# Wrangler temporary files
+.wrangler/
+.wrangler/toml.lock
+.wrangler/tmp/
+
+# Logs and debugging files
+*.log
+*.tmp
+*.bak
+*.swp
+
+# Build artifacts
+dist/
+build/
+*.map
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDE-specific files
+.vscode/
+.idea/
+*.code-workspace
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Miscellaneous
+*.cache
+*.pid
