@@ -186,8 +186,9 @@ const htmlContent = `
                 }
                 const isValidUsername = /^[a-zA-Z0-9_]+$/.test(username);
                 if (!isValidUsername) {
-                    throw new Error('Username incorrect');
+                    throw new Error('Incorrect username format');
                 }
+                document.getElementById('username').innerText = username;
                 resultDiv.innerHTML = '<p class="text-gray-500 dark:text-gray-400 py-2 px-4">Loading...</p>';
 
                 const response = await fetch(\`/api?username=\${username}\`);
