@@ -1,4 +1,4 @@
-const RATE_LIMIT = 10; // Max requests allowed
+const RATE_LIMIT = 6; // Max requests allowed
 const TIME_WINDOW = 60 * 1000; // Time window (1 minute)
 
 const requestCounts = new Map(); // Store request counts per IP
@@ -420,7 +420,7 @@ const homePage = `
                 }
                 const works = await response.json();
 
-                console.info("Raw sent works data is below 📑(๑• . •๑)")
+                console.info("Raw sent works data is below 📚(๑• . •๑)")
                 console.log(works)
 
                 // Aggregate requests and tips by creator
@@ -447,7 +447,6 @@ const homePage = `
                         if (a.tips !== b.tips) {
                             return b.tips - a.tips;
                         }
-                        return a.name.localeCompare(b.name);
                     });
 
                 // Generate table
@@ -459,17 +458,15 @@ const homePage = `
                             <table class="w-full text-left border-collapse">
                                 <thead>
                                     <tr class="border-b border-gray-300 dark:border-gray-600">
-                                        <th class="py-2 px-4 font-semibold text-sm sm:text-base">Creator Name</th>
-                                        <th class="py-2 px-4 font-semibold text-sm sm:text-base">Request Count</th>
-                                        <th class="py-2 px-4 font-semibold text-sm sm:text-base">Tip Count</th>
+                                        <th class="py-2 px-4 font-semibold text-sm sm:text-base">Name</th>
+                                        <th class="py-2 px-4 font-semibold text-sm sm:text-base">Tipped / Total</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     \${sortedCreators.length ? sortedCreators.map(creator => \`
                                         <tr class="border-t border-gray-300 dark:border-gray-600">
                                             <td class="py-2 px-4 text-sm sm:text-base"><a href="https://skeb.jp/@\${creator.name}" target="_blank" class="text-[#28837f] hover:underline">\${creator.name}</a></td>
-                                            <td class="py-2 px-4 text-sm sm:text-base">\${creator.requests}</td>
-                                            <td class="py-2 px-4 text-sm sm:text-base">\${creator.tips}</td>
+                                            <td class="py-2 px-4 text-sm sm:text-base">\${creator.tips} / \${creator.requests}</td>
                                         </tr>
                                     \`).join('') : \`
                                         <tr>

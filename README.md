@@ -41,7 +41,7 @@ This tool is an unofficial interface for retrieving publicly available Skeb arti
 
 ## Limitations
 
-- Rate limit: 10 requests per minute per IP.  
+- Rate limit: 6 requests per minute per IP.  
 - Relies on Skeb's API: subject to their rate limits and availability.
 
 ## License
