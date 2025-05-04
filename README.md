@@ -32,7 +32,7 @@ This tool is an unofficial interface for retrieving publicly available Skeb arti
 1. Create a Cloudflare Worker, choose "Start with Hello World!"
 2. Replace the content of `worker.js` with [worker.js](worker.js) in this repo.
 3. Deploy.
-### Wrangler 命令行
+### Wrangler CLI
 - Download code and run `weangler deploy`.
 
 ## Limitations
