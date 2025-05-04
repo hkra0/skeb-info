@@ -128,7 +128,7 @@ const htmlContent = `
     <title>🔍(๑• . •๑)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        // Apply dark mode based on system preference or localStorage
+        // Apply dark mode based on system preference
         if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
             document.documentElement.classList.add('dark');
         } else {
@@ -187,8 +187,9 @@ const htmlContent = `
                 const isValidUsername = /^[a-zA-Z0-9_]+$/.test(username);
                 if (!isValidUsername) {
                     throw new Error('Incorrect username format');
+                } else {
+                    document.getElementById('username').value = username;
                 }
-                document.getElementById('username').innerText = username;
                 resultDiv.innerHTML = '<p class="text-gray-500 dark:text-gray-400 py-2 px-4">Loading...</p>';
 
                 const response = await fetch(\`/api?username=\${username}\`);
