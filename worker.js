@@ -11,7 +11,36 @@ addEventListener('fetch', event => {
 async function handleRequest(request) {
   const url = new URL(request.url);
   const clientIP = request.headers.get('CF-Connecting-IP') || 'unknown';
-
+  const skebHeaders = {
+    'authorization': 'Bearer null',
+    'sec-fetch-site': 'same-origin',
+    'sec-fetch-mode': 'cors',
+  };
+  const responseHeaders = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+  };
+  // Handle API errors
+  function handleApiError(response, resourceType = 'Resource') {
+    let errorMessage;
+    switch (response.status) {
+      case 404:
+        errorMessage = `${resourceType} not found`;
+        break;
+      case 429:
+        errorMessage = 'Skeb API rate limit exceeded';
+        break;
+      case 500:
+        errorMessage = 'Skeb API server error';
+        break;
+      default:
+        errorMessage = 'Unexpected API error';
+    }
+    return new Response(JSON.stringify({ error: errorMessage }), {
+      status: response.status,
+      headers: responseHeaders,
+    });
+  }
   // Rate limiting logic
   if (url.pathname.startsWith('/api')) {
     const now = Date.now();
@@ -32,10 +61,7 @@ async function handleRequest(request) {
     if (clientData.count > RATE_LIMIT) {
       return new Response(JSON.stringify({ error: 'Rate limit exceeded' }), {
         status: 429,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
+        headers: responseHeaders,
       });
     }
   }
@@ -49,11 +75,6 @@ async function handleRequest(request) {
 
   // Handle API requests
   if (url.pathname.startsWith('/api/users/')) {
-    const headers = {
-      'authorization': 'Bearer null',
-      'sec-fetch-site': 'same-origin',
-      'sec-fetch-mode': 'cors',
-    };
 
     // Extract username from path
     const pathParts = url.pathname.split('/');
@@ -61,16 +82,11 @@ async function handleRequest(request) {
     if (!username) {
       return new Response(JSON.stringify({ error: 'Username is required' }), {
         status: 400,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
+        headers: responseHeaders,
       });
     }
-
     try {
       let apiUrl;
-
       // Handle user info request: /api/users/${username}
       if (pathParts.length === 4) {
         apiUrl = `https://skeb.jp/api/users/${username}`;
@@ -78,71 +94,71 @@ async function handleRequest(request) {
       // Handle works requests: /api/users/${username}/works
       else if (pathParts.length === 5 && pathParts[4] === 'works') {
         const role = url.searchParams.get('role');
-        const sort = url.searchParams.get('sort') || 'date';
-        const offset = url.searchParams.get('offset') || '0';
-
+        const sort = url.searchParams.get('sort');
+        const offset = url.searchParams.get('offset');
         if (!['creator', 'client'].includes(role)) {
           return new Response(JSON.stringify({ error: 'Invalid role parameter' }), {
             status: 400,
-            headers: {
-              'Content-Type': 'application/json',
-              'Access-Control-Allow-Origin': '*',
-            },
+            headers: responseHeaders,
           });
         }
+        if (sort && offset) {
+          apiUrl = `https://skeb.jp/api/users/${username}/works?role=${role}&sort=${sort || 'date'}&offset=${offset || '0'}`;
+        } else {
+          // Step 1: Get user info to determine total works
+          const userResponse = await fetch(`https://skeb.jp/api/users/${username}`, { headers });
+          if (!userResponse.ok) {
+            return handleApiError(userResponse, 'User');
+          }
 
-        apiUrl = `https://skeb.jp/api/users/${username}/works?role=${role}&sort=${sort}&offset=${offset}`;
+          const userData = await userResponse.json();
+          const totalWorks = role === 'creator' ? userData.creator_works_count : userData.client_works_count;
+          const perPage = 30;
+          const totalPages = Math.ceil(totalWorks / perPage);
+          let allWorks = [];
+
+          // Step 2: Fetch all works in batches
+          for (let page = 0; page < totalPages; page++) {
+            const currentOffset = page * perPage;
+            apiUrl = `https://skeb.jp/api/users/${username}/works?role=${role}&sort=date&offset=${currentOffset}`;
+            const worksResponse = await fetch(apiUrl, { headers });
+
+            if (!worksResponse.ok) {
+              return handleApiError(worksResponse, 'Works');
+            }
+
+            const worksData = await worksResponse.json();
+            allWorks = allWorks.concat(worksData);
+          }
+
+          // Step 3: Return combined works
+          return new Response(JSON.stringify(allWorks), {
+            status: 200,
+            headers: responseHeaders,
+          });
+        }
       } else {
         return new Response(JSON.stringify({ error: 'Invalid API path' }), {
           status: 400,
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-          },
+          headers: responseHeaders,
         });
       }
 
-      const response = await fetch(apiUrl, { headers });
+      const response = await fetch(apiUrl, { headers: skebHeaders });
 
       if (!response.ok) {
-        let errorMessage;
-        switch (response.status) {
-          case 404:
-            errorMessage = 'Resource not found';
-            break;
-          case 429:
-            errorMessage = 'Skeb API rate limit exceeded';
-            break;
-          case 500:
-            errorMessage = 'Skeb API server error';
-            break;
-          default:
-            errorMessage = 'Unexpected API error';
-        }
-        return new Response(JSON.stringify({ error: errorMessage }), {
-          status: response.status,
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-          },
-        });
+        return handleApiError(response);
       }
 
       const data = await response.json();
       return new Response(JSON.stringify(data), {
         status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
+        headers: responseHeaders,
       });
     } catch (error) {
       return new Response(JSON.stringify({ error: error.message }), {
         status: 500,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
+        headers: responseHeaders,
       });
     }
   }
