@@ -12,7 +12,9 @@
 
 ## 使用方法
 
-- 访问 [skebinfo.hkra.xyz](https://skebinfo.hkra.xyz/)
+- 访问 [skebinfo.hkra.xyz](https://skebinfo.hkra.xyz/)，输入用户名或链接，点击查询
+- 点击用户名称可以打开该用户的 Skeb 主页
+- 点击已发送公开委托数量 (`Sent Public Requests`) 的数字可查看该客户按创作者排序的请求数量统计
 
 ## 免责声明
 

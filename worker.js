@@ -194,7 +194,9 @@ const homePage = `
         </div>
 
         <!-- Result Area -->
-        <div id="result" class="mt-8"></div>
+        <div id="user-info" class="mt-8"></div>
+        <div id="sent-works-info" class="mt-8"></div>
+        <div id="received-works-info" class="mt-8"></div>
     </div>
 
     <script>
@@ -205,7 +207,11 @@ const homePage = `
             }
         });
         async function fetchArtistInfo() {
-            const resultDiv = document.getElementById('result');
+            const userInfoDiv = document.getElementById('user-info');
+            const sentWorksDiv = document.getElementById('sent-works-info');
+            const receivedWorksDiv = document.getElementById('received-works-info');
+            sentWorksDiv.innerHTML = "";
+            receivedWorksDiv.innerHTML = "";
             try {
                 const usernameInput = document.getElementById('username').value.trim();
                 let username = usernameInput;
@@ -230,7 +236,7 @@ const homePage = `
                 } else {
                     document.getElementById('username').value = username;
                 }
-                resultDiv.innerHTML = '<p class="text-gray-500 dark:text-gray-400 py-2 px-4">Loading...</p>';
+                userInfoDiv.innerHTML = '<p class="text-gray-500 dark:text-gray-400 py-2 px-4">Loading...</p>';
 
                 const response = await fetch(\`/api/users/\${username}\`);
                 if (!response.ok) {
@@ -242,7 +248,7 @@ const homePage = `
                     throw new Error(data.error);
                 }
 
-                console.info("Raw response data is below 📑(๑• . •๑)")
+                console.info("Raw user data is below 📑(๑• . •๑)")
                 console.log(data)
 
                 const twitterScreenName = data.user_service_links?.[0]?.screen_name || null;
@@ -279,7 +285,7 @@ const homePage = `
                 const avgCompletionDays = data.completing_average_time ? (data.completing_average_time / 86400).toFixed(2) : null;
 
                 // Format fields
-                resultDiv.innerHTML = \`
+                userInfoDiv.innerHTML = \`
                     <div class="overflow-x-auto">
                         <div class="py-2 px-4 flex items-baseline">
                             \${data.request_master_rank ?
@@ -373,7 +379,7 @@ const homePage = `
                                 \${data.sent_public_works_count ?
                                 \`<tr class="border-t border-gray-300 dark:border-gray-600">
                                     <th class="py-2 px-4 font-semibold text-sm sm:text-base">Sent Public Requests</th>
-                                    <td class="py-2 px-4 text-sm sm:text-base">
+                                    <td class="py-2 px-4 text-sm sm:text-base cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700" onclick="fetchClientWorks('\${username}')">
                                     \${data.sent_public_works_count} \${data.sent_first_works_count ? \`( first \${data.sent_first_works_count} )\` : ""}
                                     </td>
                                 </tr>\`: ""}
@@ -387,10 +393,10 @@ const homePage = `
                     </div>
                 \`;
             } catch (error) {
-                if (error.response && error.response.status === 404) {
-                    resultDiv.innerHTML = \`<p class="text-red-500 dark:text-red-400 py-2 px-4">Error: User not found</p>\`;
+                if (error.message.toLowerCase().includes("not found")) {
+                    userInfoDiv.innerHTML = \`<p class="text-red-500 dark:text-red-400 py-2 px-4">Error: User not found</p>\`;
                 } else {
-                    resultDiv.innerHTML = \`<p class="text-red-500 dark:text-red-400 py-2 px-4">Error: \${error.message}</p>\`;
+                    userInfoDiv.innerHTML = \`<p class="text-red-500 dark:text-red-400 py-2 px-4">Error: \${error.message}</p>\`;
                 }
             }
         }
@@ -401,6 +407,86 @@ const homePage = `
             const div = document.createElement('div');
             div.textContent = description;
             return div.innerHTML.replace(/\\n/g, '<br>');
+        }
+        async function fetchClientWorks(username) {
+            const sentWorksDiv = document.getElementById('sent-works-info');
+            try {
+                sentWorksDiv.innerHTML += '<p class="text-gray-500 dark:text-gray-400 py-2 px-4">Loading sent works...</p>';
+                
+                const response = await fetch(\`/api/users/\${username}/works?role=client\`);
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Failed to fetch client works');
+                }
+                const works = await response.json();
+
+                console.info("Raw sent works data is below 📑(๑• . •๑)")
+                console.log(works)
+
+                // Aggregate requests and tips by creator
+                const creatorStats = {};
+                for (const work of works) {
+                    const creatorPath = work.path.split('/works/')[0]; // Extract creator username from path (e.g., /@TsukimiSD)
+                    const creatorName = creatorPath.replace('/@', '');
+                    if (!creatorStats[creatorName]) {
+                        creatorStats[creatorName] = { requests: 0, tips: 0 };
+                    }
+                    creatorStats[creatorName].requests += 1;
+                    if (work.tipped) {
+                        creatorStats[creatorName].tips += 1;
+                    }
+                }
+
+                // Convert to array and sort
+                const sortedCreators = Object.entries(creatorStats)
+                    .map(([name, stats]) => ({ name, ...stats }))
+                    .sort((a, b) => {
+                        if (a.requests !== b.requests) {
+                            return b.requests - a.requests;
+                        }
+                        if (a.tips !== b.tips) {
+                            return b.tips - a.tips;
+                        }
+                        return a.name.localeCompare(b.name);
+                    });
+
+                // Generate table
+                const tableHtml = \`
+                    <div class="mt-8">
+                        <h2 class="text-xl font-bold mb-4 py-2 px-4">Client Requests by Creator</h2>
+                        <hr/>
+                        <div class="max-h-64 overflow-y-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="border-b border-gray-300 dark:border-gray-600">
+                                        <th class="py-2 px-4 font-semibold text-sm sm:text-base">Creator Name</th>
+                                        <th class="py-2 px-4 font-semibold text-sm sm:text-base">Request Count</th>
+                                        <th class="py-2 px-4 font-semibold text-sm sm:text-base">Tip Count</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    \${sortedCreators.length ? sortedCreators.map(creator => \`
+                                        <tr class="border-t border-gray-300 dark:border-gray-600">
+                                            <td class="py-2 px-4 text-sm sm:text-base"><a href="https://skeb.jp/@\${creator.name}" target="_blank" class="text-[#28837f] hover:underline">\${creator.name}</a></td>
+                                            <td class="py-2 px-4 text-sm sm:text-base">\${creator.requests}</td>
+                                            <td class="py-2 px-4 text-sm sm:text-base">\${creator.tips}</td>
+                                        </tr>
+                                    \`).join('') : \`
+                                        <tr>
+                                            <td colspan="3" class="py-2 px-4 text-sm sm:text-base text-gray-500 dark:text-gray-400">No client requests found.</td>
+                                        </tr>
+                                    \`}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                \`;
+
+                // Remove loading message and append table
+                sentWorksDiv.innerHTML = tableHtml;
+            } catch (error) {
+                sentWorksDiv.innerHTML = \`<p class="text-red-500 dark:text-red-400 py-2 px-4">Error fetching client works: \${error.message}</p>\`;
+            }
         }
     </script>
 </body>
