@@ -343,7 +343,9 @@ const htmlContent = `
                                 \${data.sent_public_works_count ?
                                 \`<tr class="border-t border-gray-300 dark:border-gray-600">
                                     <th class="py-2 px-4 font-semibold text-sm sm:text-base">Sent Public Requests</th>
-                                    <td class="py-2 px-4 text-sm sm:text-base">\${data.sent_public_works_count}</td>
+                                    <td class="py-2 px-4 text-sm sm:text-base">
+                                    \${data.sent_public_works_count} \${data.sent_first_works_count ? \`( first \${data.sent_first_works_count} )\` : ""}
+                                    </td>
                                 </tr>\`: ""}
                                 \${data.sent_requests_average_cancel_time ?
                                 \`<tr class="border-t border-gray-300 dark:border-gray-600">
