@@ -208,7 +208,7 @@ const htmlContent = `
                 const usernameInput = document.getElementById('username').value.trim();
                 let username = usernameInput;
                 if (username.startsWith('https://skeb.jp/')) {
-                    username = username.replace('https://skeb.jp/@', '');
+                    username = username.split('/works/')[0].replace('https://skeb.jp/@', '');
                 } else if (username.startsWith('https://x.com/')) {
                     username = username.replace('https://x.com/', '');
                 } else if (username.startsWith('https://misskey.io/')) {
