@@ -122,7 +122,7 @@ async function handleRequest(request) {
             allWorks = allWorks.concat(worksData);
           }
           // Step 3: Return combined works
-          return new Response(JSON.stringify(userData), {
+          return new Response(JSON.stringify(totalWorks), {
             status: 200,
             headers: responseHeaders,
           });
