@@ -107,7 +107,7 @@ async function handleRequest(request) {
           apiUrl = `https://skeb.jp/api/users/${username}/works?role=${role}&sort=${sort || 'date'}&offset=${offset || '0'}`;
         } else {
           // Step 1: Get user info to determine total works
-          const userResponse = await fetch(`https://skeb.jp/api/users/${username}`, { headers: responseHeaders });
+          const userResponse = await fetch(`https://skeb.jp/api/users/${username}`, { headers: skebHeaders });
           if (!userResponse.ok) {
             return handleApiError(userResponse, 'User in works api');
           }
@@ -122,7 +122,7 @@ async function handleRequest(request) {
           for (let page = 0; page < totalPages; page++) {
             const currentOffset = page * perPage;
             apiUrl = `https://skeb.jp/api/users/${username}/works?role=${role}&sort=date&offset=${currentOffset}`;
-            const worksResponse = await fetch(apiUrl, { headers: responseHeaders });
+            const worksResponse = await fetch(apiUrl, { headers: skebHeaders });
 
             if (!worksResponse.ok) {
               return handleApiError(worksResponse, 'Works');
