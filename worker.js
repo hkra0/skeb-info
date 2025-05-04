@@ -147,8 +147,14 @@ const htmlContent = `
             <div class="text-4xl mb-4 text-center">🔍(๑• . •๑)</div>
         </div>
         <div class="py-2 px-4">
-            <div class="mb-4">
-                <input id="username" type="text" placeholder="Skeb link or username" class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-cyan-500 dark:focus:ring-cyan-400">
+            <div class="mb-4 relative">
+                <input id="username" type="text" placeholder="Skeb link or username" class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-cyan-500 dark:focus:ring-cyan-400 pr-10">
+                <button id="clearInput" type="button" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+                    onclick="document.getElementById('username').value = ''; document.getElementById('username').focus();">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
             </div>
             <button onclick="fetchArtistInfo()" class="w-full bg-[#28837f] text-white p-2 rounded hover:bg-[#206966] dark:hover:bg-[#206966] transition-colors">Search</button>
         </div>
