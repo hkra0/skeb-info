@@ -265,20 +265,20 @@ const htmlContent = `
                         <p class="py-2 px-4">\${sanitizeDescription(data.description) || '<span class="text-gray-500">no description</span>'}</p>
                         <div class="py-2 px-4 mb-8">
                             \${links.twitter_url ? \`<a href="\${links.twitter_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Twitter</a>\` : ""}
-                            \${links.misskey_url ? \`&nbsp;/&nbsp;<a href="\${links.misskey_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Misskey</a>\` : ""}
-                            \${links.pixiv_url ? \`&nbsp;/&nbsp;<a href="\${links.pixiv_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Pixiv</a>\` : ""}
-                            \${links.booth_url ? \`&nbsp;/&nbsp;<a href="\${links.booth_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Booth</a>\` : ""}
-                            \${links.fantia_url ? \`&nbsp;/&nbsp;<a href="\${links.fantia_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Fantia</a>\` : ""}
-                            \${links.fanbox_url ? \`&nbsp;/&nbsp;<a href="\${links.fanbox_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Fanbox</a>\` : ""}
-                            \${links.nijie_url ? \`&nbsp;/&nbsp;<a href="\${links.nijie_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Nijie</a>\` : ""}
-                            \${links.dlsite_url ? \`&nbsp;/&nbsp;<a href="\${links.dlsite_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">DLsite</a>\` : ""}
-                            \${links.fanza_url ? \`&nbsp;/&nbsp;<a href="\${links.fanza_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Fanza</a>\` : ""}
-                            \${links.skima_url ? \`&nbsp;/&nbsp;<a href="\${links.skima_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Skima</a>\` : ""}
-                            \${links.coconala_url ? \`&nbsp;/&nbsp;<a href="\${links.coconala_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Coconala</a>\` : ""}
-                            \${links.patreon_url ? \`&nbsp;/&nbsp;<a href="\${links.patreon_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Patreon</a>\` : ""}
-                            \${links.youtube_url ? \`&nbsp;/&nbsp;<a href="\${links.youtube_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">YouTube</a>\` : ""}
-                            \${links.wishlist_url ? \`&nbsp;/&nbsp;<a href="\${links.wishlist_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Wishlist</a>\` : ""}
-                            \${data.url ? \`&nbsp;/&nbsp;<a href="\${data.url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Url (\${new URL(data.url).hostname.split('.').slice(-2).join('.')})</a>\` : ""}
+                            \${links.misskey_url ? \`/&nbsp;<a href="\${links.misskey_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Misskey</a>\` : ""}
+                            \${links.pixiv_url ? \`/&nbsp;<a href="\${links.pixiv_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Pixiv</a>\` : ""}
+                            \${links.booth_url ? \`/&nbsp;<a href="\${links.booth_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Booth</a>\` : ""}
+                            \${links.fantia_url ? \`/&nbsp;<a href="\${links.fantia_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Fantia</a>\` : ""}
+                            \${links.fanbox_url ? \`/&nbsp;<a href="\${links.fanbox_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Fanbox</a>\` : ""}
+                            \${links.nijie_url ? \`/&nbsp;<a href="\${links.nijie_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Nijie</a>\` : ""}
+                            \${links.dlsite_url ? \`/&nbsp;<a href="\${links.dlsite_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">DLsite</a>\` : ""}
+                            \${links.fanza_url ? \`/&nbsp;<a href="\${links.fanza_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Fanza</a>\` : ""}
+                            \${links.skima_url ? \`/&nbsp;<a href="\${links.skima_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Skima</a>\` : ""}
+                            \${links.coconala_url ? \`/&nbsp;<a href="\${links.coconala_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Coconala</a>\` : ""}
+                            \${links.patreon_url ? \`/&nbsp;<a href="\${links.patreon_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Patreon</a>\` : ""}
+                            \${links.youtube_url ? \`/&nbsp;<a href="\${links.youtube_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">YouTube</a>\` : ""}
+                            \${links.wishlist_url ? \`/&nbsp;<a href="\${links.wishlist_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Wishlist</a>\` : ""}
+                            \${data.url ? \`/&nbsp;<a href="\${data.url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Url (\${new URL(data.url).hostname.split('.').slice(-2).join('.')})</a>\` : ""}
                         </div>
                             <table class="w-full text-left border-collapse">
                             <tbody>
@@ -304,7 +304,11 @@ const htmlContent = `
                                 \${data.received_works_count ?
                                 \`<tr class="border-t border-gray-300 dark:border-gray-600">
                                     <th class="py-2 px-4 font-semibold text-sm sm:text-base">Total</th>
-                                    <td class="py-2 px-4 text-sm sm:text-base">\${data.received_works_count}</td>
+                                    <td class="py-2 px-4 text-sm sm:text-base">
+                                        \${data.received_works_count}
+                                        \${received_private_works_count ? \` (private: \$received_private_works_count)\` : ""}
+                                        \${received_nsfw_works_count ? \` (nsfw: \$received_nsfw_works_count)\` : ""}
+                                    </td>
                                 </tr>\` : ""}
                                 \${data.complete_rate ?
                                 \`<tr class="border-t border-gray-300 dark:border-gray-600">
