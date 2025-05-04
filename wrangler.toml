@@ -1,3 +1,6 @@
 name = "skeb-info"
 compatibility_date = "2025-05-03"
 main = "worker.js"
+[observability]
+enabled = true
+head_sampling_rate = 1 # optional. default = 1.
