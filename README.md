@@ -13,11 +13,15 @@ English | [中文](README.zh-CN.md)
 ## Usage
 
 - Visit [skebinfo.hkra.xyz](https://skebinfo.hkra.xyz/).  
-- API endpoint: `/api/users/<username>`.
 
 ## Disclaimer
 
 This tool is an unofficial interface for retrieving publicly available Skeb artist information. Users must comply with Skeb's terms of service, including restrictions on misuse, fraudulent activities, or actions that may infringe on third-party rights. The tool's developer are not liable for any misuse, or violations of Skeb's guidelines resulting from its use.
+
+## API endpoints
+- User info: `/api/users/<username>`
+- All works (creator): `/api/users/<username>/works?role=creator`
+- All sent requests (client): `/api/users/<username>/works?role=client`
 
 ## Deployment
 ### git
@@ -28,6 +32,8 @@ This tool is an unofficial interface for retrieving publicly available Skeb arti
 1. Create a Cloudflare Worker, choose "Start with Hello World!"
 2. Replace the content of `worker.js` with [worker.js](worker.js) in this repo.
 3. Deploy.
+### Wrangler 命令行
+- Download code and run `weangler deploy`.
 
 ## Limitations
 

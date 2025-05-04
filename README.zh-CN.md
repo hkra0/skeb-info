@@ -13,11 +13,15 @@
 ## 使用方法
 
 - 访问 [skebinfo.hkra.xyz](https://skebinfo.hkra.xyz/)
-- API 端点：`/api/users/<用户名>`
 
 ## 免责声明
 
 本工具为非官方接口，仅用于获取 Skeb 平台公开的创作者信息。使用者须遵守 Skeb 服务条款，禁止滥用服务、进行欺诈行为或侵犯第三方权益。开发者不对任何滥用行为或违反 Skeb 指南导致的后果承担责任。
+
+## API 端点
+- 用户信息: `/api/users/<username>`
+- 所有作品（创作者）: `/api/users/<username>/works?role=creator`
+- 所有发送的请求（客户）: `/api/users/<username>/works?role=client`
 
 ## 部署方式
 ### 连接 git
@@ -28,6 +32,8 @@
 1. 创建一个 Cloudflare Worker，选择“Start with Hello World!”
 2. 将 `worker.js` 的内容替换为本项目中的 [worker.js](worker.js)
 3. 点击部署
+### Wrangler 命令行
+- 下载仓库文件，运行 `weangler deploy`
 
 ## 限制
 
