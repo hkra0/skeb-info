@@ -75,7 +75,6 @@ async function handleRequest(request) {
 
   // Handle API requests
   if (url.pathname.startsWith('/api/users/')) {
-
     // Extract username from path
     const pathParts = url.pathname.split('/');
     const username = pathParts[3]?.replace(/^@/, '');
@@ -121,7 +120,7 @@ async function handleRequest(request) {
           for (let page = 0; page < totalPages; page++) {
             const currentOffset = page * perPage;
             apiUrl = `https://skeb.jp/api/users/${username}/works?role=${role}&sort=date&offset=${currentOffset}`;
-            const worksResponse = await fetch(apiUrl, { headers });
+            const worksResponse = await fetch(apiUrl, { headers: responseHeaders });
 
             if (!worksResponse.ok) {
               return handleApiError(worksResponse, 'Works');
