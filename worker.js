@@ -34,7 +34,7 @@ async function handleRequest(request) {
         errorMessage = 'Skeb API server error';
         break;
       default:
-        errorMessage = 'Unexpected API error';
+        errorMessage = `Unexpected API error: ${response.status}`;
     }
     return new Response(JSON.stringify({ error: errorMessage }), {
       status: response.status,
