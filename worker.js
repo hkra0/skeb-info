@@ -1,8 +1,7 @@
 const RATE_LIMIT = 10; // Max requests allowed
-const TIME_WINDOW = 60 * 1000; // Time window in milliseconds (1 minute)
+const TIME_WINDOW = 60 * 1000; // Time window (1 minute)
 
-// Store request counts per IP
-const requestCounts = new Map();
+const requestCounts = new Map(); // Store request counts per IP
 
 addEventListener('fetch', event => {
   event.respondWith(handleRequest(event.request));
@@ -47,15 +46,12 @@ async function handleRequest(request) {
   if (url.pathname.startsWith('/api')) {
     const now = Date.now();
     let clientData = requestCounts.get(clientIP) || { count: 0, startTime: now };
-
     // Reset count if time window has passed
     if (now - clientData.startTime > TIME_WINDOW) {
       clientData = { count: 0, startTime: now };
     }
-
     // Increment request count
     clientData.count += 1;
-
     // Update map
     requestCounts.set(clientIP, clientData);
 
@@ -67,14 +63,12 @@ async function handleRequest(request) {
       });
     }
   }
-
   // Serve the HTML page for the root path
   if (url.pathname === '/' || url.pathname === '') {
-    return new Response(htmlContent, {
+    return new Response(homePage, {
       headers: { 'Content-Type': 'text/html' },
     });
   }
-
   // Handle API requests
   if (url.pathname.startsWith('/api/users/')) {
     // Extract username from path
@@ -111,29 +105,24 @@ async function handleRequest(request) {
           if (!userResponse.ok) {
             return handleApiError(userResponse, 'User in works api');
           }
-
           const userData = await userResponse.json();
           const totalWorks = role === 'creator' ? userData.creator_works_count : userData.client_works_count;
           const perPage = 30;
           const totalPages = Math.ceil(totalWorks / perPage);
           let allWorks = [];
-
           // Step 2: Fetch all works in batches
           for (let page = 0; page < totalPages; page++) {
             const currentOffset = page * perPage;
             apiUrl = `https://skeb.jp/api/users/${username}/works?role=${role}&sort=date&offset=${currentOffset}`;
             const worksResponse = await fetch(apiUrl, { headers: skebHeaders });
-
             if (!worksResponse.ok) {
               return handleApiError(worksResponse, 'Works');
             }
-
             const worksData = await worksResponse.json();
             allWorks = allWorks.concat(worksData);
           }
-
           // Step 3: Return combined works
-          return new Response(JSON.stringify(totalPages), {
+          return new Response(JSON.stringify(userData), {
             status: 200,
             headers: responseHeaders,
           });
@@ -144,13 +133,10 @@ async function handleRequest(request) {
           headers: responseHeaders,
         });
       }
-
       const response = await fetch(apiUrl, { headers: skebHeaders });
-
       if (!response.ok) {
         return handleApiError(response);
       }
-
       const data = await response.json();
       return new Response(JSON.stringify(data), {
         status: 200,
@@ -163,12 +149,11 @@ async function handleRequest(request) {
       });
     }
   }
-
   // Return 404 for unknown paths
   return new Response('Not Found', { status: 404 });
 }
 // HTML content
-const htmlContent = `
+const homePage = `
 <!DOCTYPE html>
 <html lang="en" class="h-full">
 <head>
@@ -401,8 +386,12 @@ const htmlContent = `
                         </table>
                     </div>
                 \`;
-            } catch (error) {
-                resultDiv.innerHTML = \`<p class="text-red-500 dark:text-red-400 py-2 px-4">Error: \${error.message}</p>\`;
+            catch (error) {
+                if (error.response && error.response.status === 404) {
+                    resultDiv.innerHTML = \`<p class="text-red-500 dark:text-red-400 py-2 px-4">Error: User not found</p>\`;
+                } else {
+                    resultDiv.innerHTML = \`<p class="text-red-500 dark:text-red-400 py-2 px-4">Error: \${error.message}</p>\`;
+                }
             }
         }
 
