@@ -194,6 +194,7 @@ const homePage = `
             document.documentElement.classList.remove('dark');
         }
     </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 </head>
 <body class="h-full bg-[#e6ecf0] dark:bg-[#181a1b] py-6 text-gray-900 dark:text-gray-100 transition-all duration-200">
     <div class="w-full max-w-2xl mx-auto p-6 bg-white dark:bg-[#292c2e] rounded-lg shadow-lg">
@@ -203,7 +204,9 @@ const homePage = `
         <!-- Title and Input -->
         <div class="py-6">
             <h1 class="text-5xl font-bold mb-4 text-center text-[#28837f]">Skeb info</h1>
-            <div id="tinyko" class="text-4xl mb-4 text-center">🔍(๑• . •๑)</div>
+            <div class="text-4xl mb-4 text-center">
+                <span class="cursor-default select-none">🔍</span><span id="tinyko" class="cursor-pointer select-none">(๑• . •๑)</span>
+            </div>
         </div>
         <div class="py-2 px-4">
             <div class="mb-4 relative">
@@ -224,6 +227,18 @@ const homePage = `
         <div id="received-works-info" class="mt-8"></div>
     </div>
 
+    <script>
+        // tinyko (๑• . •๑)
+        const tinyko = document.getElementById("tinyko");
+        tinyko.addEventListener("click", () => {
+          tinyko.classList.add("animate__animated", "animate__rubberBand");
+          tinyko.innerHTML = "(๑>.<๑)";
+        });
+        tinyko.addEventListener('animationend', () => {
+          tinyko.classList.remove("animate__animated", "animate__rubberBand");
+          tinyko.innerHTML = "(๑• . •๑)";
+        });
+    </script>
     <script>
         document.getElementById('username').addEventListener('keypress', function(event) {
             if (event.key === 'Enter') {
