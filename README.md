@@ -16,8 +16,6 @@ English | [中文](README.zh-CN.md)
 - Click the username to open the user's Skeb profile.
 - Click the number of `Sent Public Requests` to view the client's request count by creator.
 
-New chat
-
 ## Disclaimer
 
 This tool is an unofficial interface for retrieving publicly available Skeb artist information. Users must comply with Skeb's terms of service, including restrictions on misuse, fraudulent activities, or actions that may infringe on third-party rights. The tool's developer are not liable for any misuse, or violations of Skeb's guidelines resulting from its use.
