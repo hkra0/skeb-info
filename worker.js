@@ -205,7 +205,7 @@ const homePage = `
         <div class="py-6">
             <h1 class="text-5xl font-bold mb-4 text-center text-[#28837f]">Skeb info</h1>
             <div class="text-4xl mb-4 text-center">
-                <span class="cursor-default select-none">🔍</span><span id="tinyko" class="cursor-pointer select-none">(๑• . •๑)</span>
+                <span class="inline-block cursor-default select-none">🔍</span><span id="tinyko" class="inline-block cursor-pointer select-none">(๑• . •๑)</span>
             </div>
         </div>
         <div class="py-2 px-4">
@@ -232,7 +232,9 @@ const homePage = `
         const tinyko = document.getElementById("tinyko");
         tinyko.addEventListener("click", () => {
           tinyko.classList.add("animate__animated", "animate__rubberBand");
-          tinyko.innerHTML = "(๑>.<๑)";
+          setTimeout(() => {
+            tinyko.innerHTML = "(๑>.<๑)";
+          }, 100);
         });
         tinyko.addEventListener('animationend', () => {
           tinyko.classList.remove("animate__animated", "animate__rubberBand");
