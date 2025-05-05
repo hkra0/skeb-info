@@ -1,5 +1,5 @@
-# Skeb info
-基于 Cloudflare Worker 的简易 Skeb 用户信息查询工具 (๑• . •๑)
+# Skeb-info 🔍(๑• . •๑)
+基于 Cloudflare Worker 的简易 Skeb 用户信息查询工具
 
 [English](README.md) | 中文
 

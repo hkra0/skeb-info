@@ -203,7 +203,7 @@ const homePage = `
         <!-- Title and Input -->
         <div class="py-6">
             <h1 class="text-5xl font-bold mb-4 text-center text-[#28837f]">Skeb info</h1>
-            <div class="text-4xl mb-4 text-center">🔍(๑• . •๑)</div>
+            <div id="tinyko" class="text-4xl mb-4 text-center">🔍(๑• . •๑)</div>
         </div>
         <div class="py-2 px-4">
             <div class="mb-4 relative">

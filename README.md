@@ -1,5 +1,5 @@
-# Skeb-info
-A simple Skeb user info lookup tool using Cloudflare worker. (๑• . •๑)
+# Skeb-info 🔍(๑• . •๑)
+A simple Skeb user info lookup tool using Cloudflare worker.
 
 English | [中文](README.zh-CN.md)
 
