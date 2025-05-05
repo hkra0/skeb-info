@@ -26,6 +26,7 @@ This tool is an unofficial interface for retrieving publicly available Skeb arti
 - User info: `/api/users/<username>`
 - All works (creator): `/api/users/<username>/works?role=creator`
 - All sent requests (client): `/api/users/<username>/works?role=client`
+    - When data volume is too large (exceeds 1200), pagination is required; use `meta.next` from the response as the URL for the next request.
 
 ## Deployment
 ### git
@@ -41,7 +42,8 @@ This tool is an unofficial interface for retrieving publicly available Skeb arti
 
 ## Limitations
 
-- Rate limit: 6 requests per minute per IP.  
+- Rate limit: 6 requests per minute per IP.
+- Unable to complete requests with excessive data volume (when `Sent Public Requests` exceeds 6,000).
 - Relies on Skeb's API: subject to their rate limits and availability.
 
 ## License

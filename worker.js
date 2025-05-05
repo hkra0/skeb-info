@@ -1,5 +1,7 @@
 const RATE_LIMIT = 6; // Max requests allowed
 const TIME_WINDOW = 60 * 1000; // Time window (1 minute)
+const SUBREQUEST_LIMIT = 40;
+const perPage = 30;
 
 const requestCounts = new Map(); // Store request counts per IP
 
@@ -90,29 +92,43 @@ async function handleRequest(request) {
       else if (pathParts.length === 5 && pathParts[4] === 'works') {
         const role = url.searchParams.get('role');
         const sort = url.searchParams.get('sort');
-        const offset = url.searchParams.get('offset');
+        let offset = url.searchParams.get('offset');
+        let limit = url.searchParams.get('limit');
+        let status = 400;
         if (!['creator', 'client'].includes(role)) {
           return new Response(JSON.stringify({ error: 'Invalid role parameter' }), {
-            status: 400,
+            status: status,
             headers: responseHeaders,
           });
         }
-        if (sort && offset) {
+        if (sort && offset) { // Normal Skeb webpage request
           apiUrl = `https://skeb.jp/api/users/${username}/works?role=${role}&sort=${sort || 'date'}&offset=${offset || '0'}`;
         } else {
-          // Step 1: Get user info to determine total works
-          const userResponse = await fetch(`https://skeb.jp/api/users/${username}`, { headers: skebHeaders });
-          if (!userResponse.ok) {
-            return handleApiError(userResponse, 'User in works api');
+          let next = null;
+          // Step 1: Determine total works
+          if (!limit) {
+            const userResponse = await fetch(`https://skeb.jp/api/users/${username}`, { headers: skebHeaders });
+            if (!userResponse.ok) {
+              return handleApiError(userResponse, 'User in works api');
+            }
+            const userData = await userResponse.json();
+            limit = role === 'creator' ? userData.received_works_count : userData.sent_public_works_count;
           }
-          const userData = await userResponse.json();
-          const totalWorks = role === 'creator' ? userData.received_works_count : userData.sent_public_works_count;
-          const perPage = 30;
-          const totalPages = Math.ceil(totalWorks / perPage);
+          if (!offset) {
+            offset = 0;
+          }
+          let totalPages = Math.ceil(limit / perPage);
+          if (totalPages > SUBREQUEST_LIMIT) {
+            totalPages = SUBREQUEST_LIMIT;
+            status = 206;
+            const maxSingleRequest = perPage * SUBREQUEST_LIMIT
+            const newOffset = maxSingleRequest + parseInt(offset);
+            next = `/api/users/${username}/works?role=${role}&offset=${newOffset}&limit=${limit - maxSingleRequest}`;
+          }
           let allWorks = [];
           // Step 2: Fetch all works in batches
           for (let page = 0; page < totalPages; page++) {
-            const currentOffset = page * perPage;
+            const currentOffset = page * perPage + parseInt(offset);
             apiUrl = `https://skeb.jp/api/users/${username}/works?role=${role}&sort=date&offset=${currentOffset}`;
             const worksResponse = await fetch(apiUrl, { headers: skebHeaders });
             if (!worksResponse.ok) {
@@ -120,10 +136,19 @@ async function handleRequest(request) {
             }
             const worksData = await worksResponse.json();
             allWorks = allWorks.concat(worksData);
+            status = 200;
           }
-          // Step 3: Return combined works
-          return new Response(JSON.stringify(allWorks), {
-            status: 200,
+          // Step 3: Return result
+          const responseBody = {
+            data: allWorks,
+            meta: {
+              total: limit,
+              returned: allWorks.length,
+              next: next,
+            }
+          }
+          return new Response(JSON.stringify(responseBody), {
+            status: status,
             headers: responseHeaders,
           });
         }
@@ -379,7 +404,7 @@ const homePage = `
                                 \${data.sent_public_works_count ?
                                 \`<tr class="border-t border-gray-300 dark:border-gray-600">
                                     <th class="py-2 px-4 font-semibold text-sm sm:text-base">Sent Public Requests</th>
-                                    <td class="py-2 px-4 text-sm sm:text-base cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700" onclick="fetchClientWorks('\${username}')">
+                                    <td class="py-2 px-4 text-sm sm:text-base cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700" onclick="fetchClientWorks('\${username}', \${data.sent_public_works_count})">
                                     \${data.sent_public_works_count} \${data.sent_first_works_count ? \`( first \${data.sent_first_works_count} )\` : ""}
                                     </td>
                                 </tr>\`: ""}
@@ -408,17 +433,31 @@ const homePage = `
             div.textContent = description;
             return div.innerHTML.replace(/\\n/g, '<br>');
         }
-        async function fetchClientWorks(username) {
+        async function fetchClientWorks(username, total) {
             const sentWorksDiv = document.getElementById('sent-works-info');
             try {
-                sentWorksDiv.innerHTML += '<p class="text-gray-500 dark:text-gray-400 py-2 px-4">Loading sent works...</p>';
-                
-                const response = await fetch(\`/api/users/\${username}/works?role=client\`);
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || 'Failed to fetch client works');
+                sentWorksDiv.innerHTML = '<p class="text-gray-500 dark:text-gray-400 py-2 px-4">Loading sent works...</p>';
+                let works = [];
+                let nextUrl = \`/api/users/\${username}/works?role=client&limit=\${total}\`;
+                let subRequestCount = 0;
+                while (nextUrl) {
+                    subRequestCount ++;
+                    const response = await fetch(nextUrl);
+                    if (!response.ok && response.status !== 206) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.error || 'Failed to fetch client works');
+                    }
+                    const responseJson = await response.json();
+                    if (!responseJson.data || !responseJson.meta) {
+                        throw new Error('Invalid response structure: missing data or meta');
+                    }
+                    works = works.concat(responseJson.data);
+                    nextUrl = responseJson.meta.next;
+                    if (subRequestCount >= 5) {
+                        break;
+                    }
+                    sentWorksDiv.innerHTML = \`<p class="text-gray-500 dark:text-gray-400 py-2 px-4">Loading sent works (slice \${subRequestCount + 1}) ...</p>\`;
                 }
-                const works = await response.json();
 
                 console.info("Raw sent works data is below 📚(๑• . •๑)")
                 console.log(works)
@@ -452,7 +491,7 @@ const homePage = `
                 // Generate table
                 const tableHtml = \`
                     <div class="mt-8">
-                        <h2 class="text-xl font-bold mb-4 py-2 px-4">Client Requests by Creator</h2>
+                        <h2 class="text-l font-bold mb-4 py-2 px-4">Client Requests by Creator</h2>
                         <hr/>
                         <div class="max-h-64 overflow-y-auto">
                             <table class="w-full text-left border-collapse">

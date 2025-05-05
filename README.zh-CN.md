@@ -24,6 +24,7 @@
 - 用户信息: `/api/users/<username>`
 - 所有作品（创作者）: `/api/users/<username>/works?role=creator`
 - 所有发送的请求（客户）: `/api/users/<username>/works?role=client`
+    - 数据量过大（超过1200）时需要分片，使用返回数据中 `meta.next` 作为下一部分请求的 Url
 
 ## 部署方式
 ### 连接 git
@@ -40,6 +41,7 @@
 ## 限制
 
 - 速率限制：每个 IP 每分钟 6 次请求
+- 无法完成数据量过大的请求（`Sent Public Requests` 超过 6000 时）
 - 依赖 Skeb API：可能受到限制或出现字段更新等原因导致的不可用
 
 ## 协议
