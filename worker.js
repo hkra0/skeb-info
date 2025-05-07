@@ -104,7 +104,7 @@ async function handleRequest(request) {
         if (sort && offset) { // Normal Skeb webpage request
           apiUrl = `https://skeb.jp/api/users/${username}/works?role=${role}&sort=${sort || 'date'}&offset=${offset || '0'}`;
         } else {
-          let next = null;
+          let next, remain = null;
           // Step 1: Determine total works
           if (!limit) {
             const userResponse = await fetch(`https://skeb.jp/api/users/${username}`, { headers: skebHeaders });
@@ -119,6 +119,7 @@ async function handleRequest(request) {
           }
           let totalPages = Math.ceil(limit / perPage);
           if (totalPages > SUBREQUEST_LIMIT) {
+            remain = Math.ceil((totalPages - SUBREQUEST_LIMIT) / SUBREQUEST_LIMIT);
             totalPages = SUBREQUEST_LIMIT;
             status = 206;
             const maxSingleRequest = perPage * SUBREQUEST_LIMIT
@@ -145,6 +146,7 @@ async function handleRequest(request) {
               total: limit,
               returned: allWorks.length,
               next: next,
+              remain: remain,
             }
           }
           return new Response(JSON.stringify(responseBody), {
@@ -473,7 +475,7 @@ const homePage = `
                     if (subRequestCount >= 5) {
                         break;
                     }
-                    sentWorksDiv.innerHTML = \`<p class="text-gray-500 dark:text-gray-400 py-2 px-4">Loading sent works (slice \${subRequestCount + 1}) ...</p>\`;
+                    sentWorksDiv.innerHTML = \`<p class="text-gray-500 dark:text-gray-400 py-2 px-4">Loading sent works (part \${subRequestCount + 1} / \${subRequestCount + responseJson.meta.remain}) ...</p>\`;
                 }
 
                 console.info("Raw sent works data is below 📚(๑• . •๑)")
