@@ -177,7 +177,7 @@ async function handleRequest(request) {
     }
   }
   // Return 404 for unknown paths
-  return new Response('Not Found', { status: 404 });
+  return new Response('?(๑• . •๑)', { status: 404 });
 }
 // HTML content
 const homePage = `
