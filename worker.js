@@ -65,9 +65,15 @@ async function handleRequest(request) {
       });
     }
   }
-  // Serve the HTML page for the root path
+  // Home & user page
   if (url.pathname === '/' || url.pathname === '' || url.pathname.startsWith('/@')) {
-    return new Response(homePage, {
+    return new Response(infoPage, {
+      headers: { 'Content-Type': 'text/html' },
+    });
+  }
+  // Wishlist page
+  if (url.pathname === '/wishlist' || url.pathname === '/wishlist/') {
+    return new Response(wishlistPage, {
       headers: { 'Content-Type': 'text/html' },
     });
   }
@@ -180,7 +186,7 @@ async function handleRequest(request) {
   return new Response('?(๑• . •๑)', { status: 404 });
 }
 // HTML content
-const homePage = `
+const infoPage = `
 <!DOCTYPE html>
 <html lang="en" class="h-full">
 <head>
@@ -201,11 +207,11 @@ const homePage = `
 <body class="h-full bg-[#e6ecf0] dark:bg-[#181a1b] py-6 text-gray-900 dark:text-gray-100 transition-all duration-200">
     <div class="w-full max-w-2xl mx-auto p-6 bg-white dark:bg-[#292c2e] rounded-lg shadow-lg">
         <noscript>
-            <p class="text-red-500 dark:text-red-400 mb-4">JavaScript is disabled. Please enable JavaScript to use this page.</p>
+            <p class="text-red-500 opacity-75 mb-4">JavaScript is disabled. Please enable JavaScript to use this page.</p>
         </noscript>
         <!-- Title and Input -->
         <div class="py-6">
-            <a href="/" class="text-5xl font-bold mb-4 text-center block text-[#28837f]">Skeb info</a>
+            <a href="/" class="text-5xl font-bold mb-4 text-center block text-teal-500">Skeb info</a>
             <div class="text-4xl mb-4 text-center">
                 <span id="spyglass" class="inline-block cursor-default select-none">🔍</span><span id="tinyko" class="inline-block cursor-pointer select-none">(๑• . •๑)</span>
             </div>
@@ -384,21 +390,21 @@ const homePage = `
                             \${[
                                 data.nsfw_acceptable ? \`<span class="font-bold opacity-50">nsfw OK</span>\` : null,
                                 data.tip_acceptable ? null : \`<span class="font-bold opacity-50">Boost NG</span>\`,
-                                links.twitter_url ? \`<a href="\${links.twitter_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Twitter</a>\` : null,
-                                links.misskey_url ? \`<a href="\${links.misskey_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Misskey</a>\` : null,
-                                links.pixiv_url ? \`<a href="\${links.pixiv_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Pixiv</a>\` : null,
-                                links.booth_url ? \`<a href="\${links.booth_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Booth</a>\` : null,
-                                links.fantia_url ? \`<a href="\${links.fantia_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Fantia</a>\` : null,
-                                links.fanbox_url ? \`<a href="\${links.fanbox_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Fanbox</a>\` : null,
-                                links.nijie_url ? \`<a href="\${links.nijie_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Nijie</a>\` : null,
-                                links.dlsite_url ? \`<a href="\${links.dlsite_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">DLsite</a>\` : null,
-                                links.fanza_url ? \`<a href="\${links.fanza_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Fanza</a>\` : null,
-                                links.skima_url ? \`<a href="\${links.skima_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Skima</a>\` : null,
-                                links.coconala_url ? \`<a href="\${links.coconala_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Coconala</a>\` : null,
-                                links.patreon_url ? \`<a href="\${links.patreon_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Patreon</a>\` : null,
-                                links.youtube_url ? \`<a href="\${links.youtube_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">YouTube</a>\` : null,
-                                links.wishlist_url ? \`<a href="\${links.wishlist_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Wishlist</a>\` : null,
-                                data.url ? \`<a href="\${data.url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Url (\${new URL(data.url).hostname.split('.').slice(-2).join('.')})</a>\` : null
+                                links.twitter_url ? \`<a href="\${links.twitter_url}" target="_blank" class="text-teal-700 font-bold hover:underline">Twitter</a>\` : null,
+                                links.misskey_url ? \`<a href="\${links.misskey_url}" target="_blank" class="text-teal-700 font-bold hover:underline">Misskey</a>\` : null,
+                                links.pixiv_url ? \`<a href="\${links.pixiv_url}" target="_blank" class="text-teal-700 font-bold hover:underline">Pixiv</a>\` : null,
+                                links.booth_url ? \`<a href="\${links.booth_url}" target="_blank" class="text-teal-700 font-bold hover:underline">Booth</a>\` : null,
+                                links.fantia_url ? \`<a href="\${links.fantia_url}" target="_blank" class="text-teal-700 font-bold hover:underline">Fantia</a>\` : null,
+                                links.fanbox_url ? \`<a href="\${links.fanbox_url}" target="_blank" class="text-teal-700 font-bold hover:underline">Fanbox</a>\` : null,
+                                links.nijie_url ? \`<a href="\${links.nijie_url}" target="_blank" class="text-teal-700 font-bold hover:underline">Nijie</a>\` : null,
+                                links.dlsite_url ? \`<a href="\${links.dlsite_url}" target="_blank" class="text-teal-700 font-bold hover:underline">DLsite</a>\` : null,
+                                links.fanza_url ? \`<a href="\${links.fanza_url}" target="_blank" class="text-teal-700 font-bold hover:underline">Fanza</a>\` : null,
+                                links.skima_url ? \`<a href="\${links.skima_url}" target="_blank" class="text-teal-700 font-bold hover:underline">Skima</a>\` : null,
+                                links.coconala_url ? \`<a href="\${links.coconala_url}" target="_blank" class="text-teal-700 font-bold hover:underline">Coconala</a>\` : null,
+                                links.patreon_url ? \`<a href="\${links.patreon_url}" target="_blank" class="text-teal-700 font-bold hover:underline">Patreon</a>\` : null,
+                                links.youtube_url ? \`<a href="\${links.youtube_url}" target="_blank" class="text-teal-700 font-bold hover:underline">YouTube</a>\` : null,
+                                links.wishlist_url ? \`<a href="\${links.wishlist_url}" target="_blank" class="text-teal-700 font-bold hover:underline">Wishlist</a>\` : null,
+                                data.url ? \`<a href="\${data.url}" target="_blank" class="text-teal-700 font-bold hover:underline">Url (\${new URL(data.url).hostname.split('.').slice(-2).join('.')})</a>\` : null
                             ].filter(Boolean).join(' / ')}
                         </div>
                             <table class="w-full text-left border-collapse">
@@ -574,7 +580,7 @@ const homePage = `
                                 <tbody>
                                     \${sortedCreators.length ? sortedCreators.map(creator => \`
                                         <tr class="border-t border-gray-300 dark:border-gray-600">
-                                            <td class="py-2 px-4 text-sm sm:text-base"><a href="https://skeb.jp/@\${creator.name}" target="_blank" class="text-[#28837f] hover:underline">\${creator.name}</a></td>
+                                            <td class="py-2 px-4 text-sm sm:text-base"><a href="https://skeb.jp/@\${creator.name}" target="_blank" class="text-teal-700 hover:underline">\${creator.name}</a></td>
                                             <td class="py-2 px-4 text-sm sm:text-base">\${creator.tips} / \${creator.requests}</td>
                                         </tr>
                                     \`).join('') : \`
@@ -598,3 +604,4 @@ const homePage = `
 </body>
 </html>
 `;
+const wishlistPage = ``
