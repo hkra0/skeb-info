@@ -66,7 +66,7 @@ async function handleRequest(request) {
     }
   }
   // Serve the HTML page for the root path
-  if (url.pathname === '/' || url.pathname === '') {
+  if (url.pathname === '/' || url.pathname === '' || url.pathname.startsWith('/@')) {
     return new Response(homePage, {
       headers: { 'Content-Type': 'text/html' },
     });
@@ -244,6 +244,11 @@ const homePage = `
         });
     </script>
     <script>
+        const urlUserName = window.location.pathname.slice(2);
+        console.log(urlUserName)
+        document.getElementById('username').value = urlUserName;
+    </script>
+    <script>
         document.getElementById('username').addEventListener('keypress', function(event) {
             if (event.key === 'Enter') {
                 fetchArtistInfo();
@@ -279,6 +284,8 @@ const homePage = `
                     throw new Error('Incorrect username format');
                 } else {
                     document.getElementById('username').value = username;
+                    history.pushState({}, '', \`@\${username}\`);
+                    document.title = \`\${username} - 🔍(๑• . •๑)\`;
                 }
                 userInfoDiv.innerHTML = '<p class="text-gray-500 dark:text-gray-400 py-2 px-4">Loading...</p>';
 
@@ -423,7 +430,7 @@ const homePage = `
                                 \${data.sent_public_works_count ?
                                 \`<tr class="border-t border-gray-300 dark:border-gray-600">
                                     <th class="py-2 px-4 font-semibold text-sm sm:text-base">Sent Public Requests</th>
-                                    <td class="py-2 px-4 text-sm sm:text-base cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700" onclick="fetchClientWorks('\${username}', \${data.sent_public_works_count})">
+                                    <td class="py-2 px-4 text-sm sm:text-base cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition" onclick="fetchClientWorks('\${username}', \${data.sent_public_works_count})">
                                     \${data.sent_public_works_count} \${data.sent_first_works_count ? \`( first \${data.sent_first_works_count} )\` : ""}
                                     </td>
                                 </tr>\`: ""}
