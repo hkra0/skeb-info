@@ -272,6 +272,7 @@ const homePage = `
             searchButton.textContent = "Search";
             searchButton.disabled = false;
             tinyko.innerHTML = "(๑• . •๑)";
+            spyglass.innerHTML = "🔍";
             spyglass.classList.remove("animate__animated", "animate__infinite", "animate__headShake", "animate__pulse");
         }
         function disableSearchButton() {
