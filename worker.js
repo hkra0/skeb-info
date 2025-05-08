@@ -5,9 +5,23 @@ const perPage = 30;
 
 const requestCounts = new Map(); // Store request counts per IP
 
-addEventListener('fetch', event => {
-  event.respondWith(handleRequest(event.request));
-});
+// Cache for HTML content
+let infoPage = null;
+let wishlistPage = null;
+
+export default {
+  async fetch(request) {
+    // Preload HTML content if not already loaded
+    if (infoPage === null || wishlistPage === null) {
+      const infoResponse = await fetch(`https://afxr17light.github.io/Skeb-info/`);
+      const wishlistResponse = await fetch(`https://afxr17light.github.io/Skeb-info/wishlist`);
+      infoPage = await infoResponse.text();
+      wishlistPage = await wishlistResponse.text();
+    }
+
+    return handleRequest(request);
+  }
+};
 
 async function handleRequest(request) {
   const url = new URL(request.url);
@@ -21,12 +35,14 @@ async function handleRequest(request) {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
   };
+
   // Handle API errors
   function handleApiError(response, resourceType = 'Resource') {
     let errorMessage;
     switch (response.status) {
       case 403:
         errorMessage = 'Access denied by Skeb';
+        break;
       case 404:
         errorMessage = `${resourceType} not found`;
         break;
@@ -44,6 +60,7 @@ async function handleRequest(request) {
       headers: responseHeaders,
     });
   }
+
   // Rate limiting logic
   if (url.pathname.startsWith('/api')) {
     const now = Date.now();
@@ -65,18 +82,21 @@ async function handleRequest(request) {
       });
     }
   }
+
   // Home & user page
   if (url.pathname === '/' || url.pathname === '' || url.pathname.startsWith('/@')) {
     return new Response(infoPage, {
       headers: { 'Content-Type': 'text/html' },
     });
   }
+
   // Wishlist page
   if (url.pathname === '/wishlist' || url.pathname === '/wishlist/') {
     return new Response(wishlistPage, {
       headers: { 'Content-Type': 'text/html' },
     });
   }
+
   // Handle API requests
   if (url.pathname.startsWith('/api/users/')) {
     // Extract username from path
@@ -88,6 +108,7 @@ async function handleRequest(request) {
         headers: responseHeaders,
       });
     }
+
     try {
       let apiUrl;
       // Handle user info request: /api/users/${username}
@@ -101,16 +122,20 @@ async function handleRequest(request) {
         let offset = url.searchParams.get('offset');
         let limit = url.searchParams.get('limit');
         let status = 400;
+
         if (!['creator', 'client'].includes(role)) {
           return new Response(JSON.stringify({ error: 'Invalid role parameter' }), {
             status: status,
             headers: responseHeaders,
           });
         }
+
         if (sort && offset) { // Normal Skeb webpage request
           apiUrl = `https://skeb.jp/api/users/${username}/works?role=${role}&sort=${sort || 'date'}&offset=${offset || '0'}`;
         } else {
-          let next, remain = null;
+          let next = null;
+          let remain = null;
+
           // Step 1: Determine total works
           if (!limit) {
             const userResponse = await fetch(`https://skeb.jp/api/users/${username}`, { headers: skebHeaders });
@@ -120,18 +145,21 @@ async function handleRequest(request) {
             const userData = await userResponse.json();
             limit = role === 'creator' ? userData.received_works_count : userData.sent_public_works_count;
           }
+
           if (!offset) {
             offset = 0;
           }
+
           let totalPages = Math.ceil(limit / perPage);
           if (totalPages > SUBREQUEST_LIMIT) {
             remain = Math.ceil((totalPages - SUBREQUEST_LIMIT) / SUBREQUEST_LIMIT);
             totalPages = SUBREQUEST_LIMIT;
             status = 206;
-            const maxSingleRequest = perPage * SUBREQUEST_LIMIT
+            const maxSingleRequest = perPage * SUBREQUEST_LIMIT;
             const newOffset = maxSingleRequest + parseInt(offset);
             next = `/api/users/${username}/works?role=${role}&offset=${newOffset}&limit=${limit - maxSingleRequest}`;
           }
+
           let allWorks = [];
           // Step 2: Fetch all works in batches
           for (let page = 0; page < totalPages; page++) {
@@ -145,6 +173,7 @@ async function handleRequest(request) {
             allWorks = allWorks.concat(worksData);
             status = 200;
           }
+
           // Step 3: Return result
           const responseBody = {
             data: allWorks,
@@ -153,8 +182,9 @@ async function handleRequest(request) {
               returned: allWorks.length,
               next: next,
               remain: remain,
-            }
-          }
+            },
+          };
+
           return new Response(JSON.stringify(responseBody), {
             status: status,
             headers: responseHeaders,
@@ -166,10 +196,12 @@ async function handleRequest(request) {
           headers: responseHeaders,
         });
       }
+
       const response = await fetch(apiUrl, { headers: skebHeaders });
       if (!response.ok) {
         return handleApiError(response);
       }
+
       const data = await response.json();
       return new Response(JSON.stringify(data), {
         status: 200,
@@ -182,9 +214,7 @@ async function handleRequest(request) {
       });
     }
   }
+
   // Return 404 for unknown paths
   return new Response('?(๑• . •๑)', { status: 404 });
 }
-// HTML content
-const infoPage = await fetch(`https://afxr17light.github.io/Skeb-info/`);
-const wishlistPage = await fetch(`https://afxr17light.github.io/Skeb-info/wishlist`);
