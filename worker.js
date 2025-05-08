@@ -205,7 +205,7 @@ const homePage = `
         </noscript>
         <!-- Title and Input -->
         <div class="py-6">
-            <h1 class="text-5xl font-bold mb-4 text-center text-[#28837f]">Skeb info</h1>
+            <a href="/" class="text-5xl font-bold mb-4 text-center block text-[#28837f]">Skeb info</a>
             <div class="text-4xl mb-4 text-center">
                 <span class="inline-block cursor-default select-none">🔍</span><span id="tinyko" class="inline-block cursor-pointer select-none">(๑• . •๑)</span>
             </div>
@@ -247,6 +247,7 @@ const homePage = `
         const urlUserName = window.location.pathname.slice(2);
         console.log(urlUserName)
         document.getElementById('username').value = urlUserName;
+        document.title = \`\${urlUserName} - 🔍(๑• . •๑)\`;
     </script>
     <script>
         document.getElementById('username').addEventListener('keypress', function(event) {
