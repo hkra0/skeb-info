@@ -1,0 +1,26 @@
+{
+    "rewrites": [
+      {
+        "source": "/wishlist",
+        "destination": "/wishlist.html"
+      },
+      {
+        "source": "/wishlist/",
+        "destination": "/wishlist.html"
+      },
+      {
+        "source": "/@(.*)",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/api/(.*)",
+        "destination": "/api/skeb.js"
+      }
+    ],
+    "cleanUrls": true,
+    "trailingSlash": false
+  }

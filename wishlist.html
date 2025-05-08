@@ -223,7 +223,7 @@
                 if (creators.some(c => c.screen_name === data.screen_name)) {
                     throw new Error('Creator already in wishlist');
                 }
-                creators.push(data);
+                creators.unshift(data);
                 saveCreators(creators);
                 restore();
                 usernameInput.value = '';
