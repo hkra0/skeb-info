@@ -247,7 +247,7 @@ const homePage = `
         const urlUserName = window.location.pathname.slice(2);
         console.log(urlUserName)
         document.getElementById('username').value = urlUserName;
-        document.title = \`\${urlUserName} - 🔍(๑• . •๑)\`;
+        document.title = \`\${urlUserName}\${urlUserName ? " - " : ""}🔍(๑• . •๑)\`;
     </script>
     <script>
         document.getElementById('username').addEventListener('keypress', function(event) {
@@ -399,7 +399,7 @@ const homePage = `
                                     <td class="py-2 px-4 text-sm sm:text-base">
                                         \${data.received_works_count}\${
                                             ((p = data.received_private_works_count, n = data.received_nsfw_works_count) => 
-                                                p || n ? \` (\${[p && \`priv \${p}\`, n && \`nsfw \${n}\`].filter(Boolean).join('; ')})\` : ''
+                                                p || n ? \` (\${[p && \`priv \${p}\`, n && \`nsfw \${n}\`].filter(Boolean).join(' / ')})\` : ''
                                             )()
                                         }
                                     </td>
