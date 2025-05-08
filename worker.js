@@ -207,20 +207,21 @@ const homePage = `
         <div class="py-6">
             <a href="/" class="text-5xl font-bold mb-4 text-center block text-[#28837f]">Skeb info</a>
             <div class="text-4xl mb-4 text-center">
-                <span class="inline-block cursor-default select-none">🔍</span><span id="tinyko" class="inline-block cursor-pointer select-none">(๑• . •๑)</span>
+                <span id="spyglass" class="inline-block cursor-default select-none">🔍</span><span id="tinyko" class="inline-block cursor-pointer select-none">(๑• . •๑)</span>
             </div>
         </div>
         <div class="py-2 px-4">
             <div class="mb-4 relative">
-                <input id="username" type="text" placeholder="Skeb link or username" class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-cyan-500 dark:focus:ring-cyan-400 pr-10">
+                <input id="username" type="text" placeholder="Skeb link or username" oninput="restore()"
+                    class="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-cyan-500 dark:focus:ring-cyan-400 pr-10" />
                 <button id="clearInput" type="button" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
-                    onclick="document.getElementById('username').value = ''; document.getElementById('username').focus();">
+                    onclick="clearInput()">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                 </button>
             </div>
-            <button onclick="fetchUserInfo()" class="w-full bg-[#28837f] text-white p-2 rounded hover:bg-[#206966] dark:hover:bg-[#206966] transition-colors">Search</button>
+            <button id="search" onclick="fetchUserInfo()" class="w-full bg-[#28837f] text-white p-2 rounded hover:bg-[#206966] dark:hover:bg-[#206966] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">Search</button>
         </div>
 
         <!-- Result Area -->
@@ -228,11 +229,19 @@ const homePage = `
         <div id="sent-works-info" class="mt-8"></div>
         <div id="received-works-info" class="mt-8"></div>
     </div>
-
     <script>
-        // tinyko (๑• . •๑)
         const tinyko = document.getElementById("tinyko");
+        const spyglass = document.getElementById("spyglass");
+        const urlUserName = window.location.pathname.slice(2);
+        const userNameInput = document.getElementById('username')
+        const searchButton = document.getElementById('search');
+        const userInfoDiv = document.getElementById('user-info');
+        const sentWorksDiv = document.getElementById('sent-works-info');
+        const receivedWorksDiv = document.getElementById('received-works-info');
+        // tinyko (๑• . •๑)
+        let tnkBeforeState = tinyko.innerHTML;
         tinyko.addEventListener("click", () => {
+          tnkBeforeState = tinyko.innerHTML;
           tinyko.classList.add("animate__animated", "animate__rubberBand");
           setTimeout(() => {
             tinyko.innerHTML = "(๑>.<๑)";
@@ -240,30 +249,41 @@ const homePage = `
         });
         tinyko.addEventListener('animationend', () => {
           tinyko.classList.remove("animate__animated", "animate__rubberBand");
-          tinyko.innerHTML = "(๑• . •๑)";
+          tinyko.innerHTML = tnkBeforeState;
         });
-    </script>
-    <script>
-        const urlUserName = window.location.pathname.slice(2);
-        const userNameInput = document.getElementById('username')
         userNameInput.value = urlUserName;
+        const searchButtonDefaultClasses = searchButton.className;
         document.title = \`\${urlUserName}\${urlUserName ? " - " : ""}🔍(๑• . •๑)\`;
         if (urlUserName) fetchUserInfo();
+        // input enter
         userNameInput.addEventListener('keypress', function(event) {
             if (event.key === 'Enter') {
-                fetchUserInfo();
+                !searchButton.disabled && fetchUserInfo();
                 document.getElementById('username').blur();
             }
         });
+        function clearInput() {
+            userNameInput.value = '';
+            userNameInput.focus();
+            restore();
+        }
+        function restore() {
+            searchButton.className = searchButtonDefaultClasses;
+            searchButton.textContent = "Search";
+            searchButton.disabled = false;
+            tinyko.innerHTML = "(๑• . •๑)";
+            spyglass.classList.remove("animate__animated", "animate__infinite", "animate__headShake", "animate__pulse");
+        }
+        function disableSearchButton() {
+            searchButton.disabled = true;
+            searchButton.classList.remove('hover:bg-[#206966]', 'dark:hover:bg-[#206966]')
+        }
         async function fetchUserInfo() {
-            const userInfoDiv = document.getElementById('user-info');
-            const sentWorksDiv = document.getElementById('sent-works-info');
-            const receivedWorksDiv = document.getElementById('received-works-info');
             sentWorksDiv.innerHTML = "";
             receivedWorksDiv.innerHTML = "";
             try {
-                const usernameInput = document.getElementById('username').value.trim();
-                let username = usernameInput;
+                const usernameInputValue = userNameInput.value.trim();
+                let username = usernameInputValue;
                 if (username.startsWith('https://skeb.jp/')) {
                     username = username.split('/works/')[0].replace('https://skeb.jp/@', '');
                 } else if (username.startsWith('https://x.com/')) {
@@ -287,13 +307,18 @@ const homePage = `
                     history.pushState({}, '', \`@\${username}\`);
                     document.title = \`\${username} - 🔍(๑• . •๑)\`;
                 }
-                userInfoDiv.innerHTML = '<p class="text-gray-500 dark:text-gray-400 py-2 px-4">Loading...</p>';
-
+                disableSearchButton();
+                spyglass.classList.add("animate__animated", "animate__infinite", "animate__pulse");
+                searchButton.textContent = 'Loading...';
+// await new Promise(resolve => setTimeout(resolve, 2000)); // test loading state
                 const response = await fetch(\`/api/users/\${username}\`);
                 if (!response.ok) {
                     const errorData = await response.json();
                     throw new Error(errorData.error || 'Unknown error');
+                } else {
+                    restore();
                 }
+                spyglass.classList.remove("animate__animated", "animate__infinite", "animate__pulse");
                 const data = await response.json();
                 if (data.error) {
                     throw new Error(data.error);
@@ -445,8 +470,22 @@ const homePage = `
                 \`;
             } catch (error) {
                 if (error.message.toLowerCase().includes("not found")) {
-                    userInfoDiv.innerHTML = \`<p class="text-red-500 dark:text-red-400 py-2 px-4">Error: User not found</p>\`;
+                    searchButton.textContent = 'User not found';
+                    searchButton.classList.remove('bg-[#28837f]', 'hover:bg-[#206966]', 'dark:hover:bg-[#206966]');
+                    searchButton.classList.add('bg-gray-600');
+                    spyglass.innerHTML = "❔";
+                    spyglass.classList.remove("animate__animated", "animate__infinite", "animate__pulse");
+                    spyglass.classList.add("animate__animated", "animate__bounceIn");
+                    document.title = \`404 - 🔍(๑• . •๑)\`;
+                    userInfoDiv.innerHTML = "";
                 } else {
+                    searchButton.textContent = 'Error';
+                    searchButton.classList.remove('bg-[#28837f]', 'hover:bg-[#206966]', 'dark:hover:bg-[#206966]');
+                    searchButton.classList.add('bg-red-500', 'opacity-50');
+                    spyglass.innerHTML = "❌";
+                    spyglass.classList.remove("animate__animated", "animate__infinite", "animate__pulse");
+                    spyglass.classList.add("animate__animated", "animate__bounceIn");
+                    tinyko.innerHTML = "(๑>.<๑)";
                     userInfoDiv.innerHTML = \`<p class="text-red-500 dark:text-red-400 py-2 px-4">Error: \${error.message}</p>\`;
                 }
             }
