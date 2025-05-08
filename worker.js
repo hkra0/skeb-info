@@ -220,7 +220,7 @@ const homePage = `
                     </svg>
                 </button>
             </div>
-            <button onclick="fetchArtistInfo()" class="w-full bg-[#28837f] text-white p-2 rounded hover:bg-[#206966] dark:hover:bg-[#206966] transition-colors">Search</button>
+            <button onclick="fetchUserInfo()" class="w-full bg-[#28837f] text-white p-2 rounded hover:bg-[#206966] dark:hover:bg-[#206966] transition-colors">Search</button>
         </div>
 
         <!-- Result Area -->
@@ -245,18 +245,17 @@ const homePage = `
     </script>
     <script>
         const urlUserName = window.location.pathname.slice(2);
-        console.log(urlUserName)
-        document.getElementById('username').value = urlUserName;
+        const userNameInput = document.getElementById('username')
+        userNameInput.value = urlUserName;
         document.title = \`\${urlUserName}\${urlUserName ? " - " : ""}🔍(๑• . •๑)\`;
-    </script>
-    <script>
-        document.getElementById('username').addEventListener('keypress', function(event) {
+        if (urlUserName) fetchUserInfo();
+        userNameInput.addEventListener('keypress', function(event) {
             if (event.key === 'Enter') {
-                fetchArtistInfo();
+                fetchUserInfo();
                 document.getElementById('username').blur();
             }
         });
-        async function fetchArtistInfo() {
+        async function fetchUserInfo() {
             const userInfoDiv = document.getElementById('user-info');
             const sentWorksDiv = document.getElementById('sent-works-info');
             const receivedWorksDiv = document.getElementById('received-works-info');
