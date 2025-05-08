@@ -381,21 +381,25 @@ const homePage = `
                         </div>
                         <p class="py-2 px-4">\${sanitizeDescription(data.description) || '<span class="text-gray-500">no description</span>'}</p>
                         <div class="py-2 px-4 mb-8">
-                            \${links.twitter_url ? \`<a href="\${links.twitter_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Twitter</a>\` : ""}
-                            \${links.misskey_url ? \`/&nbsp;<a href="\${links.misskey_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Misskey</a>\` : ""}
-                            \${links.pixiv_url ? \`/&nbsp;<a href="\${links.pixiv_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Pixiv</a>\` : ""}
-                            \${links.booth_url ? \`/&nbsp;<a href="\${links.booth_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Booth</a>\` : ""}
-                            \${links.fantia_url ? \`/&nbsp;<a href="\${links.fantia_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Fantia</a>\` : ""}
-                            \${links.fanbox_url ? \`/&nbsp;<a href="\${links.fanbox_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Fanbox</a>\` : ""}
-                            \${links.nijie_url ? \`/&nbsp;<a href="\${links.nijie_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Nijie</a>\` : ""}
-                            \${links.dlsite_url ? \`/&nbsp;<a href="\${links.dlsite_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">DLsite</a>\` : ""}
-                            \${links.fanza_url ? \`/&nbsp;<a href="\${links.fanza_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Fanza</a>\` : ""}
-                            \${links.skima_url ? \`/&nbsp;<a href="\${links.skima_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Skima</a>\` : ""}
-                            \${links.coconala_url ? \`/&nbsp;<a href="\${links.coconala_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Coconala</a>\` : ""}
-                            \${links.patreon_url ? \`/&nbsp;<a href="\${links.patreon_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Patreon</a>\` : ""}
-                            \${links.youtube_url ? \`/&nbsp;<a href="\${links.youtube_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">YouTube</a>\` : ""}
-                            \${links.wishlist_url ? \`/&nbsp;<a href="\${links.wishlist_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Wishlist</a>\` : ""}
-                            \${data.url ? \`/&nbsp;<a href="\${data.url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Url (\${new URL(data.url).hostname.split('.').slice(-2).join('.')})</a>\` : ""}
+                            \${[
+                                data.nsfw_acceptable ? \`<span class="font-bold opacity-50">nsfw OK</span>\` : null,
+                                data.tip_acceptable ? null : \`<span class="font-bold opacity-50">Boost NG</span>\`,
+                                links.twitter_url ? \`<a href="\${links.twitter_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Twitter</a>\` : null,
+                                links.misskey_url ? \`<a href="\${links.misskey_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Misskey</a>\` : null,
+                                links.pixiv_url ? \`<a href="\${links.pixiv_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Pixiv</a>\` : null,
+                                links.booth_url ? \`<a href="\${links.booth_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Booth</a>\` : null,
+                                links.fantia_url ? \`<a href="\${links.fantia_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Fantia</a>\` : null,
+                                links.fanbox_url ? \`<a href="\${links.fanbox_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Fanbox</a>\` : null,
+                                links.nijie_url ? \`<a href="\${links.nijie_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Nijie</a>\` : null,
+                                links.dlsite_url ? \`<a href="\${links.dlsite_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">DLsite</a>\` : null,
+                                links.fanza_url ? \`<a href="\${links.fanza_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Fanza</a>\` : null,
+                                links.skima_url ? \`<a href="\${links.skima_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Skima</a>\` : null,
+                                links.coconala_url ? \`<a href="\${links.coconala_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Coconala</a>\` : null,
+                                links.patreon_url ? \`<a href="\${links.patreon_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Patreon</a>\` : null,
+                                links.youtube_url ? \`<a href="\${links.youtube_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">YouTube</a>\` : null,
+                                links.wishlist_url ? \`<a href="\${links.wishlist_url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Wishlist</a>\` : null,
+                                data.url ? \`<a href="\${data.url}" target="_blank" class="text-[#28837f] font-bold hover:underline">Url (\${new URL(data.url).hostname.split('.').slice(-2).join('.')})</a>\` : null
+                            ].filter(Boolean).join(' / ')}
                         </div>
                             <table class="w-full text-left border-collapse">
                             <tbody>
