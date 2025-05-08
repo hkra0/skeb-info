@@ -186,5 +186,5 @@ async function handleRequest(request) {
   return new Response('?(๑• . •๑)', { status: 404 });
 }
 // HTML content
-const infoPage = `https://afxr17light.github.io/Skeb-info/`;
-const wishlistPage = `https://afxr17light.github.io/Skeb-info/wishlist`
+const infoPage = await fetch(`https://afxr17light.github.io/Skeb-info/`);
+const wishlistPage = await fetch(`https://afxr17light.github.io/Skeb-info/wishlist`);
