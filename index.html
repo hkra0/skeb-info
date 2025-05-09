@@ -78,7 +78,7 @@
         });
         userNameInput.value = urlUserName;
         const searchButtonDefaultClasses = searchButton.className;
-        document.title = `\${urlUserName}\${urlUserName ? " - " : ""}🔍(๑• . •๑)`;
+        document.title = `${urlUserName}${urlUserName ? " - " : ""}🔍(๑• . •๑)`;
         if (urlUserName) fetchUserInfo();
         // input enter
         userNameInput.addEventListener('keypress', function (event) {
@@ -130,8 +130,8 @@
                     throw new Error('Incorrect username format');
                 } else {
                     document.getElementById('username').value = username;
-                    history.pushState({}, '', `@\${username}`);
-                    document.title = `\${username} - 🔍(๑• . •๑)`;
+                    history.pushState({}, '', `@${username}`);
+                    document.title = `${username} - 🔍(๑• . •๑)`;
                 }
                 disableSearchButton();
                 spyglass.classList.add("animate__animated", "animate__infinite", "animate__pulse");
@@ -157,20 +157,20 @@
                 const misskeyScreenName = data.user_service_links?.find(link => link.provider === "misskey_io")?.screen_name || null;
 
                 const links = {
-                    twitter_url: twitterScreenName ? `https://x.com/\${twitterScreenName}` : null,
-                    misskey_url: misskeyScreenName ? `https://misskey.io/@\${misskeyScreenName}` : null,
-                    pixiv_url: data.pixiv_id ? `https://www.pixiv.net/users/\${data.pixiv_id}` : null,
-                    booth_url: data.booth_id ? `https://\${data.booth_id}.booth.pm` : null,
-                    fantia_url: data.fantia_id ? `https://fantia.jp/fanclubs/\${data.fantia_id}` : null,
-                    fanbox_url: data.fanbox_id ? `https://\${data.fanbox_id}.fanbox.cc` : null,
-                    nijie_url: data.nijie_id ? `https://nijie.info/members.php?id=\${data.nijie_id}` : null,
-                    dlsite_url: data.dlsite_id ? `https://www.dlsite.com/home/circle/profile/=/maker_id/\${data.dlsite_id}` : null,
-                    fanza_url: data.fanza_id ? `https://www.dmm.co.jp/dc/doujin/-/list/=/article=maker/id/\${data.fanza_id}` : null,
-                    skima_url: data.skima_id ? `https://skima.jp/profile/users/\${data.skima_id}` : null,
-                    coconala_url: data.coconala_id ? `https://coconala.com/users/\${data.coconala_id}` : null,
-                    patreon_url: data.patreon_id ? `https://www.patreon.com/\${data.patreon_id}` : null,
-                    youtube_url: data.youtube_id ? `https://www.youtube.com/\${data.youtube_id}` : null,
-                    wishlist_url: data.wishlist_id ? `https://www.amazon.jp/hz/wishlist/ls/\${data.wishlist_id}` : null,
+                    twitter_url: twitterScreenName ? `https://x.com/${twitterScreenName}` : null,
+                    misskey_url: misskeyScreenName ? `https://misskey.io/@${misskeyScreenName}` : null,
+                    pixiv_url: data.pixiv_id ? `https://www.pixiv.net/users/${data.pixiv_id}` : null,
+                    booth_url: data.booth_id ? `https://${data.booth_id}.booth.pm` : null,
+                    fantia_url: data.fantia_id ? `https://fantia.jp/fanclubs/${data.fantia_id}` : null,
+                    fanbox_url: data.fanbox_id ? `https://${data.fanbox_id}.fanbox.cc` : null,
+                    nijie_url: data.nijie_id ? `https://nijie.info/members.php?id=${data.nijie_id}` : null,
+                    dlsite_url: data.dlsite_id ? `https://www.dlsite.com/home/circle/profile/=/maker_id/${data.dlsite_id}` : null,
+                    fanza_url: data.fanza_id ? `https://www.dmm.co.jp/dc/doujin/-/list/=/article=maker/id/${data.fanza_id}` : null,
+                    skima_url: data.skima_id ? `https://skima.jp/profile/users/${data.skima_id}` : null,
+                    coconala_url: data.coconala_id ? `https://coconala.com/users/${data.coconala_id}` : null,
+                    patreon_url: data.patreon_id ? `https://www.patreon.com/${data.patreon_id}` : null,
+                    youtube_url: data.youtube_id ? `https://www.youtube.com/${data.youtube_id}` : null,
+                    wishlist_url: data.wishlist_id ? `https://www.amazon.jp/hz/wishlist/ls/${data.wishlist_id}` : null,
                 };
 
                 // Process skills
