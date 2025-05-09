@@ -61,9 +61,6 @@ export default async function handler(req, res) {
   }
 
   const urlPath = req.url.split('?')[0];
-  console.log(`req.url: ${req.url}`);
-  console.log('req.query.path:', req.query.path);
-  console.log('req.query.role:', req.query.role);
   const pathSegments = urlPath.split('/').filter(Boolean).slice(2);
   if (pathSegments.length < 1) {
     res.statusCode = 400;
