@@ -66,6 +66,9 @@
         // tinyko (๑• . •๑)
         let tnkBeforeState = tinyko.innerHTML;
         tinyko.addEventListener("click", () => {
+            if (tinyko.classList.contains("animate__rubberBand")) {
+                return;
+            }
             tnkBeforeState = tinyko.innerHTML;
             tinyko.classList.add("animate__animated", "animate__rubberBand");
             setTimeout(() => {
