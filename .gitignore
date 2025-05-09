@@ -37,3 +37,4 @@ Thumbs.db
 # Miscellaneous
 *.cache
 *.pid
+.vercel
