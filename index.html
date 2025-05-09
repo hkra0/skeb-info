@@ -416,7 +416,7 @@
                 // Remove loading message and append table
                 sentWorksDiv.innerHTML = tableHtml;
             } catch (error) {
-                sentWorksDiv.innerHTML = `<p class="text-red-500 dark:text-red-400 py-2 px-4">Error fetching client works: \${error.message}</p>`;
+                sentWorksDiv.innerHTML = `<p class="text-red-500 dark:text-red-400 py-2 px-4">Error fetching client works: ${error.message}</p>`;
             }
         }
     </script>
