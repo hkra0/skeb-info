@@ -39,7 +39,7 @@ This tool is an unofficial interface for retrieving publicly available Skeb arti
 1. Clone or fork this repository.
 2. Create a Cloudflare Worker, select "Import a repository" and choose the cloned or forked repository.
 3. Keep the default settings and click Save and Deploy.
-- ** Note: ** HTML files are not included, host them on your own. (e.g. GitHub Pages, Vercel, etc.)
+- **Note:** HTML files are not included, host them on your own. (e.g. GitHub Pages, Vercel, etc.)
 
 ### Vercel
 - Choose other frameworks and use the default settings for deployment. Includes both API and frontend.
