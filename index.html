@@ -140,7 +140,7 @@
                 spyglass.classList.add("animate__animated", "animate__infinite", "animate__pulse");
                 searchButton.textContent = 'Loading...';
                 // await new Promise(resolve => setTimeout(resolve, 2000)); // test loading state
-                const response = await fetch(`/api/users/\${username}`);
+                const response = await fetch(`/api/users/${username}`);
                 if (!response.ok) {
                     const errorData = await response.json();
                     throw new Error(errorData.error || 'Unknown error');
