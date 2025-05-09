@@ -50,9 +50,11 @@
                 Creator</button>
             <button id="updateAll" onclick="updateAllCreators()"
                 class="w-full mt-2 bg-gray-500 text-white p-2 rounded hover:bg-gray-600 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">Update
-                All Creators</button>
+                All Creators
+            </button>
         </div>
 
+        <div id="error-message" class="mt-8"></div>
         <!-- Creator List -->
         <div id="creator-list" class="mt-8"></div>
     </div>
@@ -63,12 +65,16 @@
         const usernameInput = document.getElementById('username');
         const addCreatorButton = document.getElementById('addCreator');
         const updateAllButton = document.getElementById('updateAll');
+        const errorMessageDiv = document.getElementById('error-message');
         const creatorListDiv = document.getElementById('creator-list');
         const searchButtonDefaultClasses = addCreatorButton.className;
 
         // tinyko (๑• . •๑)
         let tnkBeforeState = tinyko.innerHTML;
         tinyko.addEventListener("click", () => {
+            if (tinyko.classList.contains("animate__rubberBand")) {
+                return;
+            }
             tnkBeforeState = tinyko.innerHTML;
             tinyko.classList.add("animate__animated", "animate__rubberBand");
             setTimeout(() => {
@@ -95,6 +101,7 @@
         }
 
         function restore() {
+            errorMessageDiv.innerHTML = '';
             addCreatorButton.className = searchButtonDefaultClasses;
             addCreatorButton.textContent = "Add Creator";
             addCreatorButton.disabled = false;
@@ -235,7 +242,7 @@
                 spyglass.classList.remove("animate__animated", "animate__infinite", "animate__pulse");
                 spyglass.classList.add("animate__animated", "animate__bounceIn");
                 tinyko.innerHTML = "(๑>.<๑)";
-                creatorListDiv.innerHTML += `<p class="text-red-500 dark:text-red-400 py-2 px-4">Error: ${error.message}</p>`;
+                errorMessageDiv.innerHTML = `<p class="text-red-500 dark:text-red-400 py-2 px-4">Error: ${error.message}</p>`;
                 setTimeout(restore, 2000);
             }
         }

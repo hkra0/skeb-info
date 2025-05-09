@@ -50,6 +50,7 @@
         </div>
 
         <!-- Result Area -->
+        <div id="error-message" class="mt-8"></div>
         <div id="user-info" class="mt-8"></div>
         <div id="sent-works-info" class="mt-8"></div>
         <div id="received-works-info" class="mt-8"></div>
@@ -60,6 +61,7 @@
         const urlUserName = window.location.pathname.slice(2);
         const userNameInput = document.getElementById('username')
         const searchButton = document.getElementById('search');
+        const errorMessageDiv = document.getElementById('error-message');
         const userInfoDiv = document.getElementById('user-info');
         const sentWorksDiv = document.getElementById('sent-works-info');
         const receivedWorksDiv = document.getElementById('received-works-info');
@@ -96,6 +98,7 @@
             restore();
         }
         function restore() {
+            errorMessageDiv.innerHTML = "";
             searchButton.className = searchButtonDefaultClasses;
             searchButton.textContent = "Search";
             searchButton.disabled = false;
@@ -319,7 +322,7 @@
                     spyglass.classList.remove("animate__animated", "animate__infinite", "animate__pulse");
                     spyglass.classList.add("animate__animated", "animate__bounceIn");
                     tinyko.innerHTML = "(๑>.<๑)";
-                    userInfoDiv.innerHTML = `<p class="text-red-500 dark:text-red-400 py-2 px-4">Error: ${error.message}</p>`;
+                    errorMessageDiv.innerHTML = `<p class="text-red-500 dark:text-red-400 py-2 px-4">Error: ${error.message}</p>`;
                 }
             }
         }
@@ -419,7 +422,7 @@
                 // Remove loading message and append table
                 sentWorksDiv.innerHTML = tableHtml;
             } catch (error) {
-                sentWorksDiv.innerHTML = `<p class="text-red-500 dark:text-red-400 py-2 px-4">Error fetching client works: ${error.message}</p>`;
+                errorMessageDiv.innerHTML = `<p class="text-red-500 dark:text-red-400 py-2 px-4">Error fetching client works: ${error.message}</p>`;
             }
         }
     </script>
