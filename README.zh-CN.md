@@ -1,5 +1,5 @@
 # 🔍 Skeb-info
-基于 Cloudflare Worker 的简易 Skeb 用户信息查询工具 (๑• . •๑)
+包含心愿单功能的简易 Skeb 用户信息查询工具 (๑• . •๑)
 
 [English](README.md) | 中文
 
@@ -7,14 +7,21 @@
 
 - 🔍 通过用户名或链接搜索 Skeb 画师资料
 - 📑 显示详细信息，即使画师关闭请求仍可获取报价和截止时间
+- 💝 使用心愿单来管理追踪收藏的创作者的信息
 - 🔗 带速率限制的 Skeb 用户信息 API 代理
-- ❤️ 简洁、用户友好的界面
+- ✨ 简洁、用户友好的界面
 
 ## 使用方法
 
+### 信息查询
 - 访问 [skebinfo.hkra.xyz](https://skebinfo.hkra.xyz/)，输入用户名或链接，点击查询
 - 点击用户名称可以打开该用户的 Skeb 主页
 - 点击已发送公开委托数量 (`Sent Public Requests`) 的数字可查看该客户按创作者排序的请求数量统计
+
+### 心愿单
+- 访问 [skebinfo.hkra.xyz/wishlist](https://skebinfo.hkra.xyz/wishlist)，输入用户名或链接，点击添加创作者
+- 点击更新所有创作者可以更新心愿单
+- 可以在心愿单列表中打开用户的 Skeb 主页，重新排序或删除创作者
 
 ## 免责声明
 
@@ -27,16 +34,16 @@
     - 数据量过大（超过1200）时需要分片，使用返回数据中 `meta.next` 作为下一部分请求的 URL
 
 ## 部署方式
-### 连接 git
+
+### Cloudflare Workers
 1. Clone 或者 fork 本仓库
 2. 创建一个 Cloudflare Worker，选择"Import a repository"然后选择刚刚 Clone 或者 fork 好的仓库
 3. 保留默认配置，选择保存并部署
-### 手动部署
-1. 创建一个 Cloudflare Worker，选择“Start with Hello World!”
-2. 将 `worker.js` 的内容替换为本项目中的 [worker.js](worker.js)
-3. 点击部署
-### Wrangler 命令行
-- 下载仓库文件，运行 `weangler deploy`
+- **注意：** HTML 文件不包含在内，请自行托管（例如 GitHub Pages、Vercel 等）
+
+### Vercel
+
+- 选择其他框架使用默认配置进行部署即可，包含 API 和前端
 
 ## 限制
 
