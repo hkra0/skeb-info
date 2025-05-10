@@ -48,7 +48,7 @@ Deploy your own instance to avoid rate limits and for personal use.
 
 ## Limitations
 
-- Rate limit: 100 User info requests per minute, 5 Works requests per minute. Requests may fail if data volume is too large.
+- Rate limit: 100 User info requests per minute, 5 works requests per minute. Requests may fail if data volume is too large.
 - Skeb API may be rate limited or unavailable due to changes in fields.
 
 ## License
