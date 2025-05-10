@@ -20,15 +20,16 @@
     <div class="w-full max-w-2xl mx-auto p-6 bg-white dark:bg-[#292c2e] rounded-lg shadow-lg">
         <noscript>
             <p class="text-red-500 dark:text-red-400 mb-4">JavaScript is disabled. Please enable JavaScript to use this
-                page.</p>
+                page.
+            </p>
         </noscript>
         <!-- Title and Input -->
         <div class="py-6">
             <a href="/" class="text-5xl font-bold text-center block text-teal-500">Skeb info</a>
             <div class="text-2xl font-bold text-center block text-teal-500 opacity-50 mb-4">Wishlist</div>
             <div class="text-4xl mb-4 text-center">
-                <span id="spyglass" class="inline-block cursor-default select-none">🔍</span>
-                <span id="tinyko" class="inline-block cursor-pointer select-none">(๑• . •๑)</span>
+                <span id="spyglass" class="inline-block cursor-default select-none">🔍</span><span id="tinyko"
+                    class="inline-block cursor-pointer select-none">(๑• . •๑)</span>
             </div>
         </div>
         <div class="py-2 px-4">
@@ -154,14 +155,14 @@
                     creator.skills.map(skill => `<span class="font-bold">${skill.genre}</span> ${skill.default_amount}`).join('<br>') :
                     `${creator.skills[0].default_amount}`;
                 const acceptingStatus = creator.acceptable ?
-                    '<span class="font-bold text-sm text-green-600">Seeking</span>' :
-                    '<span class="font-bold text-sm text-gray-500">Stopped</span>';
+                    '<span class="inline-block w-2 h-2 rounded-full bg-green-500"></span>' :
+                    '<span class="inline-block w-2 h-2 rounded-full bg-gray-500"></span>';
                 return `
                     <tr class="border-t border-gray-300 dark:border-gray-600">
                         <td class="py-2 px-4 text-sm sm:text-base">
-                            <a href="https://skeb.jp/@${creator.screen_name}" target="_blank" class="text-[#28837f] hover:underline">${creator.name}</a>
+                            ${acceptingStatus}
+                            <a href="https://skeb.jp/@${creator.screen_name}" target="_blank" class="text-[#28837f] hover:underline ml-1">${creator.name}</a>
                         </td>
-                        <td class="py-2 px-4 text-sm sm:text-base">${acceptingStatus}</td>
                         <td class="py-2 px-4 text-sm sm:text-base">${skillsHtml}</td>
                         <td class="py-2 px-4 text-sm sm:text-base">${timeInfo}</td>
                         <td class="py-2 px-4 text-sm sm:text-base flex space-x-2">
