@@ -241,9 +241,9 @@
                 spyglass.innerHTML = error.message.includes('not found') ? '❔' : '❌';
                 spyglass.classList.remove("animate__animated", "animate__infinite", "animate__pulse");
                 spyglass.classList.add("animate__animated", "animate__bounceIn");
-                tinyko.innerHTML = "(๑>.<๑)";
-                errorMessageDiv.innerHTML = `<p class="text-red-500 dark:text-red-400 py-2 px-4">Error: ${error.message}</p>`;
-                setTimeout(restore, 2000);
+                if (error.message.includes('not found')) tinyko.innerHTML = "(๑>.<๑)";
+                else errorMessageDiv.innerHTML = `<p class="text-red-500 dark:text-red-400 py-2 px-4">Error: ${error.message}</p>`;
+                setTimeout(restore, 2500);
             }
         }
 
@@ -283,7 +283,7 @@
                 spyglass.classList.remove("animate__animated", "animate__infinite", "animate__pulse");
                 spyglass.classList.add("animate__animated", "animate__bounceIn");
                 tinyko.innerHTML = "(๑>.<๑)";
-                setTimeout(restore, 2000);
+                setTimeout(restore, 2500);
             }
         }
 
