@@ -41,7 +41,8 @@ Deploy your own instance to avoid rate limits and for personal use.
 1. Host HTML files (`index.html`, `wishlist.html`) on a static hosting service (e.g., GitHub Pages, Cloudflare Pages).
 2. Create and deploy a Cloudflare Worker (using the `wrangler` CLI or Cloudflare dashboard).
 3. Add environment variable:
-   - `PAGE_URL`: URL of the hosted HTML files (e.g., `https://afxr17light.github.io/Skeb-info/`).
+   - `PAGE_URL`: URL of the hosted HTML files (e.g., `https://afxr17light.github.io/Skeb-info/`).  
+   - Note: Change `PAGE_URL` in `wrangler.toml`.
 
 ### Vercel
 - Choose other frameworks and use the default settings for deployment. Includes both API and frontend.
