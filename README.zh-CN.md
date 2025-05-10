@@ -41,7 +41,7 @@
 1. 将 HTML 文件（`index.html`、`wishlist.html`）托管在静态托管服务上（例如 GitHub Pages、Cloudflare Pages）
 2. 创建并部署 Cloudflare Worker（使用 `wrangler` CLI 或 Cloudflare 控制台）
 3. 添加环境变量：
-   - `PAGE_URL`: 托管 HTML 文件的 URL（例如 `https://afxr17light.github.io/Skeb-info/`）
+   - `PAGE_URL`: 托管 HTML 文件的 URL（例如 `https://afxr17light.github.io/skeb-info/`）
     - 注意：需要在 `wrangler.toml` 中更改 `PAGE_URL`
 
 ### Vercel
