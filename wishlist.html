@@ -119,6 +119,24 @@
             tinykoItem.classList.remove("animate__animated", "animate__infinite", "animate__bounceIn", "animate__pulse");
         }
 
+        function flash(elementId) {
+            const element = document.getElementById(elementId);
+            element.classList.add("animate__animated", "animate__flash");
+            setTimeout(() => {
+                element.classList.remove("animate__animated", "animate__flash");
+            }, 500);
+        }
+
+        function highlightOn(elementId) {
+            const element = document.getElementById(elementId);
+            element.classList.add("bg-gray-100", "dark:bg-gray-700", "transition-colors", "duration-360");
+        }
+
+        function highlightOff(elementId) {
+            const element = document.getElementById(elementId);
+            element.classList.remove("bg-gray-100", "dark:bg-gray-700", "transition-colors", "duration-360");
+        }
+
         function disableButtons() {
             addCreatorButton.disabled = true;
             updateAllButton.disabled = true;
@@ -165,7 +183,7 @@
                     '<span class="inline-block w-2 h-2 rounded-full bg-green-500"></span>' :
                     '<span class="inline-block w-2 h-2 rounded-full bg-gray-500"></span>';
                 return `
-                    <tr class="border-t border-gray-300 dark:border-gray-600">
+                    <tr id=${creator.name} class="border-t border-gray-300 dark:border-gray-600">
                         <td class="py-2 px-4 text-sm sm:text-base">
                             ${acceptingStatus}
                             <a href="https://skeb.jp/@${creator.screen_name}" target="_blank" class="text-[#28837f] hover:underline ml-1">${creator.name}</a>
@@ -265,6 +283,7 @@
                 const updatedCreators = [];
                 for (const creator of creators) {
                     try {
+                        highlightOn(creator.name);
                         const response = await fetch(`${hostURL}api/users/${creator.screen_name}`);
                         if (response.ok) {
                             const data = await response.json();
@@ -276,11 +295,13 @@
                         } else {
                             updatedCreators.push(creator); // Keep old data on error
                         }
+                        highlightOff(creator.name);
                     } catch {
                         updatedCreators.push(creator); // Keep old data on error
                     }
                 }
                 saveCreators(updatedCreators);
+                flash("creator-list");
                 restore();
                 updateAllButton.textContent = 'Update All Creators';
             } catch (error) {
