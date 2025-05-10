@@ -25,9 +25,10 @@
         </noscript>
         <!-- Title and Input -->
         <div class="py-6">
-            <a href="/" class="text-5xl font-bold mb-4 text-center block text-teal-500">Skeb info</a>
+            <a href="/" class="text-5xl font-bold text-center block text-teal-500 hover:text-teal-600 transition-all duration-200">skeb info</a>
+            <a href="/wishlist" class="text-2xl font-bold text-center block text-teal-500 hover:text-teal-600 hover:underline transition-all duration-200 opacity-50 mb-4">wishlist</a>
             <div class="text-4xl mb-4 text-center">
-                <span id="spyglass" class="inline-block cursor-default select-none">🔍</span><span id="tinyko"
+                <span id="tinyko-item" class="inline-block cursor-default select-none">🔍</span><span id="tinyko"
                     class="inline-block cursor-pointer select-none">(๑• . •๑)</span>
             </div>
         </div>
@@ -57,7 +58,7 @@
     </div>
     <script>
         const tinyko = document.getElementById("tinyko");
-        const spyglass = document.getElementById("spyglass");
+        const tinykoItem = document.getElementById("tinyko-item");
         const urlUserName = window.location.pathname.slice(2);
         const userNameInput = document.getElementById('username')
         const searchButton = document.getElementById('search');
@@ -103,8 +104,8 @@
             searchButton.textContent = "Search";
             searchButton.disabled = false;
             tinyko.innerHTML = "(๑• . •๑)";
-            spyglass.innerHTML = "🔍";
-            spyglass.classList.remove("animate__animated", "animate__infinite", "animate__bounceIn", "animate__pulse");
+            tinykoItem.innerHTML = "🔍";
+            tinykoItem.classList.remove("animate__animated", "animate__infinite", "animate__bounceIn", "animate__pulse");
         }
         function disableSearchButton() {
             searchButton.disabled = true;
@@ -140,7 +141,7 @@
                     document.title = `${username} - 🔍(๑• . •๑)`;
                 }
                 disableSearchButton();
-                spyglass.classList.add("animate__animated", "animate__infinite", "animate__pulse");
+                tinykoItem.classList.add("animate__animated", "animate__infinite", "animate__pulse");
                 searchButton.textContent = 'Loading...';
                 // await new Promise(resolve => setTimeout(resolve, 2000)); // test loading state
                 const response = await fetch(`/api/users/${username}`);
@@ -150,7 +151,7 @@
                 } else {
                     restore();
                 }
-                spyglass.classList.remove("animate__animated", "animate__infinite", "animate__pulse");
+                tinykoItem.classList.remove("animate__animated", "animate__infinite", "animate__pulse");
                 const data = await response.json();
                 if (data.error) {
                     throw new Error(data.error);
@@ -309,18 +310,18 @@
                     searchButton.textContent = 'User not found';
                     searchButton.classList.remove('bg-[#28837f]', 'hover:bg-[#206966]', 'dark:hover:bg-[#206966]');
                     searchButton.classList.add('bg-gray-600');
-                    spyglass.innerHTML = "❔";
-                    spyglass.classList.remove("animate__animated", "animate__infinite", "animate__pulse");
-                    spyglass.classList.add("animate__animated", "animate__bounceIn");
+                    tinykoItem.innerHTML = "❔";
+                    tinykoItem.classList.remove("animate__animated", "animate__infinite", "animate__pulse");
+                    tinykoItem.classList.add("animate__animated", "animate__bounceIn");
                     document.title = `404 - 🔍(๑• . •๑)`;
                     userInfoDiv.innerHTML = "";
                 } else {
                     searchButton.textContent = 'Error';
                     searchButton.classList.remove('bg-[#28837f]', 'hover:bg-[#206966]', 'dark:hover:bg-[#206966]');
                     searchButton.classList.add('bg-red-500', 'opacity-50');
-                    spyglass.innerHTML = "❌";
-                    spyglass.classList.remove("animate__animated", "animate__infinite", "animate__pulse");
-                    spyglass.classList.add("animate__animated", "animate__bounceIn");
+                    tinykoItem.innerHTML = "❌";
+                    tinykoItem.classList.remove("animate__animated", "animate__infinite", "animate__pulse");
+                    tinykoItem.classList.add("animate__animated", "animate__bounceIn");
                     tinyko.innerHTML = "(๑>.<๑)";
                     errorMessageDiv.innerHTML = `<p class="text-red-500 dark:text-red-400 py-2 px-4">Error: ${error.message}</p>`;
                     setTimeout(restore, 2500);

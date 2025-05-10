@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wishlist 🔍(๑• . •๑)</title>
+    <title>(๑• . •๑)🔖</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         // Apply dark mode based on system preference
@@ -25,11 +25,11 @@
         </noscript>
         <!-- Title and Input -->
         <div class="py-6">
-            <a href="/" class="text-5xl font-bold text-center block text-teal-500">Skeb info</a>
-            <div class="text-2xl font-bold text-center block text-teal-500 opacity-50 mb-4">Wishlist</div>
+            <a href="/wishlist" class="text-5xl font-bold text-center block text-teal-500 hover:text-teal-600 transition-all duration-200">wishlist</a>
+            <a href="/" class="text-2xl font-bold text-center block text-teal-500 hover:text-teal-600 hover:underline transition-all duration-200 opacity-50 mb-4">skeb info</a>
             <div class="text-4xl mb-4 text-center">
-                <span id="spyglass" class="inline-block cursor-default select-none">🔍</span><span id="tinyko"
-                    class="inline-block cursor-pointer select-none">(๑• . •๑)</span>
+                <span id="tinyko" class="inline-block cursor-pointer select-none">(๑• . •๑)</span><span id="tinyko-item"
+                class="inline-block cursor-default select-none">🔖</span>
             </div>
         </div>
         <div class="py-2 px-4">
@@ -62,7 +62,7 @@
     <script>
         const hostURL = "/";
         const tinyko = document.getElementById("tinyko");
-        const spyglass = document.getElementById("spyglass");
+        const tinykoItem = document.getElementById("tinyko-item");
         const usernameInput = document.getElementById('username');
         const addCreatorButton = document.getElementById('addCreator');
         const updateAllButton = document.getElementById('updateAll');
@@ -108,8 +108,8 @@
             addCreatorButton.disabled = false;
             updateAllButton.disabled = false;
             tinyko.innerHTML = "(๑• . •๑)";
-            spyglass.innerHTML = "🔍";
-            spyglass.classList.remove("animate__animated", "animate__infinite", "animate__bounceIn", "animate__pulse");
+            tinykoItem.innerHTML = "🔍";
+            tinykoItem.classList.remove("animate__animated", "animate__infinite", "animate__bounceIn", "animate__pulse");
         }
 
         function disableButtons() {
@@ -213,7 +213,7 @@
                 }
                 usernameInput.value = username;
                 disableButtons();
-                spyglass.classList.add("animate__animated", "animate__infinite", "animate__pulse");
+                tinykoItem.classList.add("animate__animated", "animate__infinite", "animate__pulse");
                 addCreatorButton.textContent = 'Loading...';
                 const response = await fetch(`${hostURL}api/users/${username}`);
                 if (!response.ok) {
@@ -239,9 +239,9 @@
                 addCreatorButton.textContent = error.message.includes('not found') ? 'User not found' : 'Error';
                 addCreatorButton.classList.remove('bg-[#28837f]', 'hover:bg-[#206966]', 'dark:hover:bg-[#206966]');
                 addCreatorButton.classList.add(error.message.includes('not found') ? 'bg-gray-600' : 'bg-red-500', 'opacity-50');
-                spyglass.innerHTML = error.message.includes('not found') ? '❔' : '❌';
-                spyglass.classList.remove("animate__animated", "animate__infinite", "animate__pulse");
-                spyglass.classList.add("animate__animated", "animate__bounceIn");
+                tinykoItem.innerHTML = error.message.includes('not found') ? '❔' : '❌';
+                tinykoItem.classList.remove("animate__animated", "animate__infinite", "animate__pulse");
+                tinykoItem.classList.add("animate__animated", "animate__bounceIn");
                 if (error.message.includes('not found')) tinyko.innerHTML = "(๑>.<๑)";
                 else errorMessageDiv.innerHTML = `<p class="text-red-500 dark:text-red-400 py-2 px-4">Error: ${error.message}</p>`;
                 setTimeout(restore, 2500);
@@ -253,7 +253,7 @@
             try {
                 disableButtons();
                 updateAllButton.textContent = 'Updating...';
-                spyglass.classList.add("animate__animated", "animate__infinite", "animate__pulse");
+                tinykoItem.classList.add("animate__animated", "animate__infinite", "animate__pulse");
                 const creators = JSON.parse(localStorage.getItem('skebWishlist') || '[]');
                 const updatedCreators = [];
                 for (const creator of creators) {
@@ -280,9 +280,9 @@
                 updateAllButton.textContent = 'Error';
                 updateAllButton.classList.remove('bg-gray-500', 'hover:bg-gray-600', 'dark:hover:bg-gray-600');
                 updateAllButton.classList.add('bg-red-500', 'opacity-50');
-                spyglass.innerHTML = '❌';
-                spyglass.classList.remove("animate__animated", "animate__infinite", "animate__pulse");
-                spyglass.classList.add("animate__animated", "animate__bounceIn");
+                tinykoItem.innerHTML = '❌';
+                tinykoItem.classList.remove("animate__animated", "animate__infinite", "animate__pulse");
+                tinykoItem.classList.add("animate__animated", "animate__bounceIn");
                 tinyko.innerHTML = "(๑>.<๑)";
                 setTimeout(restore, 2500);
             }
