@@ -121,6 +121,20 @@
             tinykoItem.innerHTML = "🔍";
             tinykoItem.classList.remove("animate__animated", "animate__infinite", "animate__bounceIn", "animate__pulse");
         }
+        function fadeIn(elementId) {
+            const element = document.getElementById(elementId);
+            element.classList.add("animate__animated", "animate__fadeIn");
+            setTimeout(() => {
+                element.classList.remove("animate__animated", "animate__fadeIn");
+            }, 500);
+        }
+        function fadeOut(elementId) {
+            const element = document.getElementById(elementId);
+            element.classList.add("animate__animated", "animate__fadeOut");
+            setTimeout(() => {
+                element.classList.remove("animate__animated", "animate__fadeOut");
+            }, 500);
+        }
         function disableSearchButton() {
             searchButton.disabled = true;
             searchButton.classList.remove('hover:bg-[#206966]', 'dark:hover:bg-[#206966]')
@@ -319,6 +333,7 @@
                         </table>
                     </div>
                 `;
+                fadeIn('user-info');
             } catch (error) {
                 if (error.message.toLowerCase().includes("not found")) {
                     searchButton.textContent = 'User not found';
