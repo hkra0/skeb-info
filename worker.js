@@ -17,7 +17,7 @@ export default {
       wishlistPage = await wishlistResponse.text();
     }
 
-    return handleRequest(request);
+    return handleRequest(request, env);
   }
 };
 
@@ -28,6 +28,7 @@ async function handleRequest(request, env) {
   let limiter;
   if (pathname.match(/^\/api\/users\/[^\/]+$/)) limiter = env.USER_INFO_LIMITER;
   else if (pathname.match(/^\/api\/users\/[^\/]+\/works$/)) limiter = env.WORKS_LIMITER;
+  console.log('Limiter:', limiter);
   const { success } = await limiter.limit({ key: '(๑• . •๑)' })
   if (!success) {
     return new Response(`429 Failure - rate limit exceeded for ${pathname} request`, { status: 429 })
