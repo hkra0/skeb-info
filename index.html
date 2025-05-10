@@ -66,6 +66,7 @@
         const userInfoDiv = document.getElementById('user-info');
         const sentWorksDiv = document.getElementById('sent-works-info');
         const receivedWorksDiv = document.getElementById('received-works-info');
+
         // tinyko (๑• . •๑)
         let tnkBeforeState = tinyko.innerHTML;
         tinyko.addEventListener("click", () => {
@@ -86,6 +87,14 @@
         const searchButtonDefaultClasses = searchButton.className;
         document.title = `${urlUserName}${urlUserName ? " - " : ""}🔍(๑• . •๑)`;
         if (urlUserName) fetchUserInfo();
+        // tinyko item
+        tinykoItem.addEventListener("click", () => {
+            tinykoItem.classList.add("scale-[0.86]", "transition-transform", "duration-100", "ease-in-out");
+            setTimeout(() => {
+                tinykoItem.classList.remove("scale-[0.86]");
+            }, 100);
+        });
+        
         // input enter
         userNameInput.addEventListener('keypress', function (event) {
             if (event.key === 'Enter') {

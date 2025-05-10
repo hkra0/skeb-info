@@ -86,6 +86,13 @@
             tinyko.classList.remove("animate__animated", "animate__rubberBand");
             tinyko.innerHTML = tnkBeforeState;
         });
+        // tinyko item
+        tinykoItem.addEventListener("click", () => {
+            tinykoItem.classList.add("scale-[0.86]", "transition-transform", "duration-100", "ease-in-out");
+            setTimeout(() => {
+                tinykoItem.classList.remove("scale-[0.86]");
+            }, 100);
+        });
 
         // Input enter
         usernameInput.addEventListener('keypress', function (event) {
