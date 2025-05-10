@@ -24,12 +24,11 @@ export default {
 async function handleRequest(request, env) {
   const url = new URL(request.url);
   const pathname = url.pathname;
-  const clientIP = request.headers.get('CF-Connecting-IP') || 'unknown';
   // Rate limiting logic
-  let limitKey;
-  if (pathname.match(/^\/api\/users\/[^\/]+$/)) limitKey = 'user';
-  else if (pathname.match(/^\/api\/users\/[^\/]+\/works$/)) limitKey = 'works';
-  const { success } = await env.MY_RATE_LIMITER.limit({ key: limitKey })
+  let limiter;
+  if (pathname.match(/^\/api\/users\/[^\/]+$/)) limiter = env.USER_INFO_LIMITER;
+  else if (pathname.match(/^\/api\/users\/[^\/]+\/works$/)) limiter = env.WORKS_LIMITER;
+  const { success } = await env.MY_RATE_LIMITER.limit({ key: '(๑• . •๑)' })
   if (!success) {
     return new Response(`429 Failure - rate limit exceeded for ${pathname} request`, { status: 429 })
   }
