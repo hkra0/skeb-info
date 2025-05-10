@@ -28,7 +28,7 @@ async function handleRequest(request, env) {
   let limiter;
   if (pathname.match(/^\/api\/users\/[^\/]+$/)) limiter = env.USER_INFO_LIMITER;
   else if (pathname.match(/^\/api\/users\/[^\/]+\/works$/)) limiter = env.WORKS_LIMITER;
-  const { success } = await env.MY_RATE_LIMITER.limit({ key: '(๑• . •๑)' })
+  const { success } = await limiter.limit({ key: '(๑• . •๑)' })
   if (!success) {
     return new Response(`429 Failure - rate limit exceeded for ${pathname} request`, { status: 429 })
   }
