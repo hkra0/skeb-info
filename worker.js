@@ -1,8 +1,6 @@
 const SUBREQUEST_LIMIT = 40;
 const perPage = 30;
 
-const requestCounts = new Map(); // Store request counts per IP
-
 // Cache for HTML content
 let infoPage = null;
 let wishlistPage = null;
@@ -30,13 +28,17 @@ async function handleRequest(request, env) {
   const url = new URL(request.url);
   const pathname = url.pathname;
   // Rate limiting logic
-  let limiter;
-  if (pathname.match(/^\/api\/users\/[^\/]+$/)) limiter = env.USER_INFO_LIMITER;
-  else if (pathname.match(/^\/api\/users\/[^\/]+\/works$/)) limiter = env.WORKS_LIMITER;
-  console.log('Limiter:', limiter);
-  const { success } = await limiter.limit({ key: '(๑• . •๑)' })
-  if (!success) {
-    return new Response(`429 Failure - rate limit exceeded for ${pathname} request`, { status: 429 })
+  if (pathname.match(/^\/api\/users\/[^\/]+$/)) {
+    const { success } = await env.USER_INFO_LIMITER.limit({ key: '(๑• . •๑)' })
+    if (!success) {
+      return new Response(`Rate limit exceeded for User request`, { status: 429 })
+    }
+  }
+  else if (pathname.match(/^\/api\/users\/[^\/]+\/works$/)) {
+    const { success } = await env.WORKS_LIMITER.limit({ key: '(๑• . •๑)' })
+    if (!success) {
+      return new Response(`Rate limit exceeded for Works request`, { status: 429 })
+    }
   }
   const skebHeaders = {
     'authorization': 'Bearer null',
