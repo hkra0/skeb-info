@@ -1,5 +1,3 @@
-const RATE_LIMIT = 6; // Max requests allowed
-const TIME_WINDOW = 60 * 1000; // Time window (1 minute)
 const SUBREQUEST_LIMIT = 40;
 const perPage = 30;
 
@@ -10,7 +8,7 @@ let infoPage = null;
 let wishlistPage = null;
 
 export default {
-  async fetch(request) {
+  async fetch(request, env) {
     // Preload HTML content if not already loaded
     if (infoPage === null || wishlistPage === null) {
       const infoResponse = await fetch(`https://afxr17light.github.io/Skeb-info/`);
@@ -23,9 +21,18 @@ export default {
   }
 };
 
-async function handleRequest(request) {
+async function handleRequest(request, env) {
   const url = new URL(request.url);
+  const pathname = url.pathname;
   const clientIP = request.headers.get('CF-Connecting-IP') || 'unknown';
+  // Rate limiting logic
+  let limitKey;
+  if (pathname.match(/^\/api\/users\/[^\/]+$/)) limitKey = 'user';
+  else if (pathname.match(/^\/api\/users\/[^\/]+\/works$/)) limitKey = 'works';
+  const { success } = await env.MY_RATE_LIMITER.limit({ key: limitKey })
+  if (!success) {
+    return new Response(`429 Failure - rate limit exceeded for ${pathname} request`, { status: 429 })
+  }
   const skebHeaders = {
     'authorization': 'Bearer null',
     'sec-fetch-site': 'same-origin',
@@ -59,28 +66,6 @@ async function handleRequest(request) {
       status: response.status,
       headers: responseHeaders,
     });
-  }
-
-  // Rate limiting logic
-  if (url.pathname.startsWith('/api')) {
-    const now = Date.now();
-    let clientData = requestCounts.get(clientIP) || { count: 0, startTime: now };
-    // Reset count if time window has passed
-    if (now - clientData.startTime > TIME_WINDOW) {
-      clientData = { count: 0, startTime: now };
-    }
-    // Increment request count
-    clientData.count += 1;
-    // Update map
-    requestCounts.set(clientIP, clientData);
-
-    // Check if rate limit exceeded
-    if (clientData.count > RATE_LIMIT) {
-      return new Response(JSON.stringify({ error: 'Rate limit exceeded' }), {
-        status: 429,
-        headers: responseHeaders,
-      });
-    }
   }
 
   // Home & user page

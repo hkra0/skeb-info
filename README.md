@@ -1,15 +1,15 @@
 # 🔍 Skeb-info
-A simple Skeb user info lookup tool with wishlist. (๑• . •๑)
+A simple Skeb info lookup tool with wishlist feature. (๑• . •๑)
 
 English | [中文](README.zh-CN.md)
 
 ## Features
 
-- 🔍 Search Skeb artist profiles by username or link.
+- 🔍 Search Skeb user profiles by username or link.
 - 📑 Displays detailed infomation, get price or expiration time even if user stopped request.
-- 💝 Manage and track infomation of favorite creators using wishlist.
-- 🔗 Rate-limited Skeb user info API proxy.
+- 💝 Manage and track infomation of your favorite creators using wishlist.
 - ✨ User-frendly UI.
+- 🔗 Skeb user info API proxy.
 
 ## Usage
 
@@ -35,20 +35,21 @@ This tool is an unofficial interface for retrieving publicly available Skeb arti
 
 ## Deployment
 
+Deploy your own instance to avoid rate limits and for personal use.
+
 ### Cloudflare Workers
 1. Clone or fork this repository.
 2. Create a Cloudflare Worker, select "Import a repository" and choose the cloned or forked repository.
 3. Keep the default settings and click Save and Deploy.
-- **Note:** HTML files are not included, host them on your own. (e.g. GitHub Pages, Vercel, etc.)
+- **Note:** HTML files are not included, host them on your own. (e.g. GitHub Pages, Cloudflare Pages, etc.)
 
 ### Vercel
 - Choose other frameworks and use the default settings for deployment. Includes both API and frontend.
 
 ## Limitations
 
-- Rate limit: 6 requests per minute per IP.
-- Unable to complete requests with excessive data volume (when `Sent Public Requests` exceeds 6,000).
-- Relies on Skeb's API: subject to their rate limits and availability.
+- Rate limit: 100 User info requests per minute, 5 Works requests per minute. Requests may fail if data volume is too large.
+- Skeb API may be rate limited or unavailable due to changes in fields.
 
 ## License
 MIT
