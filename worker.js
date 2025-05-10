@@ -11,8 +11,13 @@ export default {
   async fetch(request, env) {
     // Preload HTML content if not already loaded
     if (infoPage === null || wishlistPage === null) {
-      const infoResponse = await fetch(`https://afxr17light.github.io/Skeb-info/`);
-      const wishlistResponse = await fetch(`https://afxr17light.github.io/Skeb-info/wishlist`);
+      const infoResponse = await fetch(env.PAGE_URL);
+      const wishlistResponse = await fetch(new URL('wishlist', env.PAGE_URL));
+      console.log(env.PAGE_URL);
+      if (!infoResponse.ok || !wishlistResponse.ok) {
+        console.error('Failed to fetch HTML content:', infoResponse.status, wishlistResponse.status);
+        return new Response('Failed to fetch HTML content', { status: 500 });
+      }
       infoPage = await infoResponse.text();
       wishlistPage = await wishlistResponse.text();
     }
