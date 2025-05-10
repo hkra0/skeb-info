@@ -6,10 +6,10 @@ English | [中文](README.zh-CN.md)
 ## Features
 
 - 🔍 Search Skeb user profiles by username or link.
-- 📑 Displays detailed infomation, get price or expiration time even if user stopped request.
-- 💝 Manage and track infomation of your favorite creators using wishlist.
+- 📑 Displays detailed infomation, get price or expiration time even if user stopped receiving request.
+- 💝 Manage and track infomation of your favorite creators using the wishlist.
 - ✨ User-frendly UI.
-- 🔗 Skeb user info API proxy.
+- 🔗 Skeb user info & works API proxy.
 
 ## Usage
 
