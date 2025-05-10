@@ -38,10 +38,10 @@ This tool is an unofficial interface for retrieving publicly available Skeb arti
 Deploy your own instance to avoid rate limits and for personal use.
 
 ### Cloudflare Workers
-1. Clone or fork this repository.
-2. Create a Cloudflare Worker, select "Import a repository" and choose the cloned or forked repository.
-3. Keep the default settings and click Save and Deploy.
-- **Note:** HTML files are not included, host them on your own. (e.g. GitHub Pages, Cloudflare Pages, etc.)
+1. Host HTML files (`index.html`, `wishlist.html`) on a static hosting service (e.g., GitHub Pages, Cloudflare Pages).
+2. Create and deploy a Cloudflare Worker (using the `wrangler` CLI or Cloudflare dashboard).
+3. Add environment variable:
+   - `PAGE_URL`: URL of the hosted HTML files (e.g., `https://afxr17light.github.io/Skeb-info/`).
 
 ### Vercel
 - Choose other frameworks and use the default settings for deployment. Includes both API and frontend.

@@ -38,10 +38,10 @@
 部署自己的实例以避免速率限制和个人使用。
 
 ### Cloudflare Workers
-1. Clone 或者 fork 本仓库
-2. 创建一个 Cloudflare Worker，选择"Import a repository"然后选择刚刚 Clone 或者 fork 好的仓库
-3. 保留默认配置，选择保存并部署
-- **注意：** HTML 文件不包含在内，请自行托管（例如 GitHub Pages、Cloudflare Pages 等）
+1. 将 HTML 文件（`index.html`、`wishlist.html`）托管在静态托管服务上（例如 GitHub Pages、Cloudflare Pages）
+2. 创建并部署 Cloudflare Worker（使用 `wrangler` CLI 或 Cloudflare 控制台）
+3. 添加环境变量：
+   - `PAGE_URL`: 托管 HTML 文件的 URL（例如 `https://afxr17light.github.io/Skeb-info/`）
 
 ### Vercel
 
