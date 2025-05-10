@@ -25,8 +25,13 @@
         </noscript>
         <!-- Title and Input -->
         <div class="py-6">
-            <a href="/" class="text-5xl font-bold text-center block text-teal-500 hover:text-teal-600 transition-all duration-200">skeb info</a>
-            <a href="/wishlist" class="text-2xl font-bold text-center block text-teal-500 hover:text-teal-600 hover:underline transition-all duration-200 opacity-50 mb-4">wishlist</a>
+            <div class="text-center mb-4">
+                <a href="/"
+                    class="text-5xl font-bold text-teal-700 dark:text-teal-500 hover:text-teal-800 dark:hover:text-teal-600 transition-all duration-300">skeb
+                    info</a><br />
+                <a href="/wishlist"
+                    class="text-2xl font-bold text-teal-700 dark:text-teal-500 hover:text-teal-800 dark:hover:text-teal-600 transition-all duration-300 hover:underline opacity-60">wishlist</a>
+            </div>
             <div class="text-4xl mb-4 text-center">
                 <span id="tinyko-item" class="inline-block cursor-default select-none">🔍</span><span id="tinyko"
                     class="inline-block cursor-pointer select-none">(๑• . •๑)</span>
@@ -94,7 +99,7 @@
                 tinykoItem.classList.remove("scale-[0.86]");
             }, 100);
         });
-        
+
         // input enter
         userNameInput.addEventListener('keypress', function (event) {
             if (event.key === 'Enter') {
@@ -136,7 +141,7 @@
                 if (username.startsWith('@')) {
                     username = username.slice(1);
                 }
-                username = username.replace(/\\s+/g, '_');
+                username = username.replace(/\s+/g, '_');
                 username = username.split('?')[0];
                 if (!username) {
                     throw new Error('Username required');
@@ -203,110 +208,110 @@
                 const avgCompletionDays = data.completing_average_time ? (data.completing_average_time / 86400).toFixed(2) : null;
 
                 // Format fields
+                const linkClassList = "font-bold text-teal-700 dark:text-teal-500 hover:underline";
                 userInfoDiv.innerHTML = `
                     <div class="overflow-x-auto">
                         <div class="py-2 px-4 flex items-baseline">
                             ${data.request_master_rank ?
-                            `
+                        `
                             <svg width="24" height="24" viewBox="0 0 640 512" xmlns="http://www.w3.org/2000/svg" class="mr-1">
                             <path fill="${data.request_master_rank <= 3 ? '#ffe08a' : 'currentColor'}" d="M528 448H112c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h416c8.8 0 16-7.2 16-16v-32c0-8.8-7.2-16-16-16zm64-320c-26.5 0-48 21.5-48 48 0 7.1 1.6 13.7 4.4 19.8L476 239.2c-15.4 9.2-35.3 4-44.2-11.6L350.3 85C361 76.2 368 63 368 48c0-26.5-21.5-48-48-48s-48 21.5-48 48c0 15 7 28.2 17.7 37l-81.5 142.6c-8.9 15.6-28.9 20.8-44.2 11.6l-72.3-43.4c2.7-6 4.4-12.7 4.4-19.8 0-26.5-21.5-48-48-48S0 149.5 0 176s21.5 48 48 48c2.6 0 5.2-.4 7.7-.8L128 416h384l72.3-192.8c2.5.4 5.1.8 7.7.8 26.5 0 48-21.5 48-48s-21.5-48-48-48z"></path>
                             </svg>
                             `
-                            : ""}
+                        : ""}
                             <a href="https://skeb.jp/@${data.screen_name}" target="_blank" class="text-2xl font-bold hover:underline">
                                 ${data.name}
                             </a>
                             ${skillsHtml ? `
-                              ${data.acceptable ? `<span class="font-bold text-sm text-green-600 ml-2">seeking</span>` : `<span class="font-bold text-sm text-gray-500 ml-2">stopped</span>`}`
-                              : ""}
+                              ${data.acceptable ? `<span class="text-sm font-bold text-green-600 ml-2">seeking</span>` : `<span class="font-bold text-sm text-gray-500 ml-2">stopped</span>`}`
+                        : ""}
                         </div>
                         <p class="py-2 px-4">${sanitizeDescription(data.description) || '<span class="text-gray-500">no description</span>'}</p>
                         <div class="py-2 px-4 mb-8">
                             ${[
-                                data.nsfw_acceptable ? `<span class="font-bold opacity-50">nsfw OK</span>` : null,
-                                data.tip_acceptable ? null : `<span class="font-bold opacity-50">Boost NG</span>`,
-                                links.twitter_url ? `<a href="${links.twitter_url}" target="_blank" class="text-teal-700 font-bold hover:underline">Twitter</a>` : null,
-                                links.misskey_url ? `<a href="${links.misskey_url}" target="_blank" class="text-teal-700 font-bold hover:underline">Misskey</a>` : null,
-                                links.pixiv_url ? `<a href="${links.pixiv_url}" target="_blank" class="text-teal-700 font-bold hover:underline">Pixiv</a>` : null,
-                                links.booth_url ? `<a href="${links.booth_url}" target="_blank" class="text-teal-700 font-bold hover:underline">Booth</a>` : null,
-                                links.fantia_url ? `<a href="${links.fantia_url}" target="_blank" class="text-teal-700 font-bold hover:underline">Fantia</a>` : null,
-                                links.fanbox_url ? `<a href="${links.fanbox_url}" target="_blank" class="text-teal-700 font-bold hover:underline">Fanbox</a>` : null,
-                                links.nijie_url ? `<a href="${links.nijie_url}" target="_blank" class="text-teal-700 font-bold hover:underline">Nijie</a>` : null,
-                                links.dlsite_url ? `<a href="${links.dlsite_url}" target="_blank" class="text-teal-700 font-bold hover:underline">DLsite</a>` : null,
-                                links.fanza_url ? `<a href="${links.fanza_url}" target="_blank" class="text-teal-700 font-bold hover:underline">Fanza</a>` : null,
-                                links.skima_url ? `<a href="${links.skima_url}" target="_blank" class="text-teal-700 font-bold hover:underline">Skima</a>` : null,
-                                links.coconala_url ? `<a href="${links.coconala_url}" target="_blank" class="text-teal-700 font-bold hover:underline">Coconala</a>` : null,
-                                links.patreon_url ? `<a href="${links.patreon_url}" target="_blank" class="text-teal-700 font-bold hover:underline">Patreon</a>` : null,
-                                links.youtube_url ? `<a href="${links.youtube_url}" target="_blank" class="text-teal-700 font-bold hover:underline">YouTube</a>` : null,
-                                links.wishlist_url ? `<a href="${links.wishlist_url}" target="_blank" class="text-teal-700 font-bold hover:underline">Wishlist</a>` : null,
-                                data.url ? `<a href="${data.url}" target="_blank" class="text-teal-700 font-bold hover:underline">Url (${new URL(data.url).hostname.split('.').slice(-2).join('.')})</a>` : null
-                            ].filter(Boolean).join(' / ')}
+                        data.nsfw_acceptable ? `<span class="font-bold opacity-60">nsfw OK</span>` : null,
+                        data.tip_acceptable ? null : `<span class="font-bold opacity-50">Boost NG</span>`,
+                        links.twitter_url ? `<a href="${links.twitter_url}" target="_blank" class="font-bold text-teal-700 dark:text-teal-500 hover:underline">Twitter</a>` : null,
+                        links.misskey_url ? `<a href="${links.misskey_url}" target="_blank" class="font-bold text-teal-700 dark:text-teal-500 hover:underline">Misskey</a>` : null,
+                        links.pixiv_url ? `<a href="${links.pixiv_url}" target="_blank" class="font-bold text-teal-700 dark:text-teal-500 hover:underline">Pixiv</a>` : null,
+                        links.booth_url ? `<a href="${links.booth_url}" target="_blank" class="font-bold text-teal-700 dark:text-teal-500 hover:underline">Booth</a>` : null,
+                        links.fantia_url ? `<a href="${links.fantia_url}" target="_blank" class="font-bold text-teal-700 dark:text-teal-500 hover:underline">Fantia</a>` : null,
+                        links.fanbox_url ? `<a href="${links.fanbox_url}" target="_blank" class="font-bold text-teal-700 dark:text-teal-500 hover:underline">Fanbox</a>` : null,
+                        links.nijie_url ? `<a href="${links.nijie_url}" target="_blank" class="font-bold text-teal-700 dark:text-teal-500 hover:underline">Nijie</a>` : null,
+                        links.dlsite_url ? `<a href="${links.dlsite_url}" target="_blank" class="font-bold text-teal-700 dark:text-teal-500 hover:underline">DLsite</a>` : null,
+                        links.fanza_url ? `<a href="${links.fanza_url}" target="_blank" class="font-bold text-teal-700 dark:text-teal-500 hover:underline">Fanza</a>` : null,
+                        links.skima_url ? `<a href="${links.skima_url}" target="_blank" class="font-bold text-teal-700 dark:text-teal-500 hover:underline">Skima</a>` : null,
+                        links.coconala_url ? `<a href="${links.coconala_url}" target="_blank" class="font-bold text-teal-700 dark:text-teal-500 hover:underline">Coconala</a>` : null,
+                        links.patreon_url ? `<a href="${links.patreon_url}" target="_blank" class="font-bold text-teal-700 dark:text-teal-500 hover:underline">Patreon</a>` : null,
+                        links.youtube_url ? `<a href="${links.youtube_url}" target="_blank" class="font-bold text-teal-700 dark:text-teal-500 hover:underline">YouTube</a>` : null,
+                        links.wishlist_url ? `<a href="${links.wishlist_url}" target="_blank" class="font-bold text-teal-700 dark:text-teal-500 hover:underline">Wishlist</a>` : null,
+                        data.url ? `<a href="${data.url}" target="_blank" class="font-bold text-teal-700 dark:text-teal-500 hover:underline">Url (${new URL(data.url).hostname.split('.').slice(-2).join('.')})</a>` : null
+                    ].filter(Boolean).join(' / ')}
                         </div>
                             <table class="w-full text-left border-collapse">
                             <tbody>
                                 ${data.creator ?
-                                `<tr class="separator">
+                        `<tr class="separator">
                                   <td colspan="4" class="border-t"></td>
                                 </tr>` : ""}
                                 ${skillsHtml ?
-                                `<tr class="border-t border-gray-300 dark:border-gray-600">
+                        `<tr class="border-t border-gray-300 dark:border-gray-600">
                                     <th class="py-2 px-4 font-semibold text-sm sm:text-base">Recommended amount</th>
                                     <td class="py-2 px-4 text-sm sm:text-base">${skillsHtml}</td>
                                 </tr>` : ""}
                                 ${(data.creator && data.accept_expiration_days && data.complete_expiration_days) ?
-                                `<tr class="border-t border-gray-300 dark:border-gray-600">
+                        `<tr class="border-t border-gray-300 dark:border-gray-600">
                                     <th class="py-2 px-4 font-semibold text-sm sm:text-base">Response / Complete expiration days</th>
                                     <td class="py-2 px-4 text-sm sm:text-base">${data.accept_expiration_days} / ${data.complete_expiration_days}</td>
                                 </tr>` : ""}
                                 ${(avgResponseDays && avgCompletionDays) ?
-                                `<tr class="border-t border-gray-300 dark:border-gray-600">
+                        `<tr class="border-t border-gray-300 dark:border-gray-600">
                                     <th class="py-2 px-4 font-semibold text-sm sm:text-base">Response / Complete average days</th>
                                     <td class="py-2 px-4 text-sm sm:text-base">${avgResponseDays} / ${avgCompletionDays}</td>
                                 </tr>` : ""}
                                 ${data.received_works_count ?
-                                `<tr class="border-t border-gray-300 dark:border-gray-600">
+                        `<tr class="border-t border-gray-300 dark:border-gray-600">
                                     <th class="py-2 px-4 font-semibold text-sm sm:text-base">Total</th>
                                     <td class="py-2 px-4 text-sm sm:text-base">
-                                        ${data.received_works_count}${
-                                            ((p = data.received_private_works_count, n = data.received_nsfw_works_count) => 
-                                                p || n ? ` (${[p && `priv ${p}`, n && `nsfw ${n}`].filter(Boolean).join(' / ')})` : ''
-                                            )()
-                                        }
+                                        ${data.received_works_count}${((p = data.received_private_works_count, n = data.received_nsfw_works_count) =>
+                            p || n ? ` (${[p && `priv ${p}`, n && `nsfw ${n}`].filter(Boolean).join(' / ')})` : ''
+                        )()
+                        }
                                     </td>
                                 </tr>` : ""}
                                 ${data.complete_rate ?
-                                `<tr class="border-t border-gray-300 dark:border-gray-600">
+                        `<tr class="border-t border-gray-300 dark:border-gray-600">
                                     <th class="py-2 px-4 font-semibold text-sm sm:text-base">Complete rate</th>
                                     <td class="py-2 px-4 text-sm sm:text-base">${(data.complete_rate * 100).toFixed(0)}%</td>
                                 </tr>` : ""}
                                 ${data.total_appeals_count ?
-                                `<tr class="border-t border-gray-300 dark:border-gray-600">
+                        `<tr class="border-t border-gray-300 dark:border-gray-600">
                                   <th class="py-2 px-4 font-semibold text-sm sm:text-base">Sent appeals</th>
                                   <td class="py-2 px-4 text-sm sm:text-base">${data.total_appeals_count}</td>
                                 </tr>`: ""}
                                 ${data.sent_public_works_count ?
-                                `<tr class="separator">
+                        `<tr class="separator">
                                     <td colspan="4" class="border-t"></td>
                                 </tr>`: ""}
-                                ${data.request_master_rank ? 
-                                `<tr class="border-t border-gray-300 dark:border-gray-600">
+                                ${data.request_master_rank ?
+                        `<tr class="border-t border-gray-300 dark:border-gray-600">
                                     <th class="py-2 px-4 font-semibold text-sm sm:text-base">Request master rank</th>
                                     <td class="py-2 px-4 text-sm sm:text-base">${data.request_master_rank}</td>
                                 </tr>`: ""}
                                 ${data.first_requester_rank ?
-                                `<tr class="border-t border-gray-300 dark:border-gray-600">
+                        `<tr class="border-t border-gray-300 dark:border-gray-600">
                                     <th class="py-2 px-4 font-semibold text-sm sm:text-base">Pioneer rank</th>
                                     <td class="py-2 px-4 text-sm sm:text-base">${data.first_requester_rank}</td>
                                 </tr>`: ""}
                                 ${data.sent_public_works_count ?
-                                `<tr class="border-t border-gray-300 dark:border-gray-600">
+                        `<tr class="border-t border-gray-300 dark:border-gray-600">
                                     <th class="py-2 px-4 font-semibold text-sm sm:text-base">Sent Public Requests</th>
                                     <td class="py-2 px-4 text-sm sm:text-base cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition" onclick="fetchClientWorks('${username}', ${data.sent_public_works_count})">
                                     ${data.sent_public_works_count} ${data.sent_first_works_count ? `( first ${data.sent_first_works_count} )` : ""}
                                     </td>
                                 </tr>`: ""}
                                 ${data.sent_requests_average_cancel_time ?
-                                `<tr class="border-t border-gray-300 dark:border-gray-600">
+                        `<tr class="border-t border-gray-300 dark:border-gray-600">
                                     <th class="py-2 px-4 font-semibold text-sm sm:text-base">Sent Requests Average Cancel Time</th>
                                     <td class="py-2 px-4 text-sm sm:text-base">${(data.sent_requests_average_cancel_time / 86400).toFixed(2)} days</td>
                                 </tr>`: ""}
