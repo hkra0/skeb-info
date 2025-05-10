@@ -1,4 +1,4 @@
-# 🔍 Skeb-info
+# 🔍 skeb-info
 A simple Skeb info lookup tool with wishlist feature. (๑• . •๑)
 
 English | [中文](README.zh-CN.md)
