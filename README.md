@@ -13,7 +13,6 @@ English | [中文](README.zh-CN.md)
 
 ## Usage
 
-### Info Checker
 - Visit [skebinfo.hkra.xyz](https://skebinfo.hkra.xyz/), enter a username or link, and click Search.
 - Click the username to open the user's Skeb profile.
 - Click the number of `Sent Public Requests` to view the client's request count by creator.
