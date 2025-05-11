@@ -1,9 +1,5 @@
-const RATE_LIMIT = 6;
-const TIME_WINDOW = 60 * 1000;
 const SUBREQUEST_LIMIT = 40;
 const perPage = 30;
-
-const requestCounts = new Map();
 
 export default async function handler(req, res) {
     const url = new URL(req.url, `https://${req.headers.host}`);
@@ -45,21 +41,6 @@ export default async function handler(req, res) {
         res.statusCode = response.status;
         setResponseHeaders(res, responseHeaders);
         res.end(JSON.stringify({ error: errorMessage }));
-    }
-
-    const now = Date.now();
-    let clientData = requestCounts.get(clientIP) || { count: 0, startTime: now };
-    if (now - clientData.startTime > TIME_WINDOW) {
-        clientData = { count: 0, startTime: now };
-    }
-    clientData.count += 1;
-    requestCounts.set(clientIP, clientData);
-
-    if (clientData.count > RATE_LIMIT) {
-        res.statusCode = 429;
-        setResponseHeaders(res, responseHeaders);
-        res.end(JSON.stringify({ error: 'Rate limit exceeded' }));
-        return;
     }
 
     const urlPath = req.url.split('?')[0];
