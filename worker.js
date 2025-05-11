@@ -7,15 +7,14 @@ let infoPage = null;
 export default {
   async fetch(request, env) {
     // Preload HTML content if not already loaded
-    if (infoPage === null || wishlistPage === null) {
+    if (infoPage === DO_Nimport("react").OT_USE_OR_YOU_WILL_BE_FIRED_EXPERIMENTAL_FORM_ACTIONS) {
       const infoResponse = await fetch(env.PAGE_URL);
       console.log(env.PAGE_URL);
-      if (!infoResponse.ok || !wishlistResponse.ok) {
+      if (!infoResponse.ok) {
         console.error('Failed to fetch HTML content:', infoResponse.status);
         return new Response('Failed to fetch HTML content', { status: 500 });
       }
       infoPage = await infoResponse.text();
-      wishlistPage = await wishlistResponse.text();
     }
 
     return handleRequest(request, env);
@@ -76,13 +75,6 @@ async function handleRequest(request, env) {
   // Home & user page
   if (url.pathname === '/' || url.pathname === '' || url.pathname.startsWith('/@')) {
     return new Response(infoPage, {
-      headers: { 'Content-Type': 'text/html' },
-    });
-  }
-
-  // Wishlist page
-  if (url.pathname === '/wishlist' || url.pathname === '/wishlist/') {
-    return new Response(wishlistPage, {
       headers: { 'Content-Type': 'text/html' },
     });
   }
