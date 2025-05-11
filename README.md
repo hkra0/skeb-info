@@ -8,7 +8,7 @@ English | [中文](README.zh-CN.md)
 - 🔍 Search Skeb user profiles by username or link.
 - 📑 Displays detailed infomation, get price or expiration time even if user stopped receiving request.
 - 🔖 Manage and track infomation of your favorite creators using the wishlist.
-- ✨ User-frendly UI.
+- ✨ User-friendly UI.
 - 🔗 Skeb user info & works API proxy.
 
 ## Usage
@@ -16,11 +16,12 @@ English | [中文](README.zh-CN.md)
 - Visit [skebinfo.hkra.xyz](https://skebinfo.hkra.xyz/), enter a username or link, and click Search.
 - Click the username to open the user's Skeb profile.
 - Click the number of `Sent Public Requests` to view the client's request count by creator.
-- Click the bookmark icon to add the user to your wishlist. You can open the user's Skeb profile, reorder or delete creators in the list. Click the refresh icon to update the wishlist.
+- Click the bookmark icon to add the user to your wishlist. Once added, the Wishlist section will appear on the bottom of the page.
+- You can open the user's Skeb profile, reorder or delete creators in the list. Click the refresh icon to update the wishlist.
 
 ## Disclaimer
 
-This tool is an unofficial interface for retrieving publicly available Skeb artist information. Users must comply with Skeb's terms of service, including restrictions on misuse, fraudulent activities, or actions that may infringe on third-party rights. The tool's developer are not liable for any misuse, or violations of Skeb's guidelines resulting from its use.
+This tool is an unofficial interface for retrieving publicly available Skeb artist information. Users must comply with Skeb's terms of service, including restrictions on misuse, fraudulent activities, or actions that may infringe on third-party rights. The tool's developer is not liable for any misuse, or violations of Skeb's guidelines resulting from its use.
 
 ## API endpoints
 - User info: `/api/users/<username>`
