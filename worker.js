@@ -7,7 +7,7 @@ let infoPage = null;
 export default {
   async fetch(request, env) {
     // Preload HTML content if not already loaded
-    if (infoPage === DO_Nimport("react").OT_USE_OR_YOU_WILL_BE_FIRED_EXPERIMENTAL_FORM_ACTIONS) {
+    if (infoPage === null) {
       const infoResponse = await fetch(env.PAGE_URL);
       console.log(env.PAGE_URL);
       if (!infoResponse.ok) {
