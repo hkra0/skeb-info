@@ -28,13 +28,14 @@
             <div class="text-center mb-4">
                 <a href="/"
                     class="text-5xl font-bold text-teal-700 dark:text-teal-500 hover:text-teal-800 dark:hover:text-teal-600 transition-all duration-300">skeb
-                    info</a><br />
-                <a href="/wishlist"
-                    class="text-2xl font-bold text-teal-700 dark:text-teal-500 hover:text-teal-800 dark:hover:text-teal-600 transition-all duration-300 hover:underline opacity-60">wishlist</a>
+                    info
+                </a>
             </div>
             <div class="text-4xl mb-4 text-center">
                 <span id="tinyko-item" class="inline-block cursor-default select-none">🔍</span><span id="tinyko"
-                    class="inline-block cursor-pointer select-none">(๑• . •๑)</span>
+                    class="inline-block cursor-pointer select-none">
+                    (๑• . •๑)
+                </span>
             </div>
         </div>
         <div class="py-2 px-4">
@@ -60,8 +61,17 @@
         <div id="user-info" class="mt-8"></div>
         <div id="sent-works-info" class="mt-8"></div>
         <div id="received-works-info" class="mt-8"></div>
+        <div id="wishlist-div" class="mt-8"></div>
     </div>
     <script>
+        const bookmarkRegularSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" class="w-7 h-7 fill-gray-500 dark:fill-gray-400 hover:fill-gray-600 hover:dark:fill-gray-300 transition-all duration-360" onClick="toggleBookmark()">
+            <!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+            <path d="M0 48C0 21.5 21.5 0 48 0l0 48 0 393.4 130.1-92.9c8.3-6 19.6-6 27.9 0L336 441.4 336 48 48 48 48 0 336 0c26.5 0 48 21.5 48 48l0 440c0 9-5 17.2-13 21.3s-17.6 3.4-24.9-1.8L192 397.5 37.9 507.5c-7.3 5.2-16.9 5.9-24.9 1.8S0 497 0 488L0 48z"/>
+            </svg>`
+        const bookmarkFilledSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" class="w-7 h-7 fill-gray-500 dark:fill-gray-400 hover:fill-gray-600 hover:dark:fill-gray-300 transition-all duration-360" onClick="toggleBookmark()">
+            <!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+            <path d="M0 48V487.7C0 501.1 10.9 512 24.3 512c5 0 9.9-1.5 14-4.4L192 400 345.7 507.6c4.1 2.9 9 4.4 14 4.4c13.4 0 24.3-10.9 24.3-24.3V48c0-26.5-21.5-48-48-48H48C21.5 0 0 21.5 0 48z"/>
+            </svg>`
         const tinyko = document.getElementById("tinyko");
         const tinykoItem = document.getElementById("tinyko-item");
         const urlUserName = window.location.pathname.slice(2);
@@ -71,6 +81,8 @@
         const userInfoDiv = document.getElementById('user-info');
         const sentWorksDiv = document.getElementById('sent-works-info');
         const receivedWorksDiv = document.getElementById('received-works-info');
+        const wishlistDiv = document.getElementById('wishlist-div');
+        let currentUser = null;
 
         // tinyko (๑• . •๑)
         let tnkBeforeState = tinyko.innerHTML;
@@ -128,6 +140,23 @@
                 element.classList.remove("animate__animated", "animate__fadeIn");
             }, 500);
         }
+        function flash(elementId) {
+            const element = document.getElementById(elementId);
+            element.classList.add("animate__animated", "animate__flash");
+            setTimeout(() => {
+                element.classList.remove("animate__animated", "animate__flash");
+            }, 500);
+        }
+
+        function highlightOn(elementId) {
+            const element = document.getElementById(elementId);
+            element.classList.add("bg-gray-100", "dark:bg-gray-700", "transition-all", "duration-360");
+        }
+
+        function highlightOff(elementId) {
+            const element = document.getElementById(elementId);
+            element.classList.remove("bg-gray-100", "dark:bg-gray-700");
+        }
         function fadeOut(elementId) {
             const element = document.getElementById(elementId);
             element.classList.add("animate__animated", "animate__fadeOut");
@@ -140,6 +169,7 @@
             searchButton.classList.remove('hover:bg-[#206966]', 'dark:hover:bg-[#206966]')
         }
         async function fetchUserInfo() {
+            const wishlistCreators = JSON.parse(localStorage.getItem('skebWishlist') || '[]');
             sentWorksDiv.innerHTML = "";
             receivedWorksDiv.innerHTML = "";
             try {
@@ -180,71 +210,77 @@
                     restore();
                 }
                 tinykoItem.classList.remove("animate__animated", "animate__infinite", "animate__pulse");
-                const data = await response.json();
-                if (data.error) {
-                    throw new Error(data.error);
+                currentUser = await response.json();
+                if (currentUser.error) {
+                    throw new Error(currentUser.error);
                 }
 
                 console.info("Raw user data is below 📑(๑• . •๑)")
-                console.log(data)
+                console.log(currentUser)
 
-                const twitterScreenName = data.user_service_links?.[0]?.screen_name || null;
-                const misskeyScreenName = data.user_service_links?.find(link => link.provider === "misskey_io")?.screen_name || null;
+                const twitterScreenName = currentUser.user_service_links?.[0]?.screen_name || null;
+                const misskeyScreenName = currentUser.user_service_links?.find(link => link.provider === "misskey_io")?.screen_name || null;
+                let bookmarkSVG = wishlistCreators.some(creator => creator.screen_name === currentUser.screen_name) ? bookmarkFilledSVG : bookmarkRegularSVG;
 
                 const links = {
                     twitter_url: twitterScreenName ? `https://x.com/${twitterScreenName}` : null,
                     misskey_url: misskeyScreenName ? `https://misskey.io/@${misskeyScreenName}` : null,
-                    pixiv_url: data.pixiv_id ? `https://www.pixiv.net/users/${data.pixiv_id}` : null,
-                    booth_url: data.booth_id ? `https://${data.booth_id}.booth.pm` : null,
-                    fantia_url: data.fantia_id ? `https://fantia.jp/fanclubs/${data.fantia_id}` : null,
-                    fanbox_url: data.fanbox_id ? `https://${data.fanbox_id}.fanbox.cc` : null,
-                    nijie_url: data.nijie_id ? `https://nijie.info/members.php?id=${data.nijie_id}` : null,
-                    dlsite_url: data.dlsite_id ? `https://www.dlsite.com/home/circle/profile/=/maker_id/${data.dlsite_id}` : null,
-                    fanza_url: data.fanza_id ? `https://www.dmm.co.jp/dc/doujin/-/list/=/article=maker/id/${data.fanza_id}` : null,
-                    skima_url: data.skima_id ? `https://skima.jp/profile/users/${data.skima_id}` : null,
-                    coconala_url: data.coconala_id ? `https://coconala.com/users/${data.coconala_id}` : null,
-                    patreon_url: data.patreon_id ? `https://www.patreon.com/${data.patreon_id}` : null,
-                    youtube_url: data.youtube_id ? `https://www.youtube.com/${data.youtube_id}` : null,
-                    wishlist_url: data.wishlist_id ? `https://www.amazon.jp/hz/wishlist/ls/${data.wishlist_id}` : null,
+                    pixiv_url: currentUser.pixiv_id ? `https://www.pixiv.net/users/${currentUser.pixiv_id}` : null,
+                    booth_url: currentUser.booth_id ? `https://${currentUser.booth_id}.booth.pm` : null,
+                    fantia_url: currentUser.fantia_id ? `https://fantia.jp/fanclubs/${currentUser.fantia_id}` : null,
+                    fanbox_url: currentUser.fanbox_id ? `https://${currentUser.fanbox_id}.fanbox.cc` : null,
+                    nijie_url: currentUser.nijie_id ? `https://nijie.info/members.php?id=${currentUser.nijie_id}` : null,
+                    dlsite_url: currentUser.dlsite_id ? `https://www.dlsite.com/home/circle/profile/=/maker_id/${currentUser.dlsite_id}` : null,
+                    fanza_url: currentUser.fanza_id ? `https://www.dmm.co.jp/dc/doujin/-/list/=/article=maker/id/${currentUser.fanza_id}` : null,
+                    skima_url: currentUser.skima_id ? `https://skima.jp/profile/users/${currentUser.skima_id}` : null,
+                    coconala_url: currentUser.coconala_id ? `https://coconala.com/users/${currentUser.coconala_id}` : null,
+                    patreon_url: currentUser.patreon_id ? `https://www.patreon.com/${currentUser.patreon_id}` : null,
+                    youtube_url: currentUser.youtube_id ? `https://www.youtube.com/${currentUser.youtube_id}` : null,
+                    wishlist_url: currentUser.wishlist_id ? `https://www.amazon.jp/hz/wishlist/ls/${currentUser.wishlist_id}` : null,
                 };
 
                 // Process skills
                 let skillsHtml = '';
-                if (data.skills?.length) {
-                    skillsHtml = data.skills.map(skill => {
+                if (currentUser.skills?.length) {
+                    skillsHtml = currentUser.skills.map(skill => {
                         const genre = skill.genre;
                         return `<span class="font-bold">${genre}</span>&nbsp;&nbsp;JPY&nbsp;${skill.default_amount}`;
                     }).join('<br>');
                 }
 
                 // Convert times from seconds to days
-                const avgResponseDays = data.received_requests_average_response_time ? (data.received_requests_average_response_time / 86400).toFixed(2) : null;
-                const avgCompletionDays = data.completing_average_time ? (data.completing_average_time / 86400).toFixed(2) : null;
+                const avgResponseDays = currentUser.received_requests_average_response_time ? (currentUser.received_requests_average_response_time / 86400).toFixed(2) : null;
+                const avgCompletionDays = currentUser.completing_average_time ? (currentUser.completing_average_time / 86400).toFixed(2) : null;
 
                 // Format fields
                 const linkClassList = "font-bold text-teal-700 dark:text-teal-500 hover:underline";
                 userInfoDiv.innerHTML = `
                     <div class="overflow-x-auto">
-                        <div class="py-2 px-4 flex items-baseline">
-                            ${data.request_master_rank ?
+                        <div class="py-2 px-4 flex items-center justify-between">
+                            <div class="flex items-baseline">
+                                ${currentUser.request_master_rank ?
                         `
-                            <svg width="24" height="24" viewBox="0 0 640 512" xmlns="http://www.w3.org/2000/svg" class="mr-1">
-                            <path fill="${data.request_master_rank <= 3 ? '#ffe08a' : 'currentColor'}" d="M528 448H112c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h416c8.8 0 16-7.2 16-16v-32c0-8.8-7.2-16-16-16zm64-320c-26.5 0-48 21.5-48 48 0 7.1 1.6 13.7 4.4 19.8L476 239.2c-15.4 9.2-35.3 4-44.2-11.6L350.3 85C361 76.2 368 63 368 48c0-26.5-21.5-48-48-48s-48 21.5-48 48c0 15 7 28.2 17.7 37l-81.5 142.6c-8.9 15.6-28.9 20.8-44.2 11.6l-72.3-43.4c2.7-6 4.4-12.7 4.4-19.8 0-26.5-21.5-48-48-48S0 149.5 0 176s21.5 48 48 48c2.6 0 5.2-.4 7.7-.8L128 416h384l72.3-192.8c2.5.4 5.1.8 7.7.8 26.5 0 48-21.5 48-48s-21.5-48-48-48z"></path>
-                            </svg>
-                            `
+                                <svg width="24" height="24" viewBox="0 0 640 512" xmlns="http://www.w3.org/2000/svg" class="mr-1">
+                                <path fill="${currentUser.request_master_rank <= 3 ? '#ffe08a' : 'currentColor'}" d="M528 448H112c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h416c8.8 0 16-7.2 16-16v-32c0-8.8-7.2-16-16-16zm64-320c-26.5 0-48 21.5-48 48 0 7.1 1.6 13.7 4.4 19.8L476 239.2c-15.4 9.2-35.3 4-44.2-11.6L350.3 85C361 76.2 368 63 368 48c0-26.5-21.5-48-48-48s-48 21.5-48 48c0 15 7 28.2 17.7 37l-81.5 142.6c-8.9 15.6-28.9 20.8-44.2 11.6l-72.3-43.4c2.7-6 4.4-12.7 4.4-19.8 0-26.5-21.5-48-48-48S0 149.5 0 176s21.5 48 48 48c2.6 0 5.2-.4 7.7-.8L128 416h384l72.3-192.8c2.5.4 5.1.8 7.7.8 26.5 0 48-21.5 48-48s-21.5-48-48-48z"></path>
+                                </svg>
+                                `
                         : ""}
-                            <a href="https://skeb.jp/@${data.screen_name}" target="_blank" class="text-2xl font-bold hover:underline">
-                                ${data.name}
-                            </a>
-                            ${skillsHtml ? `
-                              ${data.acceptable ? `<span class="text-sm font-bold text-green-600 ml-2">seeking</span>` : `<span class="font-bold text-sm text-gray-500 ml-2">stopped</span>`}`
+                                <a href="https://skeb.jp/@${currentUser.screen_name}" target="_blank" class="text-2xl font-bold hover:underline">
+                                    ${currentUser.name}
+                                </a>
+                                ${skillsHtml ? `
+                                ${currentUser.acceptable ? `<span class="text-sm font-bold text-green-600 ml-2">seeking</span>` : `<span class="font-bold text-sm text-gray-500 ml-2">stopped</span>`}`
                         : ""}
-                        </div>
-                        <p class="py-2 px-4">${sanitizeDescription(data.description) || '<span class="text-gray-500">no description</span>'}</p>
+                            </div>
+                            <div id="bookmark">${currentUser.creator ?
+                        bookmarkSVG : ""}
+                            </div>
+                        </div/>
+                        <p class="py-2 px-4">${sanitizeDescription(currentUser.description) || '<span class="text-gray-500">no description</span>'}</p>
                         <div class="py-2 px-4 mb-8">
                             ${[
-                        data.nsfw_acceptable ? `<span class="font-bold opacity-60">nsfw OK</span>` : null,
-                        data.tip_acceptable ? null : `<span class="font-bold opacity-50">Boost NG</span>`,
+                        currentUser.nsfw_acceptable ? `<span class="font-bold opacity-60">nsfw OK</span>` : null,
+                        currentUser.tip_acceptable ? null : `<span class="font-bold opacity-50">Boost NG</span>`,
                         links.twitter_url ? `<a href="${links.twitter_url}" target="_blank" class="font-bold text-teal-700 dark:text-teal-500 hover:underline">Twitter</a>` : null,
                         links.misskey_url ? `<a href="${links.misskey_url}" target="_blank" class="font-bold text-teal-700 dark:text-teal-500 hover:underline">Misskey</a>` : null,
                         links.pixiv_url ? `<a href="${links.pixiv_url}" target="_blank" class="font-bold text-teal-700 dark:text-teal-500 hover:underline">Pixiv</a>` : null,
@@ -259,12 +295,12 @@
                         links.patreon_url ? `<a href="${links.patreon_url}" target="_blank" class="font-bold text-teal-700 dark:text-teal-500 hover:underline">Patreon</a>` : null,
                         links.youtube_url ? `<a href="${links.youtube_url}" target="_blank" class="font-bold text-teal-700 dark:text-teal-500 hover:underline">YouTube</a>` : null,
                         links.wishlist_url ? `<a href="${links.wishlist_url}" target="_blank" class="font-bold text-teal-700 dark:text-teal-500 hover:underline">Wishlist</a>` : null,
-                        data.url ? `<a href="${data.url}" target="_blank" class="font-bold text-teal-700 dark:text-teal-500 hover:underline">Url (${new URL(data.url).hostname.split('.').slice(-2).join('.')})</a>` : null
+                        currentUser.url ? `<a href="${currentUser.url}" target="_blank" class="font-bold text-teal-700 dark:text-teal-500 hover:underline">Url (${new URL(currentUser.url).hostname.split('.').slice(-2).join('.')})</a>` : null
                     ].filter(Boolean).join(' / ')}
                         </div>
                             <table class="w-full text-left border-collapse">
                             <tbody>
-                                ${data.creator ?
+                                ${currentUser.creator ?
                         `<tr class="separator">
                                   <td colspan="4" class="border-t"></td>
                                 </tr>` : ""}
@@ -273,61 +309,61 @@
                                     <th class="py-2 px-4 font-semibold text-sm sm:text-base">Recommended amount</th>
                                     <td class="py-2 px-4 text-sm sm:text-base">${skillsHtml}</td>
                                 </tr>` : ""}
-                                ${(data.creator && data.accept_expiration_days && data.complete_expiration_days) ?
+                                ${(currentUser.creator && currentUser.accept_expiration_days && currentUser.complete_expiration_days) ?
                         `<tr class="border-t border-gray-300 dark:border-gray-600">
                                     <th class="py-2 px-4 font-semibold text-sm sm:text-base">Response / Complete expiration days</th>
-                                    <td class="py-2 px-4 text-sm sm:text-base">${data.accept_expiration_days} / ${data.complete_expiration_days}</td>
+                                    <td class="py-2 px-4 text-sm sm:text-base">${currentUser.accept_expiration_days} / ${currentUser.complete_expiration_days}</td>
                                 </tr>` : ""}
                                 ${(avgResponseDays && avgCompletionDays) ?
                         `<tr class="border-t border-gray-300 dark:border-gray-600">
                                     <th class="py-2 px-4 font-semibold text-sm sm:text-base">Response / Complete average days</th>
                                     <td class="py-2 px-4 text-sm sm:text-base">${avgResponseDays} / ${avgCompletionDays}</td>
                                 </tr>` : ""}
-                                ${data.received_works_count ?
+                                ${currentUser.received_works_count ?
                         `<tr class="border-t border-gray-300 dark:border-gray-600">
                                     <th class="py-2 px-4 font-semibold text-sm sm:text-base">Total</th>
                                     <td class="py-2 px-4 text-sm sm:text-base">
-                                        ${data.received_works_count}${((p = data.received_private_works_count, n = data.received_nsfw_works_count) =>
+                                        ${currentUser.received_works_count}${((p = currentUser.received_private_works_count, n = currentUser.received_nsfw_works_count) =>
                             p || n ? ` (${[p && `priv ${p}`, n && `nsfw ${n}`].filter(Boolean).join(' / ')})` : ''
                         )()
                         }
                                     </td>
                                 </tr>` : ""}
-                                ${data.complete_rate ?
+                                ${currentUser.complete_rate ?
                         `<tr class="border-t border-gray-300 dark:border-gray-600">
                                     <th class="py-2 px-4 font-semibold text-sm sm:text-base">Complete rate</th>
-                                    <td class="py-2 px-4 text-sm sm:text-base">${(data.complete_rate * 100).toFixed(0)}%</td>
+                                    <td class="py-2 px-4 text-sm sm:text-base">${(currentUser.complete_rate * 100).toFixed(0)}%</td>
                                 </tr>` : ""}
-                                ${data.total_appeals_count ?
+                                ${currentUser.total_appeals_count ?
                         `<tr class="border-t border-gray-300 dark:border-gray-600">
                                   <th class="py-2 px-4 font-semibold text-sm sm:text-base">Sent appeals</th>
-                                  <td class="py-2 px-4 text-sm sm:text-base">${data.total_appeals_count}</td>
+                                  <td class="py-2 px-4 text-sm sm:text-base">${currentUser.total_appeals_count}</td>
                                 </tr>`: ""}
-                                ${data.sent_public_works_count ?
+                                ${currentUser.sent_public_works_count ?
                         `<tr class="separator">
                                     <td colspan="4" class="border-t"></td>
                                 </tr>`: ""}
-                                ${data.request_master_rank ?
+                                ${currentUser.request_master_rank ?
                         `<tr class="border-t border-gray-300 dark:border-gray-600">
                                     <th class="py-2 px-4 font-semibold text-sm sm:text-base">Request master rank</th>
-                                    <td class="py-2 px-4 text-sm sm:text-base">${data.request_master_rank}</td>
+                                    <td class="py-2 px-4 text-sm sm:text-base">${currentUser.request_master_rank}</td>
                                 </tr>`: ""}
-                                ${data.first_requester_rank ?
+                                ${currentUser.first_requester_rank ?
                         `<tr class="border-t border-gray-300 dark:border-gray-600">
                                     <th class="py-2 px-4 font-semibold text-sm sm:text-base">Pioneer rank</th>
-                                    <td class="py-2 px-4 text-sm sm:text-base">${data.first_requester_rank}</td>
+                                    <td class="py-2 px-4 text-sm sm:text-base">${currentUser.first_requester_rank}</td>
                                 </tr>`: ""}
-                                ${data.sent_public_works_count ?
+                                ${currentUser.sent_public_works_count ?
                         `<tr class="border-t border-gray-300 dark:border-gray-600">
                                     <th class="py-2 px-4 font-semibold text-sm sm:text-base">Sent Public Requests</th>
-                                    <td class="py-2 px-4 text-sm sm:text-base cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition" onclick="fetchClientWorks('${username}', ${data.sent_public_works_count})">
-                                    ${data.sent_public_works_count} ${data.sent_first_works_count ? `( first ${data.sent_first_works_count} )` : ""}
+                                    <td class="py-2 px-4 text-sm sm:text-base cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition" onclick="fetchClientWorks('${username}', ${currentUser.sent_public_works_count})">
+                                    ${currentUser.sent_public_works_count} ${currentUser.sent_first_works_count ? `( first ${currentUser.sent_first_works_count} )` : ""}
                                     </td>
                                 </tr>`: ""}
-                                ${data.sent_requests_average_cancel_time ?
+                                ${currentUser.sent_requests_average_cancel_time ?
                         `<tr class="border-t border-gray-300 dark:border-gray-600">
                                     <th class="py-2 px-4 font-semibold text-sm sm:text-base">Sent Requests Average Cancel Time</th>
-                                    <td class="py-2 px-4 text-sm sm:text-base">${(data.sent_requests_average_cancel_time / 86400).toFixed(2)} days</td>
+                                    <td class="py-2 px-4 text-sm sm:text-base">${(currentUser.sent_requests_average_cancel_time / 86400).toFixed(2)} days</td>
                                 </tr>`: ""}
                             </tbody>
                         </table>
@@ -335,26 +371,7 @@
                 `;
                 fadeIn('user-info');
             } catch (error) {
-                if (error.message.toLowerCase().includes("not found")) {
-                    searchButton.textContent = 'User not found';
-                    searchButton.classList.remove('bg-[#28837f]', 'hover:bg-[#206966]', 'dark:hover:bg-[#206966]');
-                    searchButton.classList.add('bg-gray-600');
-                    tinykoItem.innerHTML = "❔";
-                    tinykoItem.classList.remove("animate__animated", "animate__infinite", "animate__pulse");
-                    tinykoItem.classList.add("animate__animated", "animate__bounceIn");
-                    document.title = `404 - 🔍(๑• . •๑)`;
-                    userInfoDiv.innerHTML = "";
-                } else {
-                    searchButton.textContent = 'Error';
-                    searchButton.classList.remove('bg-[#28837f]', 'hover:bg-[#206966]', 'dark:hover:bg-[#206966]');
-                    searchButton.classList.add('bg-red-500', 'opacity-50');
-                    tinykoItem.innerHTML = "❌";
-                    tinykoItem.classList.remove("animate__animated", "animate__infinite", "animate__pulse");
-                    tinykoItem.classList.add("animate__animated", "animate__bounceIn");
-                    tinyko.innerHTML = "(๑>.<๑)";
-                    errorMessageDiv.innerHTML = `<p class="text-red-500 dark:text-red-400 py-2 px-4">Error: ${error.message}</p>`;
-                    setTimeout(restore, 2500);
-                }
+                handleError(error);
             }
         }
 
@@ -365,6 +382,8 @@
             div.textContent = description;
             return div.innerHTML.replace(/\\n/g, '<br>');
         }
+
+        // Fetch client works
         async function fetchClientWorks(username, total) {
             const sentWorksDiv = document.getElementById('sent-works-info');
             try {
@@ -456,6 +475,237 @@
                 errorMessageDiv.innerHTML = `<p class="text-red-500 dark:text-red-400 py-2 px-4">Error fetching client works: ${error.message}</p>`;
             }
         }
+
+        // Load creators from localStorage
+        function loadCreators() {
+            const creators = JSON.parse(localStorage.getItem('skebWishlist') || '[]');
+            renderCreatorList(creators);
+        }
+
+        // Save creators to localStorage
+        function saveCreators(creators) {
+            localStorage.setItem('skebWishlist', JSON.stringify(creators));
+            renderCreatorList(creators);
+        }
+
+        // Render creator list
+        function renderCreatorList(creators) {
+            if (!creators.length) {
+                wishlistDiv.innerHTML = '';
+                return;
+            }
+
+            const tableHtml = `
+                <div class="mt-8">
+                    <div class="flex items-center justify-between mb-4 py-2 px-4">
+                        <div class="text-xl font-bold opacity-60">Wishlist</div>
+                        <button id="update-all" onclick="updateAllCreators()">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="w-6 h-6 fill-gray-500 dark:fill-gray-400 hover:fill-gray-600 hover:dark:fill-gray-300 hover:rotate-45 transition-all duration-300" :class="{ 'animate-spin': isRotating }">
+                                <!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                                <path d="M105.1 202.6c7.7-21.8 20.2-42.3 37.8-59.8c62.5-62.5 163.8-62.5 226.3 0L386.3 160 352 160c-17.7 0-32 14.3-32 32s14.3 32 32 32l111.5 0c0 0 0 0 0 0l.4 0c17.7 0 32-14.3 32-32l0-112c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 35.2L414.4 97.6c-87.5-87.5-229.3-87.5-316.8 0C73.2 122 55.6 150.7 44.8 181.4c-5.9 16.7 2.9 34.9 19.5 40.8s34.9-2.9 40.8-19.5zM39 289.3c-5 1.5-9.8 4.2-13.7 8.2c-4 4-6.7 8.8-8.1 14c-.3 1.2-.6 2.5-.8 3.8c-.3 1.7-.4 3.4-.4 5.1L16 432c0 17.7 14.3 32 32 32s32-14.3 32-32l0-35.1 17.6 17.5c0 0 0 0 0 0c87.5 87.4 229.3 87.4 316.7 0c24.4-24.4 42.1-53.1 52.9-83.8c5.9-16.7-2.9-34.9-19.5-40.8s-34.9 2.9-40.8 19.5c-7.7 21.8-20.2 42.3-37.8 59.8c-62.5 62.5-163.8 62.5-226.3 0l-.1-.1L125.6 352l34.4 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L48.4 288c-1.6 0-3.2 .1-4.8 .3s-3.1 .5-4.6 1z"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="wishlist-table-div" class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <tbody>
+                                ${creators.map((creator, index) => {
+                const avgResponseDays = creator.received_requests_average_response_time ? (creator.received_requests_average_response_time / 86400).toFixed(0) : '';
+                const avgCompletionDays = creator.completing_average_time ? (creator.completing_average_time / 86400).toFixed(0) : '';
+                const acceptExpiration = creator.accept_expiration_days || '';
+                const completeExpiration = creator.complete_expiration_days || '';
+                const timeInfo = (avgResponseDays || acceptExpiration) ?
+                    `${acceptExpiration ? `${acceptExpiration}/${completeExpiration}` : ''} ${avgResponseDays ? `(${avgResponseDays}/${avgCompletionDays})` : ''}` : '';
+                const skillsHtml = creator.skills?.length > 1 ?
+                    creator.skills.map(skill => `<span class="font-bold">${skill.genre}</span> ${skill.default_amount}`).join('<br>') :
+                    `${creator.skills[0].default_amount}`;
+                const acceptingStatus = creator.acceptable ?
+                    '<span class="inline-block w-2 h-2 rounded-full bg-green-500"></span>' :
+                    '<span class="inline-block w-2 h-2 rounded-full bg-gray-500"></span>';
+                return `
+                    <tr id=${creator.screen_name} class="border-t border-gray-300 dark:border-gray-600 transition-all duration-360">
+                        <td class="py-2 px-4 text-sm sm:text-base">
+                            ${acceptingStatus}
+                            <a href="https://skeb.jp/@${creator.screen_name}" target="_blank" class="text-teal-700 dark:text-teal-500 hover:underline ml-1">${creator.name}</a>
+                        </td>
+                        <td class="py-2 px-4 text-sm sm:text-base">${skillsHtml}</td>
+                        <td class="py-2 px-4 text-sm sm:text-base">${timeInfo}</td>
+                        <td class="py-2 px-4 text-sm sm:text-base flex space-x-2 justify-end items-center">
+                            <button onclick="moveCreator(${index}, -1)" ${index === 0 ? 'disabled' : ''} class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                                </svg>
+                            </button>
+                            <button onclick="moveCreator(${index}, 1)" ${index === creators.length - 1 ? 'disabled' : ''} class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <button onclick="deleteCreator(${index})" class="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-600">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+            wishlistDiv.innerHTML = tableHtml;
+        }
+
+        // Add creator to wishlist
+        async function addCreator(userData) {
+            try {
+                if (userData.error) {
+                    throw new Error(userData.error);
+                }
+                if (!userData.creator) {
+                    throw new Error('User is not a creator');
+                }
+                const creators = JSON.parse(localStorage.getItem('skebWishlist') || '[]');
+                if (creators.some(c => c.screen_name === userData.screen_name)) {
+                    throw new Error('Creator already in wishlist');
+                }
+                creators.unshift(userData);
+                saveCreators(creators);
+                restore();
+            } catch (error) {
+                handleError(error);
+            }
+        }
+
+        // Update all creators
+        async function updateAllCreators() {
+            const updateSvg = document.querySelector('#update-all svg');
+            const updateAllButton = document.getElementById('update-all');
+            // spin
+            updateSvg.classList.add('animate-spin'); 
+            updateSvg.classList.remove('hover:rotate-45');
+            updateAllButton.disabled = true;
+            updateAllButton.classList.add('opacity-50');
+            try {
+                disableSearchButton();
+                searchButton.textContent = 'Updating...';
+                tinykoItem.classList.add("animate__animated", "animate__infinite", "animate__pulse");
+                const creators = JSON.parse(localStorage.getItem('skebWishlist') || '[]');
+                const updatedCreators = [];
+                for (const creator of creators) {
+                    try {
+                        highlightOn(creator.screen_name);
+                        const response = await fetch(`api/users/${creator.screen_name}`);
+                        if (response.ok) {
+                            const data = await response.json();
+                            if (data.creator) {
+                                updatedCreators.push(data);
+                            } else {
+                                updatedCreators.push(creator); // Keep old data if no longer a creator
+                            }
+                        } else {
+                            console.error(`Error fetching data for ${creator.screen_name}: ${response.statusText}`);
+                            updatedCreators.push(creator); // Keep old data on error
+                        }
+                        highlightOff(creator.screen_name);
+                    } catch {
+                        updatedCreators.push(creator); // Keep old data on error
+                    }
+                }
+                saveCreators(updatedCreators);
+                flash("wishlist-table-div");
+                restore();
+                searchButton.textContent = 'Search';
+            } catch (error) {
+                console.error("Error updating all creators:", error);
+                searchButton.textContent = 'Error';
+                searchButton.classList.remove('bg-gray-500', 'hover:bg-gray-600', 'dark:hover:bg-gray-600');
+                searchButton.classList.add('bg-red-500', 'opacity-50');
+                tinykoItem.innerHTML = '❌';
+                tinykoItem.classList.remove("animate__animated", "animate__infinite", "animate__pulse");
+                tinykoItem.classList.add("animate__animated", "animate__bounceIn");
+                tinyko.innerHTML = "(๑>.<๑)";
+                setTimeout(restore, 2500);
+            } finally {
+                updateSvg.classList.remove('animate-spin');
+                updateSvg.classList.add('hover:rotate-45');
+                updateAllButton.disabled = false;
+                updateAllButton.classList.remove('opacity-50');
+            }
+        }
+
+        // Move creator up or down
+        function moveCreator(index, direction) {
+            const creators = JSON.parse(localStorage.getItem('skebWishlist') || '[]');
+            const newIndex = index + direction;
+            if (newIndex >= 0 && newIndex < creators.length) {
+                [creators[index], creators[newIndex]] = [creators[newIndex], creators[index]];
+                saveCreators(creators);
+            }
+        }
+
+        // Delete creator
+        function deleteCreator(key) {
+            const creators = JSON.parse(localStorage.getItem('skebWishlist') || '[]');
+            let index;
+            if (typeof key === 'string') {
+                index = creators.findIndex(creator => creator.screen_name === key);
+            } else {
+                index = key;
+            }
+            if (index < 0 || index >= creators.length) {
+                console.error('Invalid index:', index);
+                return;
+            }
+            console.log(`Deleting creator at index ${index}`);
+            creators.splice(index, 1);
+            saveCreators(creators);
+        }
+
+        // Toggle bookmark
+        function toggleBookmark() {
+            const bookmarkDiv = document.getElementById('bookmark');
+            const creators = JSON.parse(localStorage.getItem('skebWishlist') || '[]');
+            const creatorIndex = creators.findIndex(creator => creator.screen_name === currentUser.screen_name);
+            if (creatorIndex !== -1) {
+                // Creator already in wishlist, remove it
+                bookmarkDiv.innerHTML = bookmarkRegularSVG;
+                deleteCreator(currentUser.screen_name);
+            } else {
+                // Creator not in wishlist, add it
+                bookmarkDiv.innerHTML = bookmarkFilledSVG;
+                addCreator(currentUser);
+            }
+        }
+
+        // Error handling
+        function handleError(error) {
+            if (error.message.toLowerCase().includes("not found")) {
+                searchButton.textContent = 'User not found';
+                searchButton.classList.remove('bg-[#28837f]', 'hover:bg-[#206966]', 'dark:hover:bg-[#206966]');
+                searchButton.classList.add('bg-gray-600');
+                tinykoItem.innerHTML = "❔";
+                tinykoItem.classList.remove("animate__animated", "animate__infinite", "animate__pulse");
+                tinykoItem.classList.add("animate__animated", "animate__bounceIn");
+                document.title = `404 - 🔍(๑• . •๑)`;
+                userInfoDiv.innerHTML = "";
+            } else {
+                searchButton.textContent = 'Error';
+                searchButton.classList.remove('bg-[#28837f]', 'hover:bg-[#206966]', 'dark:hover:bg-[#206966]');
+                searchButton.classList.add('bg-red-500', 'opacity-50');
+                tinykoItem.innerHTML = "❌";
+                tinykoItem.classList.remove("animate__animated", "animate__infinite", "animate__pulse");
+                tinykoItem.classList.add("animate__animated", "animate__bounceIn");
+                tinyko.innerHTML = "(๑>.<๑)";
+                errorMessageDiv.innerHTML = `<p class="text-red-500 dark:text-red-400 py-2 px-4">Error: ${error.message}</p>`;
+                setTimeout(restore, 2500);
+            }
+        }
+
+        // Initial load
+        loadCreators();
     </script>
 </body>
 
