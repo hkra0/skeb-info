@@ -168,6 +168,33 @@
             searchButton.disabled = true;
             searchButton.classList.remove('hover:bg-[#206966]', 'dark:hover:bg-[#206966]')
         }
+        function toggleWishlistFold(fold) {
+            const wishlistTableDiv = document.getElementById('wishlist-table-div');
+            const updateAllButton = document.getElementById('update-all');
+            const foldIcon = document.getElementById('wishlist-fold');
+            const expand = document.getElementById('wishlist-expand');
+
+            if (!wishlistTableDiv || !updateAllButton || !foldIcon || !expand) {
+                console.error('One or more DOM elements not found');
+                return;
+            }
+
+            const shouldFold = fold !== undefined
+                ? fold
+                : !wishlistTableDiv.classList.contains('hidden');
+
+            if (shouldFold) {
+                wishlistTableDiv.classList.add('hidden');
+                foldIcon.classList.remove('hidden');
+                expand.classList.add('hidden');
+                updateAllButton.classList.add('hidden');
+            } else {
+                wishlistTableDiv.classList.remove('hidden');
+                foldIcon.classList.add('hidden');
+                expand.classList.remove('hidden');
+                updateAllButton.classList.remove('hidden');
+            }
+        }
         async function fetchUserInfo() {
             const wishlistCreators = JSON.parse(localStorage.getItem('skebWishlist') || '[]');
             sentWorksDiv.innerHTML = "";
@@ -369,6 +396,7 @@
                         </table>
                     </div>
                 `;
+                toggleWishlistFold(true);
                 fadeIn('user-info');
             } catch (error) {
                 handleError(error);
@@ -498,7 +526,21 @@
             const tableHtml = `
                 <div class="mt-8">
                     <div class="flex items-center justify-between mb-4 py-2 px-4">
-                        <div class="text-xl font-bold opacity-60">Wishlist</div>
+                        <div class="cursor-pointer" onClick="toggleWishlistFold()">
+                            <span class="text-xl font-bold opacity-60">Wishlist</span>
+                            <span id="wishlist-expand" class="inline-block translate-y-1 ml-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="w-5 h-5 fill-gray-500 dark:fill-gray-400 hover:fill-gray-600 hover:dark:fill-gray-300 transition-all duration-300">
+                                    <!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                                    <path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/>
+                                </svg>
+                            </span>
+                            <span id="wishlist-fold" class="inline-block translate-y-1 ml-1 hidden">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="w-5 h-5 fill-gray-500 dark:fill-gray-400 hover:fill-gray-600 hover:dark:fill-gray-300 transition-all duration-300">
+                                    <!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                                    <path d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"/>
+                                </svg>
+                            </span>
+                        </div>
                         <button id="update-all" onclick="updateAllCreators()">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="w-6 h-6 fill-gray-500 dark:fill-gray-400 hover:fill-gray-600 hover:dark:fill-gray-300 hover:rotate-45 transition-all duration-300" :class="{ 'animate-spin': isRotating }">
                                 <!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
@@ -506,6 +548,7 @@
                             </svg>
                         </button>
                     </div>
+                    <hr/>
                     <div id="wishlist-table-div" class="overflow-x-auto">
                         <table class="w-full text-left border-collapse">
                             <tbody>
@@ -584,7 +627,7 @@
             const updateSvg = document.querySelector('#update-all svg');
             const updateAllButton = document.getElementById('update-all');
             // spin
-            updateSvg.classList.add('animate-spin'); 
+            updateSvg.classList.add('animate-spin');
             updateSvg.classList.remove('hover:rotate-45');
             updateAllButton.disabled = true;
             updateAllButton.classList.add('opacity-50');
