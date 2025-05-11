@@ -17,11 +17,7 @@ English | [中文](README.zh-CN.md)
 - Visit [skebinfo.hkra.xyz](https://skebinfo.hkra.xyz/), enter a username or link, and click Search.
 - Click the username to open the user's Skeb profile.
 - Click the number of `Sent Public Requests` to view the client's request count by creator.
-
-### Wishlist
-- Visit [skebinfo.hkra.xyz/wishlist](https://skebinfo.hkra.xyz/wishlist), enter a username or link, and click Add Creator.
-- Click Update All Creators to update the wishlist.
-- You can open the user's Skeb profile, reorder or delete creators in the list.
+- Click the bookmark icon to add the user to your wishlist. You can open the user's Skeb profile, reorder or delete creators in the list. Click the refresh icon to update the wishlist.
 
 ## Disclaimer
 

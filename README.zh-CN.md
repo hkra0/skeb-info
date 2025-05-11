@@ -17,11 +17,7 @@
 - 访问 [skebinfo.hkra.xyz](https://skebinfo.hkra.xyz/)，输入用户名或链接，点击查询
 - 点击用户名称可以打开该用户的 Skeb 主页
 - 点击已发送公开委托数量 (`Sent Public Requests`) 的数字可查看该客户按创作者排序的请求数量统计
-
-### 心愿单
-- 访问 [skebinfo.hkra.xyz/wishlist](https://skebinfo.hkra.xyz/wishlist)，输入用户名或链接，点击添加创作者
-- 点击更新所有创作者可以更新心愿单
-- 可以在心愿单列表中打开用户的 Skeb 主页，重新排序或删除创作者
+- 点击书签图标可以将该用户添加到心愿单中。在心愿单中可以打开收藏用户的 Skeb 主页，重新排序或删除列表中的创作者。点击刷新图标可以更新心愿单
 
 ## 免责声明
 
