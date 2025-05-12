@@ -17,7 +17,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 </head>
 
-<body class="min-h-screen bg-[#e6ecf0] dark:bg-[#181a1b] py-6 text-gray-900 dark:text-gray-100 transition-all duration-200">
+<body
+    class="min-h-screen bg-[#e6ecf0] dark:bg-[#181a1b] py-6 text-gray-900 dark:text-gray-100 transition-all duration-200">
     <div class="max-w-2xl mx-auto p-6 bg-white dark:bg-[#292c2e] rounded-lg shadow-lg mb-8">
         <noscript>
             <p class="text-red-500 opacity-75 mb-4">JavaScript is disabled. Please enable JavaScript to use this page.
@@ -64,6 +65,129 @@
         <div id="wishlist-div" class="mt-8"></div>
     </div>
     <script>
+        const languages = {
+            "en": {
+                "title": "skeb info",
+                "placeholder": "Skeb link or username",
+                "search": "Search",
+                "loading": "Loading...",
+                "updating": "Updating...",
+                "userNotFound": "User not found",
+                "seeking": "seeking",
+                "stopped": "stopped",
+                "noDescription": "No description",
+                "recommended": "Recommended amount",
+                "respCompExp": "Response / Complete expiration days",
+                "respCompAvg": "Response / Complete average days",
+                "total": "Total",
+                "completeRate": "Complete rate",
+                "sentAppeals": "Sent appeals",
+                "requestMasterRank": "Request master rank",
+                "firstRequesterRank": "Pioneer rank",
+                "sentPublicRequests": "Sent Public Requests",
+                "clientRequestsByCreator": "Client Requests by Creator",
+                "loadingSentWorks": "Loading sent works...",
+                "sentRequestsAvgCancelTime": "Sent Requests Average Cancel Time",
+                "nsfwOK": "nsfw OK",
+                "boostNG": "Boost NG",
+                "wishlist": "Wishlist",
+                "error": {
+                    "error": "Error",
+                    "updateCreators": "Error updating all creators:",
+                    "clientWorks": "Error fetching client works:",
+                    "default": "An error occurred. Please try again later.",
+                    "usernameRequired": "Username is required.",
+                    "invalidUsername": "Invalid username format. Please enter a valid username."
+                }
+            },
+            "zh": {
+                "title": "skeb 信息",
+                "placeholder": "Skeb 链接或用户名",
+                "search": "检索",
+                "loading": "加载中...",
+                "updating": "更新中...",
+                "userNotFound": "未找到用户",
+                "seeking": "募集中",
+                "stopped": "停止中",
+                "noDescription": "没有描述",
+                "recommended": "建议金额",
+                "respCompExp": "响应 / 完成期限天数",
+                "respCompAvg": "响应 / 完成平均天数",
+                "total": "作品数量",
+                "completeRate": "完成率",
+                "sentAppeals": "发送的提升",
+                "requestMasterRank": "请求大师排名",
+                "firstRequesterRank": "先锋排名",
+                "sentPublicRequests": "发送的公开请求",
+                "clientRequestsByCreator": "客户请求 (按创作者)",
+                "loadingSentWorks": "加载发送的请求...",
+                "sentRequestsAvgCancelTime": "发送请求平均取消时间",
+                "nsfwOK": "允许 NSFW",
+                "boostNG": "禁止提升",
+                "wishlist": "心愿单",
+                "error": {
+                    "error": "错误",
+                    "updateCreators": "更新心愿单创作者时出错：",
+                    "clientWorks": "获取客户发送请求时出错：",
+                    "default": "发生错误。请稍后再试。",
+                    "usernameRequired": "需要用户名。",
+                    "invalidUsername": "无效的用户名格式。请输入有效的用户名。"
+                }
+            },
+            "ja": {
+                "title": "skeb 情報",
+                "placeholder": "Skeb リンクまたはユーザー名",
+                "search": "検索",
+                "loading": "読み込み中...",
+                "updating": "更新中...",
+                "userNotFound": "ユーザーが見つかりません",
+                "seeking": "募集中",
+                "stopped": "停止中",
+                "noDescription": "説明なし",
+                "recommended": "推奨金額",
+                "respCompExp": "応答 / 完了期限日数",
+                "respCompAvg": "応答 / 完了平均日数",
+                "total": "作品数",
+                "completeRate": "完了率",
+                "sentAppeals": "送信されたアピール",
+                "requestMasterRank": "リクエストマスターランク",
+                "firstRequesterRank": "パイオニアランク",
+                "sentPublicRequests": "送信された公開リクエスト",
+                "clientRequestsByCreator": "クリエイター別のクライアントリクエスト",
+                "loadingSentWorks": "送信されたリクエストを読み込んでいます...",
+                "sentRequestsAvgCancelTime": "送信リクエストの平均キャンセル時間",
+                "nsfwOK": "NSFW OK",
+                "boostNG": "ブースト禁止",
+                "wishlist": "ウィッシュリスト",
+                "error": {
+                    "error": "エラー",
+                    "updateCreators": "ウィッシュリストのクリエイターを更新中にエラーが発生しました：",
+                    "clientWorks": "クライアントの送信リクエストを取得中にエラーが発生しました：",
+                    "default": "エラーが発生しました。後でもう一度お試しください。",
+                    "usernameRequired": "ユーザー名が必要です。",
+                    "invalidUsername": "無効なユーザー名形式です。有効なユーザー名を入力してください。"
+                }
+            }
+        };
+        // language
+        function getBrowserLanguage() {
+            console.log("Browser language:" + navigator.language);
+            const lang = navigator.language || navigator.userLanguage;
+            if (lang.startsWith('zh')) return 'zh';
+            if (lang.startsWith('ja')) return 'ja';
+            return 'en';
+        }
+
+        const currentLang = getBrowserLanguage();
+        const t = languages[currentLang];
+
+        function updatePageLanguage() {
+            // only static text
+            console.log("Language is set to " + currentLang);
+            document.getElementById('username').placeholder = t.placeholder;
+            document.getElementById('search').textContent = t.search;
+        }
+        updatePageLanguage();
         const bookmarkRegularSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" class="w-6 h-6 mr-1 fill-gray-500 dark:fill-gray-400 hover:fill-gray-600 hover:dark:fill-gray-300 transition-all duration-360" onClick="toggleBookmark()">
             <!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
             <path d="M0 48C0 21.5 21.5 0 48 0l0 48 0 393.4 130.1-92.9c8.3-6 19.6-6 27.9 0L336 441.4 336 48 48 48 48 0 336 0c26.5 0 48 21.5 48 48l0 440c0 9-5 17.2-13 21.3s-17.6 3.4-24.9-1.8L192 397.5 37.9 507.5c-7.3 5.2-16.9 5.9-24.9 1.8S0 497 0 488L0 48z"/>
@@ -119,6 +243,8 @@
                 document.getElementById('username').blur();
             }
         });
+
+
         function clearInput() {
             userNameInput.value = '';
             userNameInput.focus();
@@ -127,7 +253,7 @@
         function restore() {
             errorMessageDiv.innerHTML = "";
             searchButton.className = searchButtonDefaultClasses;
-            searchButton.textContent = "Search";
+            searchButton.textContent = t ? t.search : "Search";
             searchButton.disabled = false;
             tinyko.innerHTML = "(๑• . •๑)";
             tinykoItem.innerHTML = "🔍";
@@ -227,7 +353,7 @@
                 }
                 disableSearchButton();
                 tinykoItem.classList.add("animate__animated", "animate__infinite", "animate__pulse");
-                searchButton.textContent = 'Loading...';
+                searchButton.textContent = t ? t.loading : "Loading...";
                 // await new Promise(resolve => setTimeout(resolve, 2000)); // test loading state
                 const response = await fetch(`/api/users/${username}`);
                 if (!response.ok) {
@@ -296,18 +422,18 @@
                                     ${currentUser.name}
                                 </a>
                                 ${skillsHtml ? `
-                                ${currentUser.acceptable ? `<span class="text-sm font-bold text-green-600 ml-2">seeking</span>` : `<span class="font-bold text-sm text-gray-500 ml-2">stopped</span>`}`
+                                ${currentUser.acceptable ? `<span class="text-sm font-bold text-green-600 ml-2">${t.seeking}</span>` : `<span class="font-bold text-sm text-gray-500 ml-2">${t.stopped}</span>`}`
                         : ""}
                             </div>
                             <div id="bookmark">${currentUser.creator ?
                         bookmarkSVG : ""}
                             </div>
                         </div/>
-                        <p class="py-2 px-4">${sanitizeDescription(currentUser.description) || '<span class="text-gray-500">no description</span>'}</p>
+                        <p class="py-2 px-4">${sanitizeDescription(currentUser.description) || `<span class="text-gray-500">${t.noDescription}</span>`}</p>
                         <div class="py-2 px-4 mb-8">
                             ${[
                         currentUser.nsfw_acceptable ? `<span class="font-bold opacity-60">nsfw OK</span>` : null,
-                        currentUser.tip_acceptable ? null : `<span class="font-bold opacity-50">Boost NG</span>`,
+                        currentUser.tip_acceptable ? null : `<span class="font-bold opacity-50">${t.boostNG}</span>`,
                         links.twitter_url ? `<a href="${links.twitter_url}" target="_blank" class="font-bold text-teal-700 dark:text-teal-500 hover:underline">Twitter</a>` : null,
                         links.misskey_url ? `<a href="${links.misskey_url}" target="_blank" class="font-bold text-teal-700 dark:text-teal-500 hover:underline">Misskey</a>` : null,
                         links.pixiv_url ? `<a href="${links.pixiv_url}" target="_blank" class="font-bold text-teal-700 dark:text-teal-500 hover:underline">Pixiv</a>` : null,
@@ -333,22 +459,22 @@
                                 </tr>` : ""}
                                 ${skillsHtml ?
                         `<tr class="border-t border-gray-300 dark:border-gray-600">
-                                    <th class="py-2 px-4 font-semibold text-sm sm:text-base">Recommended amount</th>
+                                    <th class="py-2 px-4 font-semibold text-sm sm:text-base">${t.recommended}</th>
                                     <td class="py-2 px-4 text-sm sm:text-base">${skillsHtml}</td>
                                 </tr>` : ""}
                                 ${(currentUser.creator && currentUser.accept_expiration_days && currentUser.complete_expiration_days) ?
                         `<tr class="border-t border-gray-300 dark:border-gray-600">
-                                    <th class="py-2 px-4 font-semibold text-sm sm:text-base">Response / Complete expiration days</th>
+                                    <th class="py-2 px-4 font-semibold text-sm sm:text-base">${t.respCompExp}</th>
                                     <td class="py-2 px-4 text-sm sm:text-base">${currentUser.accept_expiration_days} / ${currentUser.complete_expiration_days}</td>
                                 </tr>` : ""}
                                 ${(avgResponseDays && avgCompletionDays) ?
                         `<tr class="border-t border-gray-300 dark:border-gray-600">
-                                    <th class="py-2 px-4 font-semibold text-sm sm:text-base">Response / Complete average days</th>
+                                    <th class="py-2 px-4 font-semibold text-sm sm:text-base">${t.respCompAvg}</th>
                                     <td class="py-2 px-4 text-sm sm:text-base">${avgResponseDays} / ${avgCompletionDays}</td>
                                 </tr>` : ""}
                                 ${currentUser.received_works_count ?
                         `<tr class="border-t border-gray-300 dark:border-gray-600">
-                                    <th class="py-2 px-4 font-semibold text-sm sm:text-base">Total</th>
+                                    <th class="py-2 px-4 font-semibold text-sm sm:text-base">${t.total}</th>
                                     <td class="py-2 px-4 text-sm sm:text-base">
                                         ${currentUser.received_works_count}${((p = currentUser.received_private_works_count, n = currentUser.received_nsfw_works_count) =>
                             p || n ? ` (${[p && `priv ${p}`, n && `nsfw ${n}`].filter(Boolean).join(' / ')})` : ''
@@ -358,12 +484,12 @@
                                 </tr>` : ""}
                                 ${currentUser.complete_rate ?
                         `<tr class="border-t border-gray-300 dark:border-gray-600">
-                                    <th class="py-2 px-4 font-semibold text-sm sm:text-base">Complete rate</th>
+                                    <th class="py-2 px-4 font-semibold text-sm sm:text-base">${t.completeRate}</th>
                                     <td class="py-2 px-4 text-sm sm:text-base">${(currentUser.complete_rate * 100).toFixed(0)}%</td>
                                 </tr>` : ""}
                                 ${currentUser.total_appeals_count ?
                         `<tr class="border-t border-gray-300 dark:border-gray-600">
-                                  <th class="py-2 px-4 font-semibold text-sm sm:text-base">Sent appeals</th>
+                                  <th class="py-2 px-4 font-semibold text-sm sm:text-base">${t.sentAppeals}</th>
                                   <td class="py-2 px-4 text-sm sm:text-base">${currentUser.total_appeals_count}</td>
                                 </tr>`: ""}
                                 ${currentUser.sent_public_works_count ?
@@ -372,24 +498,24 @@
                                 </tr>`: ""}
                                 ${currentUser.request_master_rank ?
                         `<tr class="border-t border-gray-300 dark:border-gray-600">
-                                    <th class="py-2 px-4 font-semibold text-sm sm:text-base">Request master rank</th>
+                                    <th class="py-2 px-4 font-semibold text-sm sm:text-base">${t.requestMasterRank}</th>
                                     <td class="py-2 px-4 text-sm sm:text-base">${currentUser.request_master_rank}</td>
                                 </tr>`: ""}
                                 ${currentUser.first_requester_rank ?
                         `<tr class="border-t border-gray-300 dark:border-gray-600">
-                                    <th class="py-2 px-4 font-semibold text-sm sm:text-base">Pioneer rank</th>
+                                    <th class="py-2 px-4 font-semibold text-sm sm:text-base">${t.firstRequesterRank}</th>
                                     <td class="py-2 px-4 text-sm sm:text-base">${currentUser.first_requester_rank}</td>
                                 </tr>`: ""}
                                 ${currentUser.sent_public_works_count ?
                         `<tr class="border-t border-gray-300 dark:border-gray-600">
-                                    <th class="py-2 px-4 font-semibold text-sm sm:text-base">Sent Public Requests</th>
+                                    <th class="py-2 px-4 font-semibold text-sm sm:text-base">${t.sentPublicRequests}</th>
                                     <td class="py-2 px-4 text-sm sm:text-base cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition" onclick="fetchClientWorks('${username}', ${currentUser.sent_public_works_count})">
                                     ${currentUser.sent_public_works_count} ${currentUser.sent_first_works_count ? `( first ${currentUser.sent_first_works_count} )` : ""}
                                     </td>
                                 </tr>`: ""}
                                 ${currentUser.sent_requests_average_cancel_time ?
                         `<tr class="border-t border-gray-300 dark:border-gray-600">
-                                    <th class="py-2 px-4 font-semibold text-sm sm:text-base">Sent Requests Average Cancel Time</th>
+                                    <th class="py-2 px-4 font-semibold text-sm sm:text-base">${t.sentRequestsAvgCancelTime}</th>
                                     <td class="py-2 px-4 text-sm sm:text-base">${(currentUser.sent_requests_average_cancel_time / 86400).toFixed(2)} days</td>
                                 </tr>`: ""}
                             </tbody>
@@ -415,7 +541,7 @@
         async function fetchClientWorks(username, total) {
             const sentWorksDiv = document.getElementById('sent-works-info');
             try {
-                sentWorksDiv.innerHTML = '<p class="text-gray-500 dark:text-gray-400 py-2 px-4">Loading sent works...</p>';
+                sentWorksDiv.innerHTML = `<p class="text-gray-500 dark:text-gray-400 py-2 px-4">${t.loadingSentWorks}</p>`;
                 let works = [];
                 let nextUrl = `/api/users/${username}/works?role=client&limit=${total}`;
                 let subRequestCount = 0;
@@ -470,7 +596,7 @@
                 // Generate table
                 const tableHtml = `
                     <div class="mt-8">
-                        <h2 class="text-l font-bold mb-4 py-2 px-4">Client Requests by Creator</h2>
+                        <div class="text-l font-bold mb-4 py-2 px-4">${t.clientRequestsByCreator}</div>
                         <hr/>
                         <div class="max-h-64 overflow-y-auto">
                             <table class="w-full text-left border-collapse">
@@ -500,7 +626,7 @@
                 // Remove loading message and append table
                 sentWorksDiv.innerHTML = tableHtml;
             } catch (error) {
-                errorMessageDiv.innerHTML = `<p class="text-red-500 dark:text-red-400 py-2 px-4">Error fetching client works: ${error.message}</p>`;
+                errorMessageDiv.innerHTML = `<p class="text-red-500 dark:text-red-400 py-2 px-4">${t.error.clientWorks} ${error.message}</p>`;
             }
         }
 
@@ -527,7 +653,7 @@
                 <div class="mt-8">
                     <div class="flex items-center justify-between mb-4 py-2 px-4">
                         <div class="cursor-pointer" onClick="toggleWishlistFold()">
-                            <span class="text-xl font-bold opacity-60">Wishlist</span>
+                            <span class="text-xl font-bold opacity-60">${t.wishlist}</span>
                             <span id="wishlist-expand" class="inline-block translate-y-1 ml-1">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="w-5 h-5 fill-gray-500 dark:fill-gray-400 hover:fill-gray-600 hover:dark:fill-gray-300 transition-all duration-300">
                                     <!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
@@ -633,7 +759,7 @@
             updateAllButton.classList.add('opacity-50');
             try {
                 disableSearchButton();
-                searchButton.textContent = 'Updating...';
+                searchButton.textContent = t.updating;
                 tinykoItem.classList.add("animate__animated", "animate__infinite", "animate__pulse");
                 const creators = JSON.parse(localStorage.getItem('skebWishlist') || '[]');
                 const updatedCreators = [];
@@ -660,9 +786,8 @@
                 saveCreators(updatedCreators);
                 flash("wishlist-table-div");
                 restore();
-                searchButton.textContent = 'Search';
             } catch (error) {
-                console.error("Error updating all creators:", error);
+                console.error(t.error.updateCreators, error);
                 searchButton.textContent = 'Error';
                 searchButton.classList.remove('bg-gray-500', 'hover:bg-gray-600', 'dark:hover:bg-gray-600');
                 searchButton.classList.add('bg-red-500', 'opacity-50');
@@ -702,7 +827,6 @@
                 console.error('Invalid index:', index);
                 return;
             }
-            console.log(`Deleting creator at index ${index}`);
             creators.splice(index, 1);
             saveCreators(creators);
         }
@@ -726,7 +850,7 @@
         // Error handling
         function handleError(error) {
             if (error.message.toLowerCase().includes("not found")) {
-                searchButton.textContent = 'User not found';
+                searchButton.textContent = t.userNotFound;
                 searchButton.classList.remove('bg-[#28837f]', 'hover:bg-[#206966]', 'dark:hover:bg-[#206966]');
                 searchButton.classList.add('bg-gray-600');
                 tinykoItem.innerHTML = "❔";
