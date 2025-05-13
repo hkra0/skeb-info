@@ -19,6 +19,10 @@ English | [中文](README.zh-CN.md)
 - Click the bookmark icon to add the user to your wishlist. Once added, the Wishlist section will appear on the bottom of the page.
 - You can open the user's Skeb profile, reorder or delete creators in the list. Click the refresh icon to update the wishlist.
 
+### Notes
+- Language Support: Currently supports English, Chinese, and Japanese. The interface defaults to your system language, or you can manually select a language by adding a suffix to the URL (e.g., `https://skebinfo.hkra.xyz/ja` for Japanese, `en` for English, `zh` for Chinese).
+- Username Input: When entering usernames containing underscores (`_`), you can use spaces instead for convenience.
+
 ## Disclaimer
 
 This tool is an unofficial interface for retrieving publicly available Skeb artist information. Users must comply with Skeb's terms of service, including restrictions on misuse, fraudulent activities, or actions that may infringe on third-party rights. The tool's developer is not liable for any misuse, or violations of Skeb's guidelines resulting from its use.
