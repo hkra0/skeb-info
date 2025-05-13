@@ -403,7 +403,6 @@
             sentWorksDiv.innerHTML = "";
             receivedWorksDiv.innerHTML = "";
             try {
-                const usernameInputValue = userNameInput.value.trim();
                 let username = usernameInputValue;
                 if (username.startsWith('https://skeb.jp/')) {
                     username = username.split('/works/')[0].replace('https://skeb.jp/@', '');
@@ -425,7 +424,7 @@
                     throw new Error('Incorrect username format');
                 } else {
                     document.getElementById('username').value = username;
-                    history.pushState({}, '', `@${username}`);
+                    history.pushState({}, '', `${getUrlLanguage() ? `${currentLang}/` : ""}`+`@${username}`);
                     document.title = `${username} - 🔍(๑• . •๑)`;
                 }
                 disableSearchButton();
