@@ -76,15 +76,28 @@
                 "seeking": "seeking",
                 "stopped": "stopped",
                 "noDescription": "No description",
+                "genre": {
+                    "art": "Artwork",
+                    "comic": "Comic",
+                    "voice": "Voice",
+                    "text": "Text",
+                    "video": "Video",
+                    "music": "Music",
+                    "correction": "Advice",
+                },
                 "recommended": "Recommended amount",
+                "jpy": "JPY",
                 "respCompExp": "Response / Complete expiration days",
                 "respCompAvg": "Response / Complete average days",
                 "total": "Total",
+                "priv": "priv",
+                "nsfw": "nsfw",
                 "completeRate": "Complete rate",
                 "sentAppeals": "Sent appeals",
                 "requestMasterRank": "Request master rank",
                 "firstRequesterRank": "Pioneer rank",
                 "sentPublicRequests": "Sent Public Requests",
+                "first": "first",
                 "clientRequestsByCreator": "Client Requests by Creator",
                 "loadingSentWorks": "Loading sent works...",
                 "sentRequestsAvgCancelTime": "Sent Requests Average Cancel Time",
@@ -98,6 +111,10 @@
                     "default": "An error occurred. Please try again later.",
                     "usernameRequired": "Username is required.",
                     "invalidUsername": "Invalid username format. Please enter a valid username."
+                },
+                "tinykoLog": {
+                    "user": "Raw user data is below 📑(๑• . •๑)",
+                    "works": "Raw sent works data is below 📚(๑• . •๑)",
                 }
             },
             "zh": {
@@ -110,19 +127,32 @@
                 "seeking": "募集中",
                 "stopped": "停止中",
                 "noDescription": "没有描述",
+                "genre": {
+                    "art": "插图",
+                    "comic": "漫画",
+                    "voice": "语音",
+                    "text": "文本",
+                    "video": "视频",
+                    "music": "音乐",
+                    "correction": "建议",
+                },
                 "recommended": "建议金额",
+                "jpy": "JPY",
                 "respCompExp": "响应 / 完成期限天数",
                 "respCompAvg": "响应 / 完成平均天数",
                 "total": "作品数量",
+                "priv": "私密",
+                "nsfw": "nsfw",
                 "completeRate": "完成率",
                 "sentAppeals": "发送的提升",
                 "requestMasterRank": "请求大师排名",
                 "firstRequesterRank": "先锋排名",
                 "sentPublicRequests": "发送的公开请求",
+                "first": "首次请求",
                 "clientRequestsByCreator": "客户请求 (按创作者)",
                 "loadingSentWorks": "加载发送的请求...",
                 "sentRequestsAvgCancelTime": "发送请求平均取消时间",
-                "nsfwOK": "允许 NSFW",
+                "nsfwOK": "nsfw OK",
                 "boostNG": "禁止提升",
                 "wishlist": "心愿单",
                 "error": {
@@ -132,6 +162,10 @@
                     "default": "发生错误。请稍后再试。",
                     "usernameRequired": "需要用户名。",
                     "invalidUsername": "无效的用户名格式。请输入有效的用户名。"
+                },
+                "tinykoLog": {
+                    "user": "原始用户数据如下 📑(๑• . •๑)",
+                    "works": "原始发送作品数据如下 📚(๑• . •๑)",
                 }
             },
             "ja": {
@@ -144,19 +178,32 @@
                 "seeking": "募集中",
                 "stopped": "停止中",
                 "noDescription": "説明なし",
-                "recommended": "推奨金額",
-                "respCompExp": "応答 / 完了期限日数",
-                "respCompAvg": "応答 / 完了平均日数",
+                "genre": {
+                    "art": "イラスト",
+                    "comic": "コミック",
+                    "voice": "ボイス",
+                    "text": "テキスト",
+                    "video": "ムービー",
+                    "music": "ミュージック",
+                    "correction": "アドバイス",
+                },
+                "recommended": "おまかせ金額",
+                "jpy": "￥",
+                "respCompExp": "返答 / 納品締切日数",
+                "respCompAvg": "平均返答 / 納品日数",
                 "total": "作品数",
-                "completeRate": "完了率",
+                "priv": "非表示",
+                "nsfw": "nsfw",
+                "completeRate": "締切厳守率",
                 "sentAppeals": "送信されたアピール",
-                "requestMasterRank": "リクエストマスターランク",
+                "requestMasterRank": "リクエストマスター",
                 "firstRequesterRank": "パイオニアランク",
-                "sentPublicRequests": "送信された公開リクエスト",
+                "sentPublicRequests": "送信したリクエスト",
+                "first": "ファースト",
                 "clientRequestsByCreator": "クリエイター別のクライアントリクエスト",
                 "loadingSentWorks": "送信されたリクエストを読み込んでいます...",
                 "sentRequestsAvgCancelTime": "送信リクエストの平均キャンセル時間",
-                "nsfwOK": "NSFW OK",
+                "nsfwOK": "nsfw OK",
                 "boostNG": "ブースト禁止",
                 "wishlist": "ウィッシュリスト",
                 "error": {
@@ -166,6 +213,10 @@
                     "default": "エラーが発生しました。後でもう一度お試しください。",
                     "usernameRequired": "ユーザー名が必要です。",
                     "invalidUsername": "無効なユーザー名形式です。有効なユーザー名を入力してください。"
+                },
+                "tinykoLog": {
+                    "user": "原始ユーザーデータは以下の通りです 📑(๑• . •๑)",
+                    "works": "原始送信作品データは以下の通りです 📚(๑• . •๑)",
                 }
             }
         };
@@ -182,8 +233,8 @@
         const t = languages[currentLang];
 
         function updatePageLanguage() {
+            document.documentElement.lang = currentLang;
             // only static text
-            console.log("Language is set to " + currentLang);
             document.getElementById('username').placeholder = t.placeholder;
             document.getElementById('search').textContent = t.search;
         }
@@ -358,7 +409,7 @@
                 const response = await fetch(`/api/users/${username}`);
                 if (!response.ok) {
                     const errorData = await response.json();
-                    throw new Error(errorData.error || 'Unknown error');
+                    throw new Error(errorData.error || t.error.default);
                 } else {
                     restore();
                 }
@@ -368,7 +419,7 @@
                     throw new Error(currentUser.error);
                 }
 
-                console.info("Raw user data is below 📑(๑• . •๑)")
+                console.info(t.tinykoLog.user);
                 console.log(currentUser)
 
                 const twitterScreenName = currentUser.user_service_links?.[0]?.screen_name || null;
@@ -396,8 +447,8 @@
                 let skillsHtml = '';
                 if (currentUser.skills?.length) {
                     skillsHtml = currentUser.skills.map(skill => {
-                        const genre = skill.genre;
-                        return `<span class="font-bold">${genre}</span>&nbsp;&nbsp;JPY&nbsp;${skill.default_amount}`;
+                        const genre = t.genre[skill.genre];
+                        return `<span>${genre}</span>&nbsp;&nbsp;JPY&nbsp;${skill.default_amount}`;
                     }).join('<br>');
                 }
 
@@ -429,7 +480,7 @@
                         bookmarkSVG : ""}
                             </div>
                         </div/>
-                        <p class="py-2 px-4">${sanitizeDescription(currentUser.description) || `<span class="text-gray-500">${t.noDescription}</span>`}</p>
+                        <p class="py-2 px-4 whitespace-normal break-words overflow-x-auto">${sanitizeDescription(currentUser.description) || `<span class="text-gray-500">${t.noDescription}</span>`}</p>
                         <div class="py-2 px-4 mb-8">
                             ${[
                         currentUser.nsfw_acceptable ? `<span class="font-bold opacity-60">nsfw OK</span>` : null,
@@ -477,7 +528,7 @@
                                     <th class="py-2 px-4 font-semibold text-sm sm:text-base">${t.total}</th>
                                     <td class="py-2 px-4 text-sm sm:text-base">
                                         ${currentUser.received_works_count}${((p = currentUser.received_private_works_count, n = currentUser.received_nsfw_works_count) =>
-                            p || n ? ` (${[p && `priv ${p}`, n && `nsfw ${n}`].filter(Boolean).join(' / ')})` : ''
+                            p || n ? ` (${[p && `${t.priv} ${p}`, n && `${t.nsfw} ${n}`].filter(Boolean).join(' / ')})` : ''
                         )()
                         }
                                     </td>
@@ -510,7 +561,7 @@
                         `<tr class="border-t border-gray-300 dark:border-gray-600">
                                     <th class="py-2 px-4 font-semibold text-sm sm:text-base">${t.sentPublicRequests}</th>
                                     <td class="py-2 px-4 text-sm sm:text-base cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition" onclick="fetchClientWorks('${username}', ${currentUser.sent_public_works_count})">
-                                    ${currentUser.sent_public_works_count} ${currentUser.sent_first_works_count ? `( first ${currentUser.sent_first_works_count} )` : ""}
+                                    ${currentUser.sent_public_works_count} ${currentUser.sent_first_works_count ? `( ${t.first} ${currentUser.sent_first_works_count} )` : ""}
                                     </td>
                                 </tr>`: ""}
                                 ${currentUser.sent_requests_average_cancel_time ?
@@ -564,7 +615,7 @@
                     sentWorksDiv.innerHTML = `<p class="text-gray-500 dark:text-gray-400 py-2 px-4">Loading sent works (part ${subRequestCount + 1} / ${subRequestCount + responseJson.meta.remain}) ...</p>`;
                 }
 
-                console.info("Raw sent works data is below 📚(๑• . •๑)")
+                console.info(t.tinykoLog.works);
                 console.log(works)
 
                 // Aggregate requests and tips by creator
@@ -686,7 +737,7 @@
                 const timeInfo = (avgResponseDays || acceptExpiration) ?
                     `${acceptExpiration ? `${acceptExpiration}/${completeExpiration}` : ''} ${avgResponseDays ? `(${avgResponseDays}/${avgCompletionDays})` : ''}` : '';
                 const skillsHtml = creator.skills?.length > 1 ?
-                    creator.skills.map(skill => `<span class="font-bold">${skill.genre}</span> ${skill.default_amount}`).join('<br>') :
+                    creator.skills.map(skill => skill.default_amount).join(' / ') :
                     `${creator.skills[0].default_amount}`;
                 const acceptingStatus = creator.acceptable ?
                     '<span class="inline-block w-2 h-2 rounded-full bg-green-500"></span>' :
