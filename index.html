@@ -266,11 +266,21 @@
         const wishlistDiv = document.getElementById('wishlist-div');
         let currentUser = null;
 
-        // location
-        if (window.location.pathname !== '/' && (!urlUserName || !getUrlLanguage())) {
+        // redirect to homepage if the URL is invalid
+        const segments = window.location.pathname.split('/').filter(Boolean);
+        let isValid = false;
+        if (segments.length === 0) {
+            // `/`
+            isValid = true;
+        } else if (segments.length === 1) {
+            // `/@username` or `/lang`
+            isValid = !!urlUserName || !!getUrlLanguage();
+        } else if (segments.length === 2) {
+            // `/lang/@username`
+            isValid = !!getUrlLanguage() && !!urlUserName;
+        }
+        if (!isValid) {
             window.location.pathname = '/';
-        } else if (urlUserName && !getUrlLanguage()) {
-            window.location.pathname = `/@${urlUserName}`;
         }
 
         // tinyko (๑• . •๑)
