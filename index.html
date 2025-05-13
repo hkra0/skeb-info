@@ -403,7 +403,7 @@
             sentWorksDiv.innerHTML = "";
             receivedWorksDiv.innerHTML = "";
             try {
-                let username = usernameInputValue;
+                let username = userNameInput.value;
                 if (username.startsWith('https://skeb.jp/')) {
                     username = username.split('/works/')[0].replace('https://skeb.jp/@', '');
                 } else if (username.startsWith('https://x.com/')) {
@@ -414,7 +414,7 @@
                 if (username.startsWith('@')) {
                     username = username.slice(1);
                 }
-                username = username.replace(/\s+/g, '_');
+                username = username.replace(/[\s\-—]+/g, '_');
                 username = username.split('?')[0];
                 if (!username) {
                     throw new Error('Username required');
