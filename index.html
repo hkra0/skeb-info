@@ -474,7 +474,7 @@
                 if (currentUser.skills?.length) {
                     skillsHtml = currentUser.skills.map(skill => {
                         const genre = t.genre[skill.genre];
-                        return `<span>${genre}</span>&nbsp;&nbsp;JPY&nbsp;${skill.default_amount}`;
+                        return `<span>${genre}</span>&nbsp;&nbsp;${t.jpy}&nbsp;${skill.default_amount}`;
                     }).join('<br>');
                 }
 
