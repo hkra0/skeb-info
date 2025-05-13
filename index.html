@@ -222,14 +222,21 @@
         };
         // language
         function getBrowserLanguage() {
-            console.log("Browser language:" + navigator.language);
             const lang = navigator.language || navigator.userLanguage;
             if (lang.startsWith('zh')) return 'zh';
             if (lang.startsWith('ja')) return 'ja';
             return 'en';
         }
 
-        const currentLang = getBrowserLanguage();
+        function getUrlLanguage() {
+            const urlLang = window.location.pathname.split('/')[1];
+            if (urlLang === 'en') return 'en';
+            if (urlLang === 'zh') return 'zh';
+            if (urlLang === 'ja') return 'ja';
+            return null;
+        }
+
+        const currentLang = getUrlLanguage() || getBrowserLanguage();
         const t = languages[currentLang];
 
         function updatePageLanguage() {
@@ -249,7 +256,7 @@
             </svg>`
         const tinyko = document.getElementById("tinyko");
         const tinykoItem = document.getElementById("tinyko-item");
-        const urlUserName = window.location.pathname.slice(2);
+        const urlUserName = window.location.pathname.split('/').pop().startsWith('@') ? window.location.pathname.split('@')[1] : "";
         const userNameInput = document.getElementById('username')
         const searchButton = document.getElementById('search');
         const errorMessageDiv = document.getElementById('error-message');
@@ -258,6 +265,13 @@
         const receivedWorksDiv = document.getElementById('received-works-info');
         const wishlistDiv = document.getElementById('wishlist-div');
         let currentUser = null;
+
+        // location
+        if (window.location.pathname !== '/' && (!urlUserName || !getUrlLanguage())) {
+            window.location.pathname = '/';
+        } else if (urlUserName && !getUrlLanguage()) {
+            window.location.pathname = `/@${urlUserName}`;
+        }
 
         // tinyko (๑• . •๑)
         let tnkBeforeState = tinyko.innerHTML;
@@ -405,8 +419,8 @@
                 disableSearchButton();
                 tinykoItem.classList.add("animate__animated", "animate__infinite", "animate__pulse");
                 searchButton.textContent = t ? t.loading : "Loading...";
-                // await new Promise(resolve => setTimeout(resolve, 2000)); // test loading state
                 const response = await fetch(`/api/users/${username}`);
+                // await new Promise(resolve => setTimeout(resolve, 2000)); // delay for testing
                 if (!response.ok) {
                     const errorData = await response.json();
                     throw new Error(errorData.error || t.error.default);
