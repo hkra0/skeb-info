@@ -242,7 +242,8 @@
         function updatePageLanguage() {
             document.documentElement.lang = currentLang;
             // only static
-            if (getUrlLanguage) document.getElementById('title') = `/${currentLang}`;
+            const title = document.getElementById('title')
+            if (getUrlLanguage()) title.href = `/${currentLang}`;
             document.getElementById('username').placeholder = t.placeholder;
             document.getElementById('search').textContent = t.search;
         }
