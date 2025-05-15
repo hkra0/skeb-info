@@ -89,6 +89,7 @@
                 "jpy": "JPY",
                 "respCompExp": "Response / Complete expiration days",
                 "respCompAvg": "Response / Complete average days",
+                "timeInfo": "exp(avg)",
                 "total": "Total",
                 "priv": "priv",
                 "nsfw": "nsfw",
@@ -140,6 +141,7 @@
                 "jpy": "JPY",
                 "respCompExp": "响应 / 完成期限天数",
                 "respCompAvg": "响应 / 完成平均天数",
+                "timeInfo": "期限(平均)",
                 "total": "作品数量",
                 "priv": "私密",
                 "nsfw": "nsfw",
@@ -191,6 +193,7 @@
                 "jpy": "￥",
                 "respCompExp": "返答 / 納品締切日数",
                 "respCompAvg": "平均返答 / 納品日数",
+                "timeInfo": "締切(平均)",
                 "total": "作品数",
                 "priv": "非表示",
                 "nsfw": "nsfw",
@@ -535,23 +538,23 @@
                                 </tr>` : ""}
                                 ${skillsHtml ?
                         `<tr class="border-t border-gray-300 dark:border-gray-600">
-                                    <th class="py-2 px-4 font-semibold text-sm sm:text-base">${t.recommended}</th>
-                                    <td class="py-2 px-4 text-sm sm:text-base">${skillsHtml}</td>
+                                    <th class="py-2 px-4 font-semibold text-sm md:text-base">${t.recommended}</th>
+                                    <td class="py-2 px-4 text-sm md:text-base">${skillsHtml}</td>
                                 </tr>` : ""}
                                 ${(currentUser.creator && currentUser.accept_expiration_days && currentUser.complete_expiration_days) ?
                         `<tr class="border-t border-gray-300 dark:border-gray-600">
-                                    <th class="py-2 px-4 font-semibold text-sm sm:text-base">${t.respCompExp}</th>
-                                    <td class="py-2 px-4 text-sm sm:text-base">${currentUser.accept_expiration_days} / ${currentUser.complete_expiration_days}</td>
+                                    <th class="py-2 px-4 font-semibold text-sm md:text-base">${t.respCompExp}</th>
+                                    <td class="py-2 px-4 text-sm md:text-base">${currentUser.accept_expiration_days} / ${currentUser.complete_expiration_days}</td>
                                 </tr>` : ""}
                                 ${(avgResponseDays && avgCompletionDays) ?
                         `<tr class="border-t border-gray-300 dark:border-gray-600">
-                                    <th class="py-2 px-4 font-semibold text-sm sm:text-base">${t.respCompAvg}</th>
-                                    <td class="py-2 px-4 text-sm sm:text-base">${avgResponseDays} / ${avgCompletionDays}</td>
+                                    <th class="py-2 px-4 font-semibold text-sm md:text-base">${t.respCompAvg}</th>
+                                    <td class="py-2 px-4 text-sm md:text-base">${avgResponseDays} / ${avgCompletionDays}</td>
                                 </tr>` : ""}
                                 ${currentUser.received_works_count ?
                         `<tr class="border-t border-gray-300 dark:border-gray-600">
-                                    <th class="py-2 px-4 font-semibold text-sm sm:text-base">${t.total}</th>
-                                    <td class="py-2 px-4 text-sm sm:text-base">
+                                    <th class="py-2 px-4 font-semibold text-sm md:text-base">${t.total}</th>
+                                    <td class="py-2 px-4 text-sm md:text-base">
                                         ${currentUser.received_works_count}${((p = currentUser.received_private_works_count, n = currentUser.received_nsfw_works_count) =>
                             p || n ? ` (${[p && `${t.priv} ${p}`, n && `${t.nsfw} ${n}`].filter(Boolean).join(' / ')})` : ''
                         )()
@@ -560,13 +563,13 @@
                                 </tr>` : ""}
                                 ${currentUser.complete_rate ?
                         `<tr class="border-t border-gray-300 dark:border-gray-600">
-                                    <th class="py-2 px-4 font-semibold text-sm sm:text-base">${t.completeRate}</th>
-                                    <td class="py-2 px-4 text-sm sm:text-base">${(currentUser.complete_rate * 100).toFixed(0)}%</td>
+                                    <th class="py-2 px-4 font-semibold text-sm md:text-base">${t.completeRate}</th>
+                                    <td class="py-2 px-4 text-sm md:text-base">${(currentUser.complete_rate * 100).toFixed(0)}%</td>
                                 </tr>` : ""}
                                 ${currentUser.total_appeals_count ?
                         `<tr class="border-t border-gray-300 dark:border-gray-600">
-                                  <th class="py-2 px-4 font-semibold text-sm sm:text-base">${t.sentAppeals}</th>
-                                  <td class="py-2 px-4 text-sm sm:text-base">${currentUser.total_appeals_count}</td>
+                                  <th class="py-2 px-4 font-semibold text-sm md:text-base">${t.sentAppeals}</th>
+                                  <td class="py-2 px-4 text-sm md:text-base">${currentUser.total_appeals_count}</td>
                                 </tr>`: ""}
                                 ${currentUser.sent_public_works_count ?
                         `<tr class="separator">
@@ -574,25 +577,25 @@
                                 </tr>`: ""}
                                 ${currentUser.request_master_rank ?
                         `<tr class="border-t border-gray-300 dark:border-gray-600">
-                                    <th class="py-2 px-4 font-semibold text-sm sm:text-base">${t.requestMasterRank}</th>
-                                    <td class="py-2 px-4 text-sm sm:text-base">${currentUser.request_master_rank}</td>
+                                    <th class="py-2 px-4 font-semibold text-sm md:text-base">${t.requestMasterRank}</th>
+                                    <td class="py-2 px-4 text-sm md:text-base">${currentUser.request_master_rank}</td>
                                 </tr>`: ""}
                                 ${currentUser.first_requester_rank ?
                         `<tr class="border-t border-gray-300 dark:border-gray-600">
-                                    <th class="py-2 px-4 font-semibold text-sm sm:text-base">${t.firstRequesterRank}</th>
-                                    <td class="py-2 px-4 text-sm sm:text-base">${currentUser.first_requester_rank}</td>
+                                    <th class="py-2 px-4 font-semibold text-sm md:text-base">${t.firstRequesterRank}</th>
+                                    <td class="py-2 px-4 text-sm md:text-base">${currentUser.first_requester_rank}</td>
                                 </tr>`: ""}
                                 ${currentUser.sent_public_works_count ?
                         `<tr class="border-t border-gray-300 dark:border-gray-600">
-                                    <th class="py-2 px-4 font-semibold text-sm sm:text-base">${t.sentPublicRequests}</th>
-                                    <td class="py-2 px-4 text-sm sm:text-base cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition" onclick="fetchClientWorks('${username}', ${currentUser.sent_public_works_count})">
+                                    <th class="py-2 px-4 font-semibold text-sm md:text-base">${t.sentPublicRequests}</th>
+                                    <td class="py-2 px-4 text-sm md:text-base cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition" onclick="fetchClientWorks('${username}', ${currentUser.sent_public_works_count})">
                                     ${currentUser.sent_public_works_count} ${currentUser.sent_first_works_count ? `( ${t.first} ${currentUser.sent_first_works_count} )` : ""}
                                     </td>
                                 </tr>`: ""}
                                 ${currentUser.sent_requests_average_cancel_time ?
                         `<tr class="border-t border-gray-300 dark:border-gray-600">
-                                    <th class="py-2 px-4 font-semibold text-sm sm:text-base">${t.sentRequestsAvgCancelTime}</th>
-                                    <td class="py-2 px-4 text-sm sm:text-base">${(currentUser.sent_requests_average_cancel_time / 86400).toFixed(2)} days</td>
+                                    <th class="py-2 px-4 font-semibold text-sm md:text-base">${t.sentRequestsAvgCancelTime}</th>
+                                    <td class="py-2 px-4 text-sm md:text-base">${(currentUser.sent_requests_average_cancel_time / 86400).toFixed(2)} days</td>
                                 </tr>`: ""}
                             </tbody>
                         </table>
@@ -678,19 +681,19 @@
                             <table class="w-full text-left border-collapse">
                                 <thead>
                                     <tr class="border-b border-gray-300 dark:border-gray-600">
-                                        <th class="py-2 px-4 font-semibold text-sm sm:text-base">Name</th>
-                                        <th class="py-2 px-4 font-semibold text-sm sm:text-base">Tipped / Total</th>
+                                        <th class="py-2 px-4 font-semibold text-sm md:text-base">Name</th>
+                                        <th class="py-2 px-4 font-semibold text-sm md:text-base">Tipped / Total</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     ${sortedCreators.length ? sortedCreators.map(creator => `
                                         <tr class="border-t border-gray-300 dark:border-gray-600">
-                                            <td class="py-2 px-4 text-sm sm:text-base"><a href="https://skeb.jp/@${creator.name}" target="_blank" class="text-teal-700 hover:underline">${creator.name}</a></td>
-                                            <td class="py-2 px-4 text-sm sm:text-base">${creator.tips} / ${creator.requests}</td>
+                                            <td class="py-2 px-4 text-sm md:text-base"><a href="https://skeb.jp/@${creator.name}" target="_blank" class="text-teal-700 hover:underline">${creator.name}</a></td>
+                                            <td class="py-2 px-4 text-sm md:text-base">${creator.tips} / ${creator.requests}</td>
                                         </tr>
                                     `).join('') : `
                                         <tr>
-                                            <td colspan="3" class="py-2 px-4 text-sm sm:text-base text-gray-500 dark:text-gray-400">No client requests found.</td>
+                                            <td colspan="3" class="py-2 px-4 text-sm md:text-base text-gray-500 dark:text-gray-400">No client requests found.</td>
                                         </tr>
                                     `}
                                 </tbody>
@@ -759,17 +762,60 @@
                 const avgCompletionDays = creator.completing_average_time ? (creator.completing_average_time / 86400).toFixed(0) : '';
                 const acceptExpiration = creator.accept_expiration_days || '';
                 const completeExpiration = creator.complete_expiration_days || '';
+                const completeRate = creator.complete_rate ? `${(creator.complete_rate * 100).toFixed(0)}%` : '';
                 const timeInfo = (avgResponseDays || acceptExpiration) ?
                     `${acceptExpiration ? `${acceptExpiration}/${completeExpiration}` : ''} ${avgResponseDays ? `(${avgResponseDays}/${avgCompletionDays})` : ''}` : '';
                 const skillsHtml = creator.skills?.length > 1 ?
                     creator.skills.map(skill => skill.default_amount).join(' / ') :
                     `${creator.skills[0].default_amount}`;
+                const skillsHtmlMobile = creator.skills.map(skill => {
+                        const genre = t.genre[skill.genre];
+                        return `<span>${genre}</span>&nbsp;&nbsp;${t.jpy}&nbsp;${skill.default_amount}`;
+                    }).join('<br>');
                 const acceptingStatus = creator.acceptable ?
                     '<span class="inline-block w-2 h-2 rounded-full bg-green-500"></span>' :
                     '<span class="inline-block w-2 h-2 rounded-full bg-gray-500"></span>';
                 return `
-                    <tr id=${creator.screen_name} class="border-t border-gray-300 dark:border-gray-600 transition-all duration-360">
-                        <td class="py-2 px-4 text-sm sm:text-base">
+                    <tr id="${creator.screen_name}" class="border-t border-gray-300 dark:border-gray-600 transition-all duration-360 flex flex-col md:table-row">
+                        <!-- First row for mobile -->
+                        <td class="md:hidden py-2 px-4 flex flex-row items-center justify-between">
+                            <div>
+                                ${acceptingStatus}
+                                <a 
+                                    href="https://skeb.jp/@${creator.screen_name}" 
+                                    target="_blank" 
+                                    class="text-teal-700 dark:text-teal-500 hover:underline ml-1" 
+                                    title="${creator.name}"
+                                >
+                                    ${creator.name}
+                                </a>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button onclick="moveCreator(${index}, -1)" ${index === 0 ? 'disabled' : ''} class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-1">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                                    </svg>
+                                </button>
+                                <button onclick="moveCreator(${index}, 1)" ${index === creators.length - 1 ? 'disabled' : ''} class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-1">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+                                <button onclick="deleteCreator(${index})" class="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-600 p-1">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </td>
+                        <!-- Second row for mobile -->
+                        <td class="md:hidden ml-4 py-2 px-4 grid flex flex-col items-center justify-between">
+                            <span>${skillsHtmlMobile}</span>
+                            <span>${timeInfo}</span>
+                            <span>${completeRate}</span>
+                        </td>
+                        <!-- desktop -->
+                        <td class="hidden md:block py-2 px-4 text-sm md:text-base">
                             ${acceptingStatus}
                             <a 
                                 href="https://skeb.jp/@${creator.screen_name}" 
@@ -780,24 +826,27 @@
                                 ${creator.name}
                             </a>
                         </td>
-                        <td class="py-2 px-4 text-sm sm:text-base">${skillsHtml}</td>
-                        <td class="py-2 px-4 text-sm sm:text-base">${timeInfo}</td>
-                        <td class="py-2 px-2 text-sm sm:text-base sm:px-4 flex flex-col sm:flex-row sm:space-x-2 space-y-1 sm:space-y-0 justify-end items-end sm:items-center">
-                            <button onclick="moveCreator(${index}, -1)" ${index === 0 ? 'disabled' : ''} class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-1 sm:p-0">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
-                                </svg>
-                            </button>
-                            <button onclick="moveCreator(${index}, 1)" ${index === creators.length - 1 ? 'disabled' : ''} class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-1 sm:p-0">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                </svg>
-                            </button>
-                            <button onclick="deleteCreator(${index})" class="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-600 p-1 sm:p-0">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                </svg>
-                            </button>
+                        <td class="hidden md:block md:table-cell py-2 px-4 text-sm md:text-base">${skillsHtml}</td>
+                        <td class="hidden md:block md:table-cell py-2 px-4 text-sm md:text-base">${timeInfo}</td>
+                        <td class="hidden md:block md:table-cell py-2 px-4 text-sm md:text-base">${completeRate}</td>
+                        <td class="hidden md:block md:table-cell py-2 px-2 text-sm md:text-base md:px-4 md:justify-end md:items-center">
+                            <div class="ml-4 flex space-x-2">
+                                <button onclick="moveCreator(${index}, -1)" ${index === 0 ? 'disabled' : ''} class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-1 md:p-0">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                                    </svg>
+                                </button>
+                                <button onclick="moveCreator(${index}, 1)" ${index === creators.length - 1 ? 'disabled' : ''} class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-1 md:p-0">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+                                <button onclick="deleteCreator(${index})" class="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-600 p-1 md:p-0">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 `;
