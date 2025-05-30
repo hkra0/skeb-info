@@ -427,7 +427,7 @@
                     throw new Error('Incorrect username format');
                 } else {
                     document.getElementById('username').value = username;
-                    history.pushState({}, '', `${getUrlLanguage() ? `${currentLang}/` : ""}`+`@${username}`);
+                    history.pushState({}, '', `@${username}`);
                     document.title = `${username} - 🔍(๑• . •๑)`;
                 }
                 disableSearchButton();
