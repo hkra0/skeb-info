@@ -9,7 +9,7 @@ enabled = true
 head_sampling_rate = 1 # optional. default = 1.
 
 [vars]
-PAGE_URL="https://afxr17light.github.io/skeb-info/"
+PAGE_URL="https://hkra0.github.io/skeb-info/"
 
 [[unsafe.bindings]]
 name = "USER_INFO_LIMITER"
