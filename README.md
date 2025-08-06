@@ -20,7 +20,7 @@ English | [中文](README.zh-CN.md)
 - You can open the user's Skeb profile, reorder or delete creators in the list. Click the refresh icon to update the wishlist.
 
 ### Notes
-- Language Support: Currently supports English, Chinese, and Japanese. The interface defaults to your system language, or you can manually select a language by adding a suffix to the URL (e.g., `https://skebinfo.hkra.xyz/ja` for Japanese, `en` for English, `zh` for Chinese).
+- Language Support: Currently supports English, Chinese, and Japanese. The interface defaults to your system language (falls back to English if unsupported), or you can manually select a language by adding a suffix to the URL (e.g., `https://skebinfo.hkra.xyz/ja` for Japanese, `en` for English, `zh` for Chinese).
 - Username Input: When entering usernames containing underscores (`_`), you can use spaces instead for convenience.
 
 ## Disclaimer
@@ -41,7 +41,7 @@ Deploy your own instance to avoid rate limits and for personal use.
 1. Host HTML files (`index.html`, `wishlist.html`) on a static hosting service (e.g., GitHub Pages, Cloudflare Pages).
 2. Create and deploy a Cloudflare Worker (using the `wrangler` CLI or Cloudflare dashboard).
 3. Add environment variable:
-   - `PAGE_URL`: URL of the hosted HTML files (e.g., `https://afxr17light.github.io/skeb-info/`).  
+   - `PAGE_URL`: URL of the hosted HTML files (e.g., `https://<username>.github.io/skeb-info/` for GitHub Pages).  
    - Note: Change `PAGE_URL` in `wrangler.toml`.
 
 ### Vercel

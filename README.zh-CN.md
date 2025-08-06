@@ -20,7 +20,7 @@
 - 在心愿单列表可以打开该用户的 Skeb 主页，重新排序或删除心愿单中的创作者。点击刷新图标可以更新心愿单
 
 ### 提示
-- 语言支持：目前支持英文、中文和日文。默认使用系统语言，也可以通过在 URL 后添加后缀手动选择语言（例如 `https://skebinfo.hkra.xyz/ja` 为日文，`en` 为英文，`zh` 为中文）
+- 语言支持：目前支持英文、中文和日文。默认使用系统语言（若系统语言不支持则使用英语），也可以通过在 URL 后添加后缀手动选择语言（例如 `https://skebinfo.hkra.xyz/ja` 为日文，`en` 为英文，`zh` 为中文）
 - 用户名输入：输入包含下划线 (`_`) 的用户名时，可以使用空格代替以方便输入
 
 ## 免责声明
@@ -41,7 +41,7 @@
 1. 将 HTML 文件（`index.html`、`wishlist.html`）托管在静态托管服务上（例如 GitHub Pages、Cloudflare Pages）
 2. 创建并部署 Cloudflare Worker（使用 `wrangler` CLI 或 Cloudflare 控制台）
 3. 添加环境变量：
-   - `PAGE_URL`: 托管 HTML 文件的 URL（例如 `https://afxr17light.github.io/skeb-info/`）
+   - `PAGE_URL`: 托管 HTML 文件的 URL（例如 GitHub Pages： `https://<用户名>.github.io/skeb-info/`）
     - 注意：需要在 `wrangler.toml` 中更改 `PAGE_URL`
 
 ### Vercel
