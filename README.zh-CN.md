@@ -35,18 +35,29 @@
 
 ## 部署
 
-部署自己的实例以避免速率限制和个人使用。
+部署自己的实例以便个人使用。
 
-### Cloudflare Workers
-1. 将 HTML 文件（`index.html`、`wishlist.html`）托管在静态托管服务上（例如 GitHub Pages、Cloudflare Pages）
-2. 创建并部署 Cloudflare Worker（使用 `wrangler` CLI 或 Cloudflare 控制台）
-3. 添加环境变量：
-   - `PAGE_URL`: 托管 HTML 文件的 URL（例如 GitHub Pages： `https://<用户名>.github.io/skeb-info/`）
-    - 注意：需要在 `wrangler.toml` 中更改 `PAGE_URL`
+### Cloudflare Workers（推荐）
+
+直接部署：
+
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/hkra0/skeb-info)
+
+或是使用 Wrangler CLI：
+
+1. Fork 本仓库。
+2. 安装 [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/install-and-update/)。
+3. 如有需要，配置 `wrangler.toml`（例如自定义速率限制）。
+4. 运行：
+   ```bash
+   npx wrangler deploy
+   ```
+   并按照提示操作。
 
 ### Vercel
 
-- 选择其他框架使用默认配置进行部署即可，包含 API 和前端
+- Fork 本仓库并导入到 [Vercel](https://vercel.com)。无需额外配置。
+- 注意：Vercel 版本不支持速率限制。
 
 ## 限制
 

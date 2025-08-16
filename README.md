@@ -35,17 +35,29 @@ This tool is an unofficial interface for retrieving publicly available Skeb arti
 
 ## Deployment
 
-Deploy your own instance to avoid rate limits and for personal use.
+Deploy your own instance for personal use.
 
-### Cloudflare Workers
-1. Host HTML files (`index.html`, `wishlist.html`) on a static hosting service (e.g., GitHub Pages, Cloudflare Pages).
-2. Create and deploy a Cloudflare Worker (using the `wrangler` CLI or Cloudflare dashboard).
-3. Add environment variable:
-   - `PAGE_URL`: URL of the hosted HTML files (e.g., `https://<username>.github.io/skeb-info/` for GitHub Pages).  
-   - Note: Change `PAGE_URL` in `wrangler.toml`.
+### Cloudflare Workers (recommended)
+
+You can deploy directly to Cloudflare Workers.
+
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/hkra0/skeb-info)
+
+Or start from Wrangler CLI:
+
+1. Fork this repository.
+2. Install [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/install-and-update/).
+3. Configure your `wrangler.toml` if needed (e.g. custom rate limits).
+4. Run:
+   ```bash
+   npx wrangler deploy
+   ````
+   and follow the prompts.
 
 ### Vercel
-- Choose other frameworks and use the default settings for deployment. Includes both API and frontend.
+
+- Fork this repository and import it into [Vercel](https://vercel.com). No extra configuration required.
+- Note: rate limiting not supported on Vercel.
 
 ## Limitations
 

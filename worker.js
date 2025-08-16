@@ -1,23 +1,13 @@
 const SUBREQUEST_LIMIT = 40;
 const perPage = 30;
 
-// Cache for HTML content
-let html = null;
-
 export default {
   async fetch(request, env) {
-    // Preload HTML content if not already loaded
-    if (html === null) {
-      const infoResponse = await fetch(env.PAGE_URL);
-      console.log(env.PAGE_URL);
-      if (!infoResponse.ok) {
-        console.error('Failed to fetch HTML content:', infoResponse.status);
-        return new Response('Failed to fetch HTML content', { status: 500 });
-      }
-      html = await infoResponse.text();
+    const url = new URL(request.url);
+    if (url.pathname.startsWith("/api/")) {
+      return handleRequest(request, env);
     }
-
-    return handleRequest(request, env);
+    return env.ASSETS.fetch(new Request(url.origin));
   }
 };
 
@@ -188,11 +178,6 @@ async function handleRequest(request, env) {
         headers: responseHeaders,
       });
     }
-  } else {
-    // webpage
-    return new Response(html, {
-      headers: { 'Content-Type': 'text/html' },
-    });
   }
 
   // Return 404 for unknown paths

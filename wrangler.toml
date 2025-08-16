@@ -4,12 +4,13 @@ main = "worker.js"
 type = "esmodule"
 compatibility_flags = ["nodejs_compat"]
 
+[assets]
+directory = "./static"
+binding = "ASSETS"
+
 [observability]
 enabled = true
 head_sampling_rate = 1 # optional. default = 1.
-
-[vars]
-PAGE_URL="https://hkra0.github.io/skeb-info/"
 
 [[unsafe.bindings]]
 name = "USER_INFO_LIMITER"

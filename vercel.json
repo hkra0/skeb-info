@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/((?!api/users/).*)",
-      "destination": "/index.html"
+      "destination": "/static/index.html"
     }
   ],
   "cleanUrls": true,

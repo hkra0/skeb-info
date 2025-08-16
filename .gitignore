@@ -22,7 +22,6 @@ lerna-debug.log*
 *.swp
 
 # Build artifacts
-dist/
 build/
 *.map
 
@@ -42,8 +41,6 @@ Thumbs.db
 .vercel
 
 node_modules
-dist
-dist-ssr
 *.local
 
 # Editor directories and files
