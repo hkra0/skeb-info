@@ -39,25 +39,15 @@
 
 ### Cloudflare Workers（推荐）
 
-直接部署：
-
 [![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/hkra0/skeb-info)
 
-或是使用 Wrangler CLI：
-
-1. Fork 本仓库。
-2. 安装 [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/install-and-update/)。
-3. 如有需要，配置 `wrangler.toml`（例如自定义速率限制）。
-4. 运行：
-   ```bash
-   npx wrangler deploy
-   ```
-   并按照提示操作。
+如有需要，可自行修改 `wrangler.toml`（如自定义速率限制）
 
 ### Vercel
 
-- Fork 本仓库并导入到 [Vercel](https://vercel.com)。无需额外配置。
-- 注意：Vercel 版本不支持速率限制。
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https%3A%2F%2Fgithub.com%2Fhkra0%2Fskeb-info%2Ftree%2Fmain)
+
+（Vercel 版本不支持速率限制）
 
 ## 限制
 
